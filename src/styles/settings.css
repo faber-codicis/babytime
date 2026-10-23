@@ -1,0 +1,360 @@
+/* Settings tab (0.4.0, mockup "Einstellungen"), version pill and backup reminder. */
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-section-title {
+  padding-left: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rose-ink);
+}
+
+.settings-card {
+  padding: 18px 20px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.settings-card-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.settings-card-text {
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.settings-note {
+  padding: 0 4px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.settings-privacy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.install-section .install-hint-steps,
+.install-section .install-hint-btn {
+  margin-top: 12px;
+}
+
+/* ---------------------------------------------------------------- profile card */
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-card-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  overflow-wrap: anywhere;
+}
+
+.profile-card-sub {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.round-btn--tint {
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------------- rows */
+
+.data-group {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.data-action {
+  width: 100%;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  text-align: left;
+  border-radius: 0;
+}
+
+/* Inside, because the rounded group clips anything outside. */
+.data-action:focus-visible {
+  outline-offset: -4px;
+  border-radius: 24px;
+}
+
+.data-action + .data-action {
+  border-top: 1px solid var(--rose-tint);
+}
+
+.data-action:disabled {
+  opacity: 0.6;
+}
+
+.data-action-icon {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+}
+
+.data-action-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.data-action-label {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.data-action-hint {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* Warning: colour plus its own group, icon and wording (not colour alone). */
+.data-action--warn .data-action-label {
+  color: var(--rose-ink);
+}
+
+.data-action--warn .data-action-icon {
+  background: var(--rose-ink);
+  color: var(--on-rose);
+}
+
+/* Switch (mockup "Einstellungen"): rosé track when on, --switch-off when off; state also via aria-checked. */
+.switch {
+  flex: none;
+  margin-left: auto;
+  width: 52px;
+  height: 32px;
+  padding: 3px;
+  border-radius: 16px;
+  background: var(--switch-off);
+  transition: background-color var(--motion) ease-out;
+}
+
+.switch-knob {
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform var(--motion) ease-out;
+}
+
+.switch.is-on {
+  background: var(--rose);
+}
+
+.switch.is-on .switch-knob {
+  transform: translateX(20px);
+}
+
+:root[data-theme='dark'] .switch-knob {
+  background: var(--ink);
+}
+
+/* ---------------------------------------------------------------- version pill (mockup variants A + C) */
+
+.header {
+  position: relative;
+}
+
+.version-anchor {
+  margin-left: auto;
+  align-self: center;
+  flex: none;
+}
+
+/* The button is the 44 px tap area; the visible pill inside stays small. */
+.version-pill-btn {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.version-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 11px;
+  border-radius: 13px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.version-pill.is-open {
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+  box-shadow: none;
+}
+
+.version-pill--ready {
+  height: 28px;
+  padding: 0 12px 0 10px;
+  background: var(--rose);
+  color: var(--on-rose);
+}
+
+.version-popover {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 6px);
+  right: 0;
+  width: min(260px, calc(100vw - 40px));
+  padding: 16px;
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--shadow-dock);
+}
+
+.version-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.version-details-title {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.version-details-meta,
+.version-details-status {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.version-details-status:empty {
+  display: none;
+}
+
+.version-details-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+}
+
+.version-btn {
+  flex: 1 1 auto;
+  min-height: 48px;
+  font-size: 15px;
+  box-shadow: none;
+  border: 2px solid var(--rose-tint);
+}
+
+.big-btn--rose.version-btn {
+  border-color: var(--rose);
+}
+
+.text-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--rose-ink);
+  text-decoration: none;
+}
+
+/* ---------------------------------------------------------------- backup reminder on Today */
+
+.backup-reminder {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 10px 14px 16px;
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.backup-reminder-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+}
+
+.backup-reminder-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.backup-reminder-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.backup-reminder-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.backup-reminder .pill-btn {
+  margin-top: 8px;
+}
+
+.pill-btn--rose {
+  background: var(--rose);
+  color: var(--on-rose);
+}
+
+.pill-btn:disabled {
+  opacity: 0.6;
+}

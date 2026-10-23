@@ -1,0 +1,263 @@
+/* Today screen (spec 6.2, mockup "Übersicht (Tag)"). */
+
+.today {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------------------------------------------------------------- header */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0 2px;
+}
+
+.avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--avatar-bg);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* Night: the face is muted like the "Nacht" logo in the mockup. */
+:root[data-theme='dark'] .avatar svg {
+  filter: brightness(0.8) saturate(0.85);
+}
+
+.avatar-initial {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.header-text {
+  min-width: 0;
+}
+
+.header-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.header-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------- cards */
+
+.card {
+  border-radius: var(--radius-card);
+  padding: 20px;
+  box-shadow: var(--card-ring);
+}
+
+/* ---------------------------------------------------------------- hero */
+
+.hero {
+  display: block;
+  background: var(--rose-tint);
+  border-radius: var(--radius-hero);
+  padding: 22px 22px 20px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.hero.is-link {
+  cursor: pointer;
+}
+
+.hero-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rose-ink);
+}
+
+.hero-head .icon-bubble {
+  color: var(--rose-ink);
+}
+
+.hero-big {
+  margin-top: 14px;
+  font-size: clamp(40px, 12vw, 48px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-big.is-empty {
+  font-size: 26px;
+  letter-spacing: -0.6px;
+}
+
+.hero-line {
+  margin-top: 6px;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+.next-side {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.next-side > span:first-child {
+  margin-right: 4px;
+}
+
+.side-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.side-dot.is-next {
+  background: var(--rose);
+  color: var(--on-rose);
+}
+
+/* ---------------------------------------------------------------- status cards */
+
+.status-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.status {
+  min-width: 0;
+  padding: 18px;
+}
+
+.status--peach {
+  background: var(--peach);
+  color: var(--peach-ink);
+}
+
+.status--lavender {
+  background: var(--lavender);
+  color: var(--lavender-ink);
+}
+
+.status-label {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-big {
+  margin-top: 2px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.status-sub {
+  min-height: 1.4em;
+  margin-top: 2px;
+  font-size: 14px;
+}
+
+/* ---------------------------------------------------------------- chips */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-height: 32px;
+}
+
+.chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 14px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- dock */
+
+.dock-area {
+  position: sticky;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  margin-top: auto;
+}
+
+/* Above the tab bar instead of the screen edge. */
+.app--with-nav .dock-area {
+  bottom: calc(var(--nav-height) + 12px);
+}
+
+.dock {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 36px;
+  background: var(--surface);
+  box-shadow: var(--shadow-dock);
+}
+
+.dock-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--action-height);
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  transition: transform var(--motion) ease-out;
+}
+
+.dock-btn:active {
+  transform: scale(0.97);
+}
+
+.dock-btn--feed {
+  flex-grow: 1.45;
+  background: var(--rose);
+  color: var(--on-rose);
+}
+
+.dock-btn--diaper {
+  background: var(--peach);
+  color: var(--peach-ink);
+}
+
+.dock-btn--sleep {
+  background: var(--lavender);
+  color: var(--lavender-ink);
+}

@@ -1,0 +1,107 @@
+/* "Was ist neu" page and update popup (spec 6.9, mockups "Was ist neu", "Neue Version (Popup)"). */
+
+.whatsnew {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.news-card {
+  padding: 22px 22px 20px;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.news-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.news-version {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.news-pill {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.news-date {
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.news-list {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  font-size: 16px;
+}
+
+.news-list li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.news-list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.5em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rose);
+}
+
+.update-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.update-star {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+}
+
+.update-subtitle {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.update-version {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.pill-btn {
+  flex: none;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 22px;
+  background: var(--surface);
+  color: var(--rose-ink);
+  font-size: 15px;
+  font-weight: 700;
+}

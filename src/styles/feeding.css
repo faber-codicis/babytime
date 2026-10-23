@@ -1,0 +1,135 @@
+/* Running feed (spec 6.3, mockup "Stillen läuft"). */
+
+.feeding {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.screen-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.screen-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+/* ---------------------------------------------------------------- segmented control */
+
+.segmented {
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 30px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.segment {
+  flex: 1 1 0;
+  min-height: 52px;
+  border-radius: 26px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  transition: background-color var(--motion) ease-out, color var(--motion) ease-out;
+}
+
+.segment.is-active {
+  background: var(--rose);
+  color: var(--on-rose);
+}
+
+/* ---------------------------------------------------------------- timer ring */
+
+.timer-ring {
+  position: relative;
+  align-self: center;
+  width: min(280px, 72vw);
+  aspect-ratio: 1;
+}
+
+.timer-ring svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.timer-track {
+  stroke: var(--surface);
+}
+
+.timer-disc {
+  fill: var(--rose-tint);
+}
+
+.timer-progress {
+  stroke: var(--rose);
+}
+
+.timer-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.timer-side {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rose-ink);
+}
+
+.timer-time {
+  font-size: clamp(48px, 16vw, 64px);
+  font-weight: 800;
+  letter-spacing: -2.5px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-started {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------- last time */
+
+.last-time {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 28px;
+  background: var(--surface);
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+.side-dot--tint {
+  flex: none;
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+}
+
+/* ---------------------------------------------------------------- bottom actions */
+
+.bottom-actions {
+  position: sticky;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  margin-top: auto;
+  display: flex;
+  gap: 12px;
+}
+
+.bottom-actions .big-btn {
+  min-height: var(--action-height);
+}

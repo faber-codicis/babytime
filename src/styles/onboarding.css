@@ -1,0 +1,96 @@
+/* First start (spec 6.7, mockups "Willkommen" + "Einrichtung"). */
+
+.onboarding {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 32px;
+}
+
+.onboarding > :not(.onboarding-blob) {
+  position: relative;
+}
+
+.onboarding-blob {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.onboarding-blob--a {
+  width: 360px;
+  height: 360px;
+  top: -170px;
+  right: -170px;
+  background: var(--rose-tint);
+}
+
+.onboarding-blob--a::after {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  left: 70px;
+  bottom: 60px;
+  border-radius: 50%;
+  background: var(--lavender);
+}
+
+.onboarding-blob--b {
+  width: 160px;
+  height: 160px;
+  top: 90px;
+  left: -90px;
+  background: var(--peach);
+}
+
+.onboarding-heart {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--rose);
+  color: var(--on-rose);
+}
+
+.onboarding-title {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+}
+
+.onboarding-text {
+  font-size: 17px;
+  color: var(--ink-soft);
+}
+
+.onboarding-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.onboarding-actions {
+  margin-top: auto;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-optional {
+  font-weight: 500;
+}
+
+.text-btn {
+  min-height: 48px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--rose-ink);
+}

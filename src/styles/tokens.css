@@ -1,0 +1,79 @@
+/* Design tokens (spec section 4). Reference width 390 px. */
+:root {
+  color-scheme: light;
+
+  --bg: #fbf3f1;
+  --surface: #ffffff;
+  --surface-2: #ffffff;
+  --ink: #3a2630;
+  --ink-soft: #6b5560;
+
+  --rose: #b04a63;
+  --on-rose: #ffffff;
+  --rose-ink: #80304a;
+  --rose-tint: #f7dce2;
+
+  --peach: #fce3d6;
+  --peach-ink: #6e301a;
+  --lavender: #e9e3f3;
+  --lavender-ink: #3f3166;
+
+  --avatar-bg: #f3c7b8;
+  --switch-off: #8f7c83;
+
+  --card-ring: none;
+  --shadow-card: 0 6px 20px rgba(58, 38, 48, 0.07);
+  --shadow-dock: 0 10px 30px rgba(58, 38, 48, 0.12);
+
+  --radius-card: 30px;
+  --radius-hero: 32px;
+  --radius-pill: 34px;
+  --radius-input: 22px;
+
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --gutter: 20px;
+  --max-width: 480px;
+  --touch: 44px;
+  --action-height: 68px;
+  /* Tab bar: 8 px top padding + 56 px tab + bottom padding per spec 6.1. */
+  --nav-height: calc(64px + max(30px, env(safe-area-inset-bottom)));
+  --motion: 160ms;
+}
+
+/*
+ * Dark design: off by default, switched on in "Daten und Info" (sets data-theme="dark" on <html>).
+ * Reddish and muted, never pure white. Brighter text and tinted cards than the first draft in spec §4,
+ * which was hard to read: text contrast >= 6.1:1 on every surface; cards get a faint ring.
+ */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #150d10;
+  --surface: #261719;
+  --surface-2: #301e22;
+  --ink: #f6c2ba;
+  --ink-soft: #d79c93;
+
+  --rose: #f09a8f;
+  --on-rose: #1a0d0f;
+  --rose-ink: #f7b3c2;
+  --rose-tint: #3d2129;
+
+  --peach: #3b2519;
+  --peach-ink: #f5c3a6;
+  --lavender: #2b2339;
+  --lavender-ink: #cfc3f2;
+
+  --avatar-bg: var(--rose-tint);
+  --switch-off: #6f5c63;
+
+  --card-ring: 0 0 0 1px rgba(246, 194, 186, 0.1);
+  --shadow-card: var(--card-ring);
+  --shadow-dock: 0 0 0 1px rgba(246, 194, 186, 0.1), 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion: 0ms;
+  }
+}
