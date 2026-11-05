@@ -1,6 +1,6 @@
 # Baby Time
 
-PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, ohne Konto. Testversion 0.3.0.
+PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, ohne Konto. Testversion 0.4.2.
 
 **Datenschutz:** Alle Einträge bleiben auf dem Gerät. Es gibt keinen Upload, keine Weitergabe, keine Analyse.
 
@@ -38,7 +38,9 @@ npm run preview   # gebaute App: http://localhost:4173 (mit Service Worker und C
 
 Beim ersten Mal für Playwright einmalig: `npx playwright install chromium webkit`.
 
-Git wird in diesem Projekt nicht verwendet; Sicherungen laufen über `npm run snapshot`.
+Der Code liegt auf GitHub (`faber-codicis/babytime`); `npm run snapshot` bleibt als zusätzliche lokale Sicherung.
+
+Die E2E-Tests laufen unabhängig von der Zeitzone des Rechners immer in `Europe/Vienna` (gesetzt in `playwright.config.ts`).
 
 ## Auf dem Handy testen
 

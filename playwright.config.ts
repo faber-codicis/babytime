@@ -3,6 +3,10 @@ import { defineConfig, devices } from '@playwright/test';
 // Own port, so a manual `npm run preview` on 4173 can keep running alongside the tests.
 const PORT = 4318;
 
+// Tests build their clock times with `new Date(2026, 9, 21, 14, 20)` in the test runner, so the runner
+// must use the same zone as the browser (`timezoneId: 'Europe/Vienna'`). Workers inherit this.
+process.env.TZ = 'Europe/Vienna';
+
 export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: false,
