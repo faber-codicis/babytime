@@ -1,11 +1,21 @@
 import type { BabyEvent } from '../data/events';
+import { DEFAULT_TRACKERS, type Trackers } from '../data/trackers';
 import { timelineMarks } from '../logic/timeline';
 import { t } from '../strings.de';
 
 const HOURS = [0, 6, 12, 18, 24];
 /** Today at a glance (0.7.0): a 24-hour bar with sleep spans, feeds, diapers and bottles, plus "now". */
-export function DayTimeline(props: { events: readonly BabyEvent[] | undefined; dayStart: number; dayEnd: number; now: number }) {
-  const marks = props.events ? timelineMarks(props.events, props.dayStart, props.dayEnd, props.now) : [];
+export function DayTimeline(props: {
+  events: readonly BabyEvent[] | undefined;
+  show?: Trackers;
+  dayStart: number;
+  dayEnd: number;
+  now: number;
+}) {
+  const show = props.show ?? DEFAULT_TRACKERS;
+  // Only switched-on trackers (Einstellungen); bottle and pump share one mark.
+  const events = props.events?.filter((e) => show[e.type]);
+  const marks = events ? timelineMarks(events, props.dayStart, props.dayEnd, props.now) : [];
   const nowPct = ((props.now - props.dayStart) / (props.dayEnd - props.dayStart)) * 100;
   return (
     <figure class="timeline" aria-label={t.today.timelineA11y}>
@@ -28,10 +38,14 @@ export function DayTimeline(props: { events: readonly BabyEvent[] | undefined; d
         ))}
       </div>
       <figcaption class="timeline-legend">
-        <span class="legend legend--sleep">{t.today.legendSleep}</span>
-        <span class="legend legend--feed">{t.today.legendFeed}</span>
-        <span class="legend legend--diaper">{t.today.legendDiaper}</span>
-        <span class="legend legend--bottle">{t.today.legendBottle}</span>
+        {show.sleep && <span class="legend legend--sleep">{t.today.legendSleep}</span>}
+        {show.feed && <span class="legend legend--feed">{t.today.legendFeed}</span>}
+        {show.diaper && <span class="legend legend--diaper">{t.today.legendDiaper}</span>}
+        {(show.bottle || show.pump) && (
+          <span class="legend legend--bottle">
+            {show.bottle && show.pump ? t.today.legendBottle : show.bottle ? t.today.actionBottle : t.today.actionPump}
+          </span>
+        )}
       </figcaption>
     </figure>
   );

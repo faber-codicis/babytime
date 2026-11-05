@@ -1,5 +1,6 @@
 import type { TodayData } from '../data/overview';
 import type { Side } from '../data/events';
+import type { Trackers } from '../data/trackers';
 import { nextSide } from '../logic/nextSide';
 import { HOUR, formatClock, formatHoursMinutes, formatTimer } from '../logic/time';
 import { t } from '../strings.de';
@@ -17,6 +18,8 @@ const sideName = (side: Side | undefined) => (side === 'right' ? t.side.right : 
 interface NightViewProps {
   data: TodayData | undefined;
   now: number;
+  /** Switched-on trackers; the night view only appears with Stillen on. */
+  show: Trackers;
   onFeed: () => void;
   onDiaper: () => void;
   onBottle: () => void;
@@ -29,7 +32,7 @@ interface NightViewProps {
  * Night view on Today (0.7.0, mockup "Übersicht (Nachtmodus)"): with "Nachts automatisch" between
  * 20:00 and 07:00. Only what counts at 3 a.m.: time since the last feed, diaper, sleep, and big buttons.
  */
-export function NightView({ data, now, onFeed, onDiaper, onBottle, onSleep, onDayView }: NightViewProps) {
+export function NightView({ data, now, show, onFeed, onDiaper, onBottle, onSleep, onDayView }: NightViewProps) {
   const running = data?.runningFeed;
   const session = data?.lastFeedSession;
   const next = nextSide(data?.lastFinishedFeed);
@@ -99,14 +102,18 @@ export function NightView({ data, now, onFeed, onDiaper, onBottle, onSleep, onDa
       )}
 
       <div class="night-cards">
-        <section class="night-card" aria-label={t.today.diaper}>
-          <p class="night-card-label">{t.today.diaper}</p>
-          <p class="night-card-big">{diaper ? t.night.hours(formatHoursMinutes(now - diaper.start)) : '–'}</p>
-        </section>
-        <section class="night-card" aria-label={t.today.sleep}>
-          <p class="night-card-label">{sleeping ? t.night.asleepSince : t.night.awakeSince}</p>
-          <p class="night-card-big">{sleepSince !== undefined ? t.night.hours(formatHoursMinutes(now - sleepSince)) : '–'}</p>
-        </section>
+        {show.diaper && (
+          <section class="night-card" aria-label={t.today.diaper}>
+            <p class="night-card-label">{t.today.diaper}</p>
+            <p class="night-card-big">{diaper ? t.night.hours(formatHoursMinutes(now - diaper.start)) : '–'}</p>
+          </section>
+        )}
+        {show.sleep && (
+          <section class="night-card" aria-label={t.today.sleep}>
+            <p class="night-card-label">{sleeping ? t.night.asleepSince : t.night.awakeSince}</p>
+            <p class="night-card-big">{sleepSince !== undefined ? t.night.hours(formatHoursMinutes(now - sleepSince)) : '–'}</p>
+          </section>
+        )}
       </div>
 
       <div class="night-actions">
@@ -115,15 +122,26 @@ export function NightView({ data, now, onFeed, onDiaper, onBottle, onSleep, onDa
           {running ? t.night.feedRunning(formatTimer(now - running.start)) : t.night.feedStart(sideName(next))}
         </button>
         <div class="night-row">
-          <button type="button" class="night-btn" onClick={onDiaper}>
-            {t.today.actionDiaper}
-          </button>
-          <button type="button" class="night-btn" aria-label={t.today.actionBottleA11y} onClick={onBottle}>
-            {t.today.actionBottle}
-          </button>
-          <button type="button" class="night-btn" onClick={onSleep}>
-            {sleeping ? t.today.actionWake : t.today.actionSleep}
-          </button>
+          {show.diaper && (
+            <button type="button" class="night-btn" onClick={onDiaper}>
+              {t.today.actionDiaper}
+            </button>
+          )}
+          {(show.bottle || show.pump) && (
+            <button
+              type="button"
+              class="night-btn"
+              aria-label={show.bottle && show.pump ? t.today.actionBottleA11y : undefined}
+              onClick={onBottle}
+            >
+              {show.bottle ? t.today.actionBottle : t.today.actionPump}
+            </button>
+          )}
+          {show.sleep && (
+            <button type="button" class="night-btn" onClick={onSleep}>
+              {sleeping ? t.today.actionWake : t.today.actionSleep}
+            </button>
+          )}
         </div>
       </div>
     </div>

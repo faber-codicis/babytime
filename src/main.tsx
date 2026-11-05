@@ -21,6 +21,12 @@ import { captureInstallPrompt } from './ui/installPrompt';
 captureInstallPrompt();
 watchForUpdates();
 
+// No zooming (owner's wish, 0.8.0): the viewport says user-scalable=no, but iOS Safari ignores it,
+// so its pinch gesture is blocked here; double-tap zoom is off via touch-action in base.css.
+for (const type of ['gesturestart', 'gesturechange']) {
+  document.addEventListener(type, (e) => e.preventDefault(), { passive: false });
+}
+
 const SPLASH_MAX_MS = 1200;
 
 function hideSplash(): void {

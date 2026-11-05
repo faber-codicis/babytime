@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'preact/hooks';
 import { addBottle, addDiaper, addPump, getLatestAmounts, startFeed, toggleSleep, type DiaperKind } from '../data/events';
 import { loadToday } from '../data/overview';
+import { DEFAULT_TRACKERS, getTrackers } from '../data/trackers';
 import type { Profile } from '../data/profile';
 import { nextSide } from '../logic/nextSide';
 import { dayStats } from '../logic/stats';
@@ -46,12 +47,14 @@ export function Today({ profile }: { profile: Profile }) {
   const [diaperOpen, setDiaperOpen] = useState(false);
   const [bottleOpen, setBottleOpen] = useState(false);
   const latestAmounts = useLive(getLatestAmounts, []);
+  const show = useLive(getTrackers, []) ?? DEFAULT_TRACKERS;
   const [snack, setSnack] = useState<SnackMessage>();
   const busy = useRef(false);
   const [, rerender] = useState(0);
   const dayViewChosen = dayViewChosenAt !== undefined && now - dayViewChosenAt < DAY_VIEW_MS;
   const nightTime = isNightView(now);
-  const night = nightTime && !dayViewChosen;
+  // The night view is built around feeding; without the Stillen tracker Today stays as it is.
+  const night = nightTime && !dayViewChosen && show.feed;
   const chooseDayView = (day: boolean) => {
     dayViewChosenAt = day ? Date.now() : undefined;
     rerender((n) => n + 1);
@@ -102,7 +105,7 @@ export function Today({ profile }: { profile: Profile }) {
 
   const sheets = (
     <>
-      <BottleSheet open={bottleOpen} latest={latestAmounts} onClose={() => setBottleOpen(false)} onSave={(pick) => void onBottle(pick)} />
+      <BottleSheet open={bottleOpen} latest={latestAmounts} modes={{ bottle: show.bottle, pump: show.pump }} onClose={() => setBottleOpen(false)} onSave={(pick) => void onBottle(pick)} />
       <DiaperSheet open={diaperOpen} onClose={() => setDiaperOpen(false)} onPick={(kind, minutesAgo) => void onDiaper(kind, minutesAgo)} />
     </>
   );
@@ -113,6 +116,7 @@ export function Today({ profile }: { profile: Profile }) {
         <NightView
           data={data}
           now={now}
+          show={show}
           onFeed={() => void onFeed()}
           onDiaper={() => setDiaperOpen(true)}
           onBottle={() => setBottleOpen(true)}
@@ -136,13 +140,14 @@ export function Today({ profile }: { profile: Profile }) {
         feeding={Boolean(data?.runningFeed)}
         onMessage={(text) => setSnack({ id: ++snackId, text })}
       />
-      <HeroCard data={data} now={now} />
-      <StatusCards data={data} now={now} />
-      <Chips stats={stats} />
-      <DayTimeline events={data?.dayEvents} dayStart={dayStart} dayEnd={dayEnd} now={now} />
+      {show.feed && <HeroCard data={data} now={now} />}
+      <StatusCards data={data} now={now} diaper={show.diaper} sleep={show.sleep} />
+      <Chips stats={stats} show={show} />
+      {show.timeline && <DayTimeline events={data?.dayEvents} show={show} dayStart={dayStart} dayEnd={dayEnd} now={now} />}
       <div class="dock-area">
         <Snackbar message={snack} onDone={() => setSnack(undefined)} />
         <DockButtons
+          show={show}
           sleeping={Boolean(data?.runningSleep)}
           feedTimer={data?.runningFeed ? formatTimer(now - data.runningFeed.start) : undefined}
           onFeed={() => void onFeed()}

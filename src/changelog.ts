@@ -10,6 +10,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.8.0',
+    date: '2026-11-05',
+    items: [
+      'Neu in den Einstellungen: „Was möchtest du festhalten?“ – Stillen, Flasche, Abpumpen, Windel und Schlaf einzeln ein- und ausschalten',
+      'Ausgeschaltetes verschwindet von Heute, deine Einträge bleiben im Verlauf',
+      'Die Zeitleiste auf Heute lässt sich ausblenden',
+      'Heute ist luftiger: alles passt ohne Scrollen auf den Bildschirm, die Knöpfe haben Symbole',
+      'Die App lässt sich nicht mehr versehentlich zoomen',
+    ],
+  },
+  {
     version: '0.7.0',
     date: '2026-11-05',
     items: [

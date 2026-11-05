@@ -9,7 +9,7 @@ PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, oh
 - **Heute:** zuletzt gestillt, nächste Seite, letzte Windel, Schlaf, Tageszähler. Stillen mit Timer und Seitenwechsel, Windel in 2 Taps, Schlaf in 1 Tap, Flasche und Abpumpen mit Menge, jeweils mit „Rückgängig“.
 - **Verlauf:** Liste nach Tagen, Einträge ändern, löschen und nachtragen.
 - **Erststart** mit Babyname und Geburtsdatum (beides freiwillig).
-- **Einstellungen** (eigener Tab): Profil, **Dunkles Design** ein/aus oder **Nachts automatisch** (20–7 Uhr, mit Nachtansicht auf Heute; Standard: hell), Sicherung exportieren (mit „Letzte Sicherung: vor x Tagen“) und wiederherstellen, alle Daten löschen, Version mit **Nach Update suchen**, „Was ist neu“, Installationshinweis.
+- **Einstellungen** (eigener Tab): Profil, **Was möchtest du festhalten?** (Stillen, Flasche, Abpumpen, Windel, Schlaf einzeln an/aus), **Zeitleiste** an/aus, **Dunkles Design** ein/aus oder **Nachts automatisch** (20–7 Uhr, mit Nachtansicht auf Heute; Standard: hell), Sicherung exportieren (mit „Letzte Sicherung: vor x Tagen“) und wiederherstellen, alle Daten löschen, Version mit **Nach Update suchen**, „Was ist neu“, Installationshinweis.
 - **Sicherungs-Erinnerung** auf Heute, wenn die letzte Sicherung zwei Wochen her ist.
 - **Update-Hinweis:** Nach einer neuen Version erscheint einmal ein Popup mit den Neuerungen.
 

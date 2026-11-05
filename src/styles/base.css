@@ -7,6 +7,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* No double-tap zoom anywhere, pinch only where the browser insists (0.8.0). */
+  touch-action: manipulation;
 }
 
 body {

@@ -129,6 +129,16 @@ Auf Wunsch des Besitzers (2026-11-05) umgesetzt: C1 „Nachts automatisch“, C2
 - **Tab-Leiste bleibt in der Nachtansicht** (Mockup zeigt keine): Ohne sie käme man nachts nicht in den Verlauf.
 - **Zeitleiste:** Positionen als Prozent des Tages in `logic/timeline.ts` (Unit-Tests), Darstellung mit Inline-`style` (CSP erlaubt `style-src 'unsafe-inline'`). Die Tageszähler-Leiste hat seit der Flasche vier Felder und bleibt mit `grid-auto-flow: column` einzeilig.
 
+## 0.8.0 (Schalter, Platz, kein Zoom)
+
+- **Tracker-Schalter in `kv`** (`trackers`), nicht in `localStorage`: Sie müssen nicht vor dem ersten Bild bekannt sein. „Alle Daten löschen“ setzt sie mit zurück. Sie sind nicht Teil der Sicherung (die Sicherung enthält Einträge und Profil; Einstellungen sind schnell neu gesetzt).
+- **Ausschalten versteckt nur:** Einträge bleiben im Verlauf, im Export und beim Nachtragen wählbar – sonst wären alte Daten nach dem Ausschalten unsichtbar oder nicht mehr korrigierbar.
+- **Mindestens ein Tracker bleibt an** (`sanitizeTrackers` stellt notfalls Stillen wieder an); ein leeres Heute ergibt keinen Sinn.
+- **Nachtansicht nur mit Stillen:** Sie ist um „Zuletzt gestillt“ gebaut.
+- **Zeitleisten-Schalter unter Darstellung**, nicht bei den Trackern: Er ändert die Ansicht, nicht was erfasst wird.
+- **Kein Zoom** (Wunsch des Besitzers nach dem Test am Handy): bewusste Abweichung von WCAG 1.4.4. iOS Safari ignoriert `user-scalable=no` seit iOS 10, deshalb werden dort `gesturestart`/`gesturechange` abgefangen; nicht auf einem echten iPhone geprüft.
+- **Weniger gestaucht:** Statuskarten mit Symbol neben der Beschriftung statt darüber, kleinere Abstände in Hero und Liste (Gap 12 statt 16), Dock-Knöpfe mit Symbol über Text. Bei 390 × 844 passt Heute (mit Flasche-Zähler und Zeitleiste) ohne Scrollen.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

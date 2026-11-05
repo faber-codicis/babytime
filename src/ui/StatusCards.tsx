@@ -18,7 +18,18 @@ function StatusCard(props: { tone: 'peach' | 'lavender'; icon: IconName; label: 
   );
 }
 
-export function StatusCards({ data, now }: { data: TodayData | undefined; now: number }) {
+export function StatusCards({
+  data,
+  now,
+  diaper: showDiaper = true,
+  sleep: showSleep = true,
+}: {
+  data: TodayData | undefined;
+  now: number;
+  diaper?: boolean;
+  sleep?: boolean;
+}) {
+  if (!showDiaper && !showSleep) return null;
   const diaper = data?.lastDiaper;
   const sleeping = data?.runningSleep;
   const lastSleep = data?.lastFinishedSleep;
@@ -28,20 +39,24 @@ export function StatusCards({ data, now }: { data: TodayData | undefined; now: n
 
   return (
     <div class="status-row">
-      <StatusCard
-        tone="peach"
-        icon="diaper"
-        label={t.today.diaper}
-        big={diaper ? formatRelative(diaper.start, now) : t.today.noEntry}
-        sub={diaper?.diaper ? t.diaper[diaper.diaper] : ''}
-      />
-      <StatusCard
-        tone="lavender"
-        icon="moon"
-        label={t.today.sleep}
-        big={sleepSince !== undefined ? formatSince(now - sleepSince) : t.today.noEntry}
-        sub={sleepSub}
-      />
+      {showDiaper && (
+        <StatusCard
+          tone="peach"
+          icon="diaper"
+          label={t.today.diaper}
+          big={diaper ? formatRelative(diaper.start, now) : t.today.noEntry}
+          sub={diaper?.diaper ? t.diaper[diaper.diaper] : ''}
+        />
+      )}
+      {showSleep && (
+        <StatusCard
+          tone="lavender"
+          icon="moon"
+          label={t.today.sleep}
+          big={sleepSince !== undefined ? formatSince(now - sleepSince) : t.today.noEntry}
+          sub={sleepSub}
+        />
+      )}
     </div>
   );
 }

@@ -28,7 +28,7 @@
 
 ### Nicht im Umfang (nicht bauen, keine Platzhalter-UI)
 
-Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Meilensteine, Tracker-Schalter, Akzentfarben, Wochenansicht, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
+Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Meilensteine, Akzentfarben, Wochenansicht, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
 
 ## 2a. Lieferstufen (Reihenfolge verbindlich)
 
@@ -196,7 +196,7 @@ Von oben nach unten:
 4a. **Update-Pille** oben rechts in der Kopfzeile: Seit 0.5.0 nur sichtbar, wenn eine neue Version bereit ist (rosé, ↻ **Update bereit**, Tippen startet neu); Version, Build-Zeitpunkt und „Nach Update suchen“ stehen in Einstellungen → Über die App. *Bis 0.4.2:* kleine Pille „v0.4.0“ (12 px / 700, `--ink-soft` auf `--surface`, Tippfläche ≥ 44 px). Tippen öffnet ein kleines Fenster (`role="dialog"`, Escape und Tippen außerhalb schließen, Fokus hinein und zurück) mit „Baby Time 0.4.0“, „Erstellt am <Build-Zeitpunkt>“, Statuszeile, Button **Nach Update suchen** und Link **Was ist neu**. Ist eine neue Version bereits aktiv (Service Worker übernommen), wird die Pille rosé mit ↻ **Update bereit**; Tippen startet die App neu. Nie automatisch neu laden. *(Ersetzt das zweizeilige Kästchen aus 0.3.1.)*
 4c. **Tages-Zeitleiste** (seit 0.7.0) unter den Tageszählern: weiße Karte mit einem 24-Stunden-Balken (0–24 Uhr). Schlaf als lavendelfarbene Abschnitte, Stillen als rosé Balken (mindestens 0,5 % breit, damit kurze sichtbar bleiben), Windeln als Punkte, Flasche/Abpumpen als Quadrate, „jetzt“ als senkrechter Strich, die Zukunft schraffiert. Darunter 0 · 6 · 12 · 18 · 24 und eine Legende (Information nicht nur über Farbe: Form unterscheidet Punkte und Quadrate, die Legende benennt alles). Schlaf über Mitternacht beginnt bei 0 Uhr.
 4b. **Sicherungs-Erinnerung** unter der Kopfzeile (seit 0.4.0): Karte „Zeit für eine Sicherung“ mit „Letzte Sicherung vor 16 Tagen“ bzw. „Noch keine Sicherung vorhanden.“, Button **Jetzt sichern** (Export wie in 6.8) und Schließen-Knopf. Erscheint, wenn die letzte Sicherung – ohne Sicherung: der älteste Eintrag – mindestens 14 Tage alt ist; nach dem Schließen frühestens nach weiteren 14 Tagen wieder. Nie, solange ein Stillen läuft.
-5. **Aktions-Dock** (weiße Pille, Radius 36, Padding 10, Gap 8) mit drei Buttons: **Stillen** (breiter, `--rose`, weißer Text, Tropfen-Icon), **Windel** (`--peach`), **Schlaf** (`--lavender`, wechselt zu **Wach**, solange ein Schlaf läuft). Höhe 68 px. Läuft ein Stillen, zeigt der Stillen-Button zweizeilig „Stillen läuft“ (mit pulsierendem Punkt, ohne Animation bei reduzierter Bewegung) und den Timer und führt zurück zum Stillen-Screen (seit 0.5.0).
+5. **Aktions-Dock** (weiße Pille, Radius 36, Padding 10, Gap 8; seit 0.8.0 jeder Knopf mit Symbol über der Beschriftung, Radius 24, 14 px, damit vier Knöpfe nicht gestaucht wirken; nur eingeschaltete Tracker) mit drei Buttons: **Stillen** (breiter, `--rose`, weißer Text, Tropfen-Icon), **Windel** (`--peach`), **Schlaf** (`--lavender`, wechselt zu **Wach**, solange ein Schlaf läuft). Höhe 68 px. Läuft ein Stillen, zeigt der Stillen-Button zweizeilig „Stillen läuft“ (mit pulsierendem Punkt, ohne Animation bei reduzierter Bewegung) und den Timer und führt zurück zum Stillen-Screen (seit 0.5.0).
 6. Tab-Leiste.
 
 Relative Zeit: unter 1 Min „gerade eben“; unter 60 Min „vor 35 Min“; ab 60 Min „vor 1 Std 40 Min“; ab 24 Std „vor 2 Tagen“. Anzeige aktualisiert sich alle 30 Sekunden und bei `visibilitychange`.
@@ -302,6 +302,8 @@ Eigener Tab `#/einstellungen` im Stil des Mockups „Einstellungen“, auf Wunsc
 
 Nicht in 0.4.0: Tracker-Schalter, Meilensteine, Akzentfarben, automatischer Nachtmodus, Benachrichtigungen.
 
+**Seit 0.8.0 – „Was möchtest du festhalten?“** (Mockup „Einstellungen“, erster Abschnitt nach dem Profil): je ein Schalter für **Stillen** („Timer mit Links/Rechts“), **Flasche** („Menge und Uhrzeit“), **Abpumpen** („Menge pro Seite“), **Windel** („nass, voll oder beides“), **Schlaf** („Start und Ende“), alle standardmäßig an, gespeichert in `kv` `trackers`. Ausgeschaltetes verschwindet von Heute (Knopf, Karte, Zähler, Zeitleiste) und aus der Nachtansicht; Einträge bleiben im Verlauf, in der Sicherung und beim Nachtragen wählbar. Mindestens einer bleibt an (sonst Hinweis „Mindestens eins bleibt eingeschaltet“). Ist nur Flasche oder nur Abpumpen an, heißt der Knopf so und das Sheet hat keinen Umschalter. Ohne Stillen gibt es keine Nachtansicht. Unter **Darstellung** zusätzlich **Zeitleiste auf Heute** (an/aus). Meilensteine und Akzentfarben weiter später.
+
 ### 6.11 Flasche und Abpumpen (seit 0.6.0)
 
 - **Dock:** vierter Button **Flasche** (`--sky`, zugänglicher Name „Flasche oder Abpumpen“) zwischen Windel und Schlaf. Die drei kleinen Buttons haben 15 px Schrift, damit alles auf 360 px Breite passt.
@@ -327,6 +329,7 @@ Nicht in 0.4.0: Tracker-Schalter, Meilensteine, Akzentfarben, automatischer Nach
 - `prefers-reduced-motion` respektieren, Animationen kurz (unter 200 ms).
 - Keine Töne, keine Vibration.
 - Alle UI-Texte zentral in `src/strings.de.ts`.
+- **Kein Zoom** (seit 0.8.0, Wunsch des Besitzers): Viewport `maximum-scale=1, user-scalable=no`, `touch-action: manipulation` (kein Doppeltipp-Zoom), auf iOS Safari zusätzlich `gesturestart` abgefangen. Bewusste Abweichung von WCAG 1.4.4; Ausgleich: Schrift mindestens 15 px, große Zahlen, die System-Schriftgröße bleibt wirksam.
 
 ## 9. Logo (Quelle für Icons und Avatar)
 

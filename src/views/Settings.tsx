@@ -10,6 +10,8 @@ import { InstallSection } from '../ui/InstallSection';
 import { ActionRow, SettingsSection, SwitchRow } from '../ui/SettingsRows';
 import { Snackbar, type SnackMessage } from '../ui/Snackbar';
 import { useThemeMode } from '../ui/theme';
+import { getTrackers, isLastTracker, setTracker, TRACKER_KINDS, type TrackerKey } from '../data/trackers';
+import type { IconName } from '../ui/icons';
 import { useDataActions } from '../ui/useDataActions';
 import { VersionDetails } from '../ui/VersionPill';
 
@@ -17,6 +19,14 @@ let snackId = 0;
 
 /** "09.10.2026" from YYYY-MM-DD. */
 const formatBirthDate = (iso: string) => iso.split('-').reverse().join('.');
+
+const TRACKER_ICON: Record<(typeof TRACKER_KINDS)[number], IconName> = {
+  feed: 'drop',
+  bottle: 'bottle',
+  pump: 'pump',
+  diaper: 'diaper',
+  sleep: 'moon',
+};
 
 /** Settings tab (0.4.0, mockup "Einstellungen"): profile, look, data, about the app. */
 export function Settings({ profile }: { profile: Profile }) {
@@ -26,6 +36,15 @@ export function Settings({ profile }: { profile: Profile }) {
   const data = useDataActions(profile, message);
   const [themeMode, setThemeMode] = useThemeMode();
   const lastExportAt = useLive(getLastExportAt, []);
+  const trackers = useLive(getTrackers, []);
+  const toggleTracker = (key: TrackerKey, on: boolean) => {
+    if (!trackers) return;
+    if (!on && isLastTracker(trackers, key)) {
+      message(t.trackers.lastOn);
+      return;
+    }
+    void setTracker(key, on);
+  };
 
   const age = profile.birthDate ? formatAge(profile.birthDate, now) : undefined;
   const profileLine = profile.birthDate ? [formatBirthDate(profile.birthDate), age].filter(Boolean).join(' · ') : undefined;
@@ -45,8 +64,31 @@ export function Settings({ profile }: { profile: Profile }) {
         </button>
       </section>
 
+      <SettingsSection id="settings-trackers" title={t.trackers.title}>
+        <div class="data-group">
+          {TRACKER_KINDS.map((key) => (
+            <SwitchRow
+              key={key}
+              icon={TRACKER_ICON[key]}
+              label={t.trackers[key]}
+              hint={t.trackers[`${key}Hint`]}
+              checked={trackers?.[key] ?? true}
+              onChange={(on) => toggleTracker(key, on)}
+            />
+          ))}
+        </div>
+        <p class="settings-note">{t.trackers.note}</p>
+      </SettingsSection>
+
       <SettingsSection id="settings-look" title={t.settings.sectionLook}>
         <div class="data-group">
+          <SwitchRow
+            icon="history"
+            label={t.data.timeline}
+            hint={t.data.timelineHint}
+            checked={trackers?.timeline ?? true}
+            onChange={(on) => toggleTracker('timeline', on)}
+          />
           <SwitchRow
             icon="moon"
             label={t.data.darkMode}

@@ -28,7 +28,7 @@ test.describe('settings tab', () => {
     await expect(nav.getByRole('link', { name: 'Einstellungen' })).toHaveAttribute('aria-current', 'page');
 
     const main = page.getByRole('main');
-    await expect(main.getByRole('heading', { level: 2 })).toHaveText(['Darstellung', 'Daten', 'Über die App']);
+    await expect(main.getByRole('heading', { level: 2 })).toHaveText(['Was möchtest du festhalten?', 'Darstellung', 'Daten', 'Über die App']);
     await expect(main.getByText('Dein Baby', { exact: true })).toBeVisible();
     await expect(main.getByRole('button', { name: /Daten exportieren Noch keine Sicherung/ })).toBeVisible();
     await expect(main.getByText(`Baby Time ${pkg.version}`)).toBeVisible();
