@@ -38,7 +38,7 @@ npm run preview   # gebaute App: http://localhost:4173 (mit Service Worker und C
 
 Beim ersten Mal für Playwright einmalig: `npx playwright install chromium webkit`.
 
-Der Code liegt auf GitHub (`faber-codicis/babytime`); `npm run snapshot` bleibt als zusätzliche lokale Sicherung.
+Der Code liegt auf GitHub (`faber-codicis/babytime`); `npm run snapshot` bleibt als zusätzliche lokale Sicherung. Geheimnisse (`.env*`, `.dev.vars*`, `.wrangler/`) sind per `.gitignore` ausgeschlossen.
 
 Die E2E-Tests laufen unabhängig von der Zeitzone des Rechners immer in `Europe/Vienna` (gesetzt in `playwright.config.ts`).
 

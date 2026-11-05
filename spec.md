@@ -238,7 +238,8 @@ Ein Screen ohne Tab-Leiste, nur beim ersten Start (`onboarded = false`):
 ### 6.8 Datensicherung
 
 - **Export:** JSON `{ app: 'babytime', schemaVersion: 1, exportedAt, profile, events: [...] }`. Dateiname `babytime-YYYY-MM-DD.json`. Bevorzugt Web Share API mit Datei (iOS), sonst Download-Link.
-- **Import:** Dateiauswahl, Validierung (Pflichtfelder, Typen), Vorschau „123 Einträge“, Wahl **Ersetzen** oder **Zusammenführen** (nach `id`), Bestätigung. Fehlerhafte Datei: verständliche Meldung, nichts wird geändert.
+- **Export mit Passwort** (seit 0.4.3, optional): eigener Eintrag „Mit Passwort exportieren“. Passwort zweimal (mindestens 8 Zeichen), dann wird die Sicherung per WebCrypto verschlüsselt (PBKDF2-SHA256 mit 600 000 Runden, AES-GCM 256) und mit einem zweiten Tipp „Datei sichern“ übergeben. Datei `babytime-YYYY-MM-DD-verschluesselt.json` mit `{ app: 'babytime', encrypted: 1, kdf, iterations, salt, iv, data }`. Das Passwort wird nirgends gespeichert; ohne Passwort ist die Datei verloren.
+- **Import:** Dateiauswahl, bei verschlüsselter Datei zuerst Passwortabfrage, Validierung (Pflichtfelder, Typen), Vorschau „123 Einträge“, Wahl **Ersetzen** oder **Zusammenführen** (nach `id`), Bestätigung. Fehlerhafte Datei: verständliche Meldung, nichts wird geändert.
 - **Alle Daten löschen** (zum Beispiel nach dem Ausprobieren mit Testeinträgen): Eintrag in den Einstellungen (Abschnitt Daten, 6.10), abgesetzt von den anderen und in warnender Farbe (Text zusätzlich, nicht nur Farbe). Tap öffnet einen Rückfrage-Dialog: Titel „Alles löschen?“, Text „Alle Einträge und das Profil werden von diesem Handy gelöscht. Das lässt sich nicht rückgängig machen.“, Buttons **Zuerst exportieren** (öffnet den Export), **Abbrechen** (Standardfokus) und **Alles löschen**. Erst der letzte löscht alle `events` und alle `kv`-Einträge (Profil, `lastSeenVersion`, gemerkte Hinweise) und führt danach zum Erststart wie bei einer frischen Installation. Der Service Worker und die Caches bleiben unberührt (Offline-Betrieb funktioniert weiter). Ein Unit-Test prüft, dass nach dem Löschen beide Tabellen leer sind, ein E2E-Test den Weg über den Dialog.
 
 ### 6.9 Version und „Was ist neu“
@@ -277,7 +278,7 @@ Eigener Tab `#/einstellungen` im Stil des Mockups „Einstellungen“, auf Wunsc
 
 1. **Profil-Karte:** Avatar, Name (ohne Namen „Dein Baby“ und darunter „Name eintragen“), „09.10.2026 · 12 Tage alt“, runder Stift-Knopf `aria-label="Profil bearbeiten"` → Sheet mit Name und Geburtsdatum (wie Erststart).
 2. **Darstellung:** Schalter **Dunkles Design** (`role="switch"`, ganze Zeile tippbar), siehe Abschnitt 4.
-3. **Daten:** **Daten exportieren** mit Zusatzzeile „Letzte Sicherung: heute / gestern / vor 12 Tagen“ bzw. „Noch keine Sicherung“ (Zeitpunkt wird beim erfolgreichen Export in `kv` `lastExportAt` gemerkt), **Daten wiederherstellen**, Hinweis zur unverschlüsselten Datei, **Alle Daten löschen** in eigener Gruppe (6.8).
+3. **Daten:** **Daten exportieren** mit Zusatzzeile „Letzte Sicherung: heute / gestern / vor 12 Tagen“ bzw. „Noch keine Sicherung“ (Zeitpunkt wird beim erfolgreichen Export in `kv` `lastExportAt` gemerkt), **Daten wiederherstellen**, **Mit Passwort exportieren**, Hinweis zur unverschlüsselten Datei, **Alle Daten löschen** in eigener Gruppe (6.8).
 4. **Über die App:** „Baby Time x.y.z“, „Erstellt am …“, Statuszeile, **Nach Update suchen** (fragt nur den eigenen `sw.js` ab; Ergebnisse „Du hast die neueste Version.“, „Neue Version wird geladen …“, „Keine Verbindung. Versuch es später noch einmal.“; bei neuer Version **Jetzt neu starten**), Link **Was ist neu**; **Als App installieren** nur, solange nicht installiert (iOS: Schritte aus 6.7, Android: Button bzw. Hinweis auf das Chrome-Menü); Satz „Deine Einträge bleiben auf diesem Handy.“
 
 Nicht in 0.4.0: Tracker-Schalter, Meilensteine, Akzentfarben, automatischer Nachtmodus, Benachrichtigungen.
@@ -465,7 +466,8 @@ Wird beim Build nach `dist/` kopiert. Die Datei gilt nur für ausgelieferte Date
 
 - Import: maximale Dateigröße 10 MB, höchstens 100 000 Einträge. Jeder Eintrag wird **explizit** geprüft: `id` als UUID, `type` aus der festen Liste, `start` und `end` als endliche Zahlen mit `end >= start`, `side` und `diaper` nur mit erlaubten Werten, `note` als String mit Längengrenze. Unbekannte Felder werden verworfen.
 - Neue Objekte werden aus den geprüften Feldern **neu aufgebaut**, nie per Spread aus dem geparsten JSON (Schutz vor `__proto__` und `constructor`). Bei einem einzigen ungültigen Eintrag: Import abbrechen, nichts ändern, verständliche Meldung.
-- Export: Hinweis im Sheet, dass die Datei unverschlüsselt ist und nach dem Wiederherstellen gelöscht werden sollte.
+- Export: Hinweis, dass die normale Datei unverschlüsselt ist und nach dem Wiederherstellen gelöscht werden sollte; optional Export mit Passwort (6.8).
+- HTTP-Header: zusätzlich `Strict-Transport-Security` (eigene Domain).
 
 ### 13.6 Notfall
 

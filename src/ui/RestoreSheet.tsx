@@ -1,9 +1,10 @@
 import { useLayoutEffect, useState } from 'preact/hooks';
-import { BackupError, importBackup, type ImportMode, type ParsedBackup } from '../data/backup';
+import { BackupError, importBackup, parseBackup, type ImportMode, type ParsedBackup } from '../data/backup';
+import { decryptBackup, DecryptError, type EncryptedEnvelope } from '../data/backupCrypto';
 import { t } from '../strings.de';
 import { Sheet } from './Sheet';
 
-export type RestoreState = { backup: ParsedBackup } | { error: string };
+export type RestoreState = { backup: ParsedBackup } | { encrypted: EncryptedEnvelope } | { error: string };
 
 const dateFormat = new Intl.DateTimeFormat(t.locale, { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
@@ -12,15 +13,39 @@ export function RestoreSheet(props: { state: RestoreState | undefined; onClose: 
   const [mode, setMode] = useState<ImportMode>();
   const [error, setError] = useState<string>();
   const [busy, setBusy] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState<string>();
+  const [unlocked, setUnlocked] = useState<ParsedBackup>();
 
   useLayoutEffect(() => {
     setMode(undefined);
     setError(undefined);
+    setPassword('');
+    setPasswordError(undefined);
+    setUnlocked(undefined);
   }, [props.state]);
 
   const state = props.state;
   const shownError = error ?? (state && 'error' in state ? state.error : undefined);
-  const backup = state && 'backup' in state ? state.backup : undefined;
+  const envelope = state && 'encrypted' in state ? state.encrypted : undefined;
+  const backup = unlocked ?? (state && 'backup' in state ? state.backup : undefined);
+
+  const unlock = async (event: Event) => {
+    event.preventDefault();
+    if (!envelope || busy) return;
+    setBusy(true);
+    try {
+      const text = await decryptBackup(envelope, password);
+      setPassword('');
+      setUnlocked(parseBackup(text));
+    } catch (e) {
+      if (e instanceof DecryptError) setPasswordError(t.restore.wrongPassword);
+      else if (e instanceof BackupError) setError(e.message);
+      else throw e;
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const confirm = async () => {
     if (!backup || !mode || busy) return;
@@ -52,6 +77,38 @@ export function RestoreSheet(props: { state: RestoreState | undefined; onClose: 
             </button>
           </div>
         </>
+      ) : envelope && !backup ? (
+        <form class="editor" noValidate onSubmit={(ev) => void unlock(ev)}>
+          <p class="sheet-text">{t.restore.encryptedText}</p>
+          <div class="field">
+            <label class="field-label" for="restore-password">
+              {t.restore.password}
+            </label>
+            <input
+              id="restore-password"
+              class="input"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onInput={(ev) => setPassword(ev.currentTarget.value)}
+              aria-invalid={passwordError ? true : undefined}
+              aria-describedby={passwordError ? 'restore-password-error' : undefined}
+            />
+            {passwordError && (
+              <p id="restore-password-error" class="field-error" role="alert">
+                {passwordError}
+              </p>
+            )}
+          </div>
+          <div class="sheet-actions sheet-actions--row">
+            <button type="button" class="big-btn big-btn--white" onClick={props.onClose}>
+              {t.restore.cancel}
+            </button>
+            <button type="submit" class="big-btn big-btn--rose" disabled={!password || busy}>
+              {busy ? t.restore.unlocking : t.restore.unlock}
+            </button>
+          </div>
+        </form>
       ) : (
         backup && (
           <>

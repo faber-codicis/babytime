@@ -84,6 +84,13 @@ Kurz begründet, neueste unten. Paketänderungen stehen im Abschnitt „Abhängi
 - **Altersanzeige:** Tage bis 14 Tage, dann Wochen bis 3 volle Monate, dann Monate, ab 24 Monaten Jahre (`formatAge`). Reine Tageszahlen wie „150 Tage alt“ waren nicht lesbar.
 - **Mehr Wege zur Version:** Splash, Pille auf Heute, Einstellungen. Die frühere Versionskarte im Sheet entfällt mit dem Sheet.
 
+## 0.4.3 (Security-Audit)
+
+- **Export mit Passwort** zusätzlich zum normalen Export, nicht statt dessen: Ein vergessenes Passwort heißt Datenverlust, deshalb bleibt die einfache Sicherung der Standard. Krypto nur über WebCrypto (keine neue Abhängigkeit): PBKDF2-SHA256 mit 600 000 Runden (OWASP), AES-GCM 256, zufälliges Salt (16 Byte) und IV (12 Byte) pro Datei. Beim Import werden nur 100 000 bis 2 000 000 Runden akzeptiert, damit eine präparierte Datei das Handy nicht minutenlang rechnen lässt. Die Datei bleibt JSON, damit die Dateiauswahl sie annimmt; nach dem Entschlüsseln läuft dieselbe Prüfung wie beim normalen Import.
+- **Zwei Tipps beim Export mit Passwort:** Verschlüsseln dauert einen Moment, iOS erlaubt das Teilen aber nur direkt im Tipp. Deshalb erst „Datei erstellen“, dann „Datei sichern“.
+- **HSTS** in `public/_headers` (1 Jahr, mit Subdomains; ohne `preload`, weil das schwer rückgängig zu machen ist).
+- **Abhängigkeiten:** `wrangler` aktualisiert, damit die hohe Lücke in `undici` weg ist. Die übrigen mittleren/niedrigen Meldungen (`minimatch`, `glob`, `deepmerge` unter eslint und vite-plugin-pwa) betreffen nur Build-Werkzeuge, nicht die ausgelieferte App. Ein `overrides` auf `minimatch@11` wurde getestet und verworfen: Danach fand Workbox nur noch 6 statt 22 Dateien für den Offline-Cache.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

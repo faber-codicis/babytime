@@ -1,9 +1,11 @@
 import { useRef, useState } from 'preact/hooks';
 import { setLastExportAt } from '../data/appState';
 import { BackupError, deleteAllData, MAX_FILE_BYTES, parseBackup } from '../data/backup';
+import { readEnvelope } from '../data/backupCrypto';
 import type { Profile } from '../data/profile';
 import { navigate } from '../router';
 import { t } from '../strings.de';
+import { EncryptedExportSheet } from './EncryptedExportSheet';
 import { deliverExportFile, prepareExportFile } from './exportFile';
 import { useLive } from './hooks';
 import { ProfileSheet } from './ProfileSheet';
@@ -37,6 +39,7 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
   const [restore, setRestore] = useState<RestoreState>();
   const [profileOpen, setProfileOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [encryptedOpen, setEncryptedOpen] = useState(false);
   const [, setDark] = useDarkTheme();
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -49,7 +52,9 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
       return;
     }
     try {
-      setRestore({ backup: parseBackup(await file.text(), file.size) });
+      const text = await file.text();
+      const envelope = readEnvelope(text);
+      setRestore(envelope ? { encrypted: envelope } : { backup: parseBackup(text, file.size) });
     } catch (error) {
       setRestore({ error: error instanceof BackupError ? error.message : t.restore.errors.notJson });
     }
@@ -73,6 +78,19 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
         tabIndex={-1}
         aria-hidden="true"
         onChange={(e) => void onFileChosen(e.currentTarget)}
+      />
+
+      <EncryptedExportSheet
+        open={encryptedOpen}
+        onClose={() => setEncryptedOpen(false)}
+        onDeliver={(file) => {
+          void deliverExportFile(file).then(async (delivered) => {
+            if (!delivered) return;
+            setEncryptedOpen(false);
+            await setLastExportAt();
+            onMessage(t.data.exported);
+          });
+        }}
       />
 
       <RestoreSheet
@@ -118,6 +136,7 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
 
   return {
     exportNow,
+    openEncryptedExport: () => setEncryptedOpen(true),
     openRestore: () => fileInput.current?.click(),
     openProfile: () => setProfileOpen(true),
     openDeleteAll: () => setDeleteOpen(true),

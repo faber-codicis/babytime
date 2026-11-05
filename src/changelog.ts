@@ -10,6 +10,15 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.4.3',
+    date: '2026-11-05',
+    items: [
+      'Neu in den Einstellungen: Sicherung mit Passwort exportieren',
+      'Eine geschützte Sicherung lässt sich nur mit dem Passwort wiederherstellen',
+      'Ohne Passwort gibt es keinen Weg zurück, also gut merken',
+    ],
+  },
+  {
     version: '0.4.2',
     date: '2026-10-21',
     items: [

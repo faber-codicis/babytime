@@ -112,3 +112,39 @@ test('edit the profile from the settings', async ({ page }) => {
   await waitForApp(page);
   await expect(page.getByRole('heading', { name: 'Lena' })).toBeVisible();
 });
+
+test('export with password: file is encrypted, restore needs the right password', async ({ page }) => {
+  await page.getByRole('button', { name: 'Windel', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Windel' }).getByRole('button', { name: 'Nass' }).click();
+
+  const main = await openData(page);
+  await main.getByRole('button', { name: /Mit Passwort exportieren/ }).click();
+  const sheet = page.getByRole('dialog', { name: 'Mit Passwort sichern' });
+  await sheet.getByLabel('Passwort', { exact: true }).fill('kurz');
+  await sheet.getByLabel('Passwort wiederholen').fill('kurz');
+  await sheet.getByRole('button', { name: 'Datei erstellen' }).click();
+  await expect(sheet.getByText('Bitte mindestens 8 Zeichen.')).toBeVisible();
+  await sheet.getByLabel('Passwort', { exact: true }).fill('geheim123');
+  await sheet.getByLabel('Passwort wiederholen').fill('geheim123');
+  await sheet.getByRole('button', { name: 'Datei erstellen' }).click();
+  const download = page.waitForEvent('download');
+  await sheet.getByRole('button', { name: 'Datei sichern' }).click();
+  const file = await download;
+  const name = file.suggestedFilename();
+  const text = readFileSync((await file.path())!, 'utf8');
+  expect(name).toMatch(/^babytime-\d{4}-\d{2}-\d{2}-verschluesselt\.json$/);
+  expect(JSON.parse(text)).toMatchObject({ app: 'babytime', encrypted: 1 });
+  expect(text).not.toContain('wet');
+  await expect(page.getByText('Sicherung erstellt')).toBeVisible();
+
+  const restore = await chooseRestoreFile(page, { name, mimeType: 'application/json', buffer: Buffer.from(text) });
+  await restore.getByLabel('Passwort').fill('falsch123');
+  await restore.getByRole('button', { name: 'Entschlüsseln' }).click();
+  await expect(restore.getByText('Das Passwort stimmt nicht, oder die Datei ist beschädigt.')).toBeVisible();
+  await restore.getByLabel('Passwort').fill('geheim123');
+  await restore.getByRole('button', { name: 'Entschlüsseln' }).click();
+  await expect(restore.getByText(/In der Datei: 1 Eintrag\./)).toBeVisible();
+  await restore.getByRole('button', { name: /Ersetzen/ }).click();
+  await restore.getByRole('button', { name: 'Ja, ersetzen' }).click();
+  await expect(page.getByText('Wiederhergestellt: 1 Eintrag')).toBeVisible();
+});

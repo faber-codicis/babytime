@@ -60,6 +60,7 @@ export function Settings({ profile }: { profile: Profile }) {
             disabled={!data.exportNow}
             onClick={() => data.exportNow?.()}
           />
+          <ActionRow icon="shield" label={t.data.exportEncrypted} hint={t.data.exportEncryptedHint} onClick={data.openEncryptedExport} />
           <ActionRow icon="upload" label={t.data.restore} onClick={data.openRestore} />
         </div>
         <p class="settings-note">{t.data.exportHint}</p>

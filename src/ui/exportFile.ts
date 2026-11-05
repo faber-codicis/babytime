@@ -1,10 +1,19 @@
 import { buildExport, exportFileName } from '../data/backup';
+import { encryptBackup } from '../data/backupCrypto';
 import { t } from '../strings.de';
 
 /** Builds the backup file in advance, so the tap can share it synchronously (iOS needs the user gesture). */
 export async function prepareExportFile(): Promise<File> {
   const backup = await buildExport();
   return new File([JSON.stringify(backup)], exportFileName(backup.exportedAt), { type: 'application/json' });
+}
+
+/** Password-protected backup ("babytime-2026-10-21-verschluesselt.json"). Built after the password is entered. */
+export async function prepareEncryptedExportFile(password: string): Promise<File> {
+  const backup = await buildExport();
+  const envelope = await encryptBackup(JSON.stringify(backup), password);
+  const name = exportFileName(backup.exportedAt).replace(/\.json$/, '-verschluesselt.json');
+  return new File([JSON.stringify(envelope)], name, { type: 'application/json' });
 }
 
 /** `navigator.standalone` exists only in iOS/iPadOS WebKit (tab or home screen). */
