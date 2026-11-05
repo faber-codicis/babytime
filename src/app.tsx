@@ -3,6 +3,7 @@ import { useRoute } from './router';
 import { useLive } from './ui/hooks';
 import { Nav } from './ui/Nav';
 import { UpdateDialog } from './ui/UpdateDialog';
+import { useAutoTheme } from './ui/theme';
 import { useUpdatePopup } from './ui/useUpdatePopup';
 import { Breastfeeding } from './views/Breastfeeding';
 import { History } from './views/History';
@@ -15,6 +16,7 @@ export function App() {
   const route = useRoute();
   const profile = useLive(getProfile, []);
   const update = useUpdatePopup(Boolean(profile?.onboarded), route);
+  useAutoTheme();
 
   // Wait for the profile, so the first start never flashes Today (the splash covers this moment).
   if (!profile) return null;

@@ -107,6 +107,12 @@ export function formatSince(ms: number): string {
   return ms < MINUTE ? t.time.justNow : t.time.since(formatDuration(ms));
 }
 
+/** Compact "h:mm" for the night view ("2:05", "0:50"). */
+export function formatHoursMinutes(ms: number): string {
+  const { h, m } = split(ms);
+  return `${h}:${String(m).padStart(2, '0')}`;
+}
+
 /** Like formatDuration, but "18 Minuten" below one hour (used in running text). */
 export function formatDurationLong(ms: number): string {
   const { h, m } = split(ms);

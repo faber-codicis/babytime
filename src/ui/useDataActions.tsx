@@ -11,7 +11,7 @@ import { useLive } from './hooks';
 import { ProfileSheet } from './ProfileSheet';
 import { RestoreSheet, type RestoreState } from './RestoreSheet';
 import { Sheet } from './Sheet';
-import { useDarkTheme } from './theme';
+import { useThemeMode } from './theme';
 
 /**
  * The export action, or undefined while the file is being prepared. The file is prepared in advance
@@ -40,7 +40,7 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
   const [profileOpen, setProfileOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [encryptedOpen, setEncryptedOpen] = useState(false);
-  const [, setDark] = useDarkTheme();
+  const [, setThemeMode] = useThemeMode();
   const fileInput = useRef<HTMLInputElement>(null);
 
   const onFileChosen = async (input: HTMLInputElement) => {
@@ -62,7 +62,7 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
 
   const deleteAll = async () => {
     await deleteAllData();
-    setDark(false); // like a fresh install: light design
+    setThemeMode('light'); // like a fresh install: light design
     setDeleteOpen(false);
     // The app now shows the first start, like a fresh install.
     navigate('today', { replace: true });

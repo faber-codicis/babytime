@@ -9,7 +9,7 @@ import { Icon } from '../ui/icons';
 import { InstallSection } from '../ui/InstallSection';
 import { ActionRow, SettingsSection, SwitchRow } from '../ui/SettingsRows';
 import { Snackbar, type SnackMessage } from '../ui/Snackbar';
-import { useDarkTheme } from '../ui/theme';
+import { useThemeMode } from '../ui/theme';
 import { useDataActions } from '../ui/useDataActions';
 import { VersionDetails } from '../ui/VersionPill';
 
@@ -24,7 +24,7 @@ export function Settings({ profile }: { profile: Profile }) {
   const [snack, setSnack] = useState<SnackMessage>();
   const message = (text: string) => setSnack({ id: ++snackId, text });
   const data = useDataActions(profile, message);
-  const [dark, setDark] = useDarkTheme();
+  const [themeMode, setThemeMode] = useThemeMode();
   const lastExportAt = useLive(getLastExportAt, []);
 
   const age = profile.birthDate ? formatAge(profile.birthDate, now) : undefined;
@@ -47,7 +47,21 @@ export function Settings({ profile }: { profile: Profile }) {
 
       <SettingsSection id="settings-look" title={t.settings.sectionLook}>
         <div class="data-group">
-          <SwitchRow icon="moon" label={t.data.darkMode} hint={t.data.darkModeHint} checked={dark} onChange={setDark} />
+          <SwitchRow
+            icon="moon"
+            label={t.data.darkMode}
+            hint={t.data.darkModeHint}
+            checked={themeMode === 'dark'}
+            onChange={(on) => setThemeMode(on ? 'dark' : 'light')}
+          />
+          {/* Both rows are one choice: switching one on switches the other off. */}
+          <SwitchRow
+            icon="clock"
+            label={t.data.nightMode}
+            hint={t.data.nightModeHint}
+            checked={themeMode === 'night'}
+            onChange={(on) => setThemeMode(on ? 'night' : 'light')}
+          />
         </div>
       </SettingsSection>
 

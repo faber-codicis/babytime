@@ -117,6 +117,18 @@ Vorschläge A1–A4 und B1–B3 aus der Designdurchsicht vom 2026-11-05, auf Wun
 - **Neue Farbe `--sky`** (hell #DCEBF2 / Schrift #1D4A5E, 7,8:1; dunkel #1C2A31 / #B4D8E8, 9,8:1), damit Flasche sich von Stillen (Rosé) abhebt.
 - **Ml-Felder nur an Tagen mit Einträgen:** Ein voll gestilltes Baby sieht Heute wie bisher.
 
+## 0.7.0 (Paket C: Nacht und Zeitleiste)
+
+Auf Wunsch des Besitzers (2026-11-05) umgesetzt: C1 „Nachts automatisch“, C2 Tages-Zeitleiste, C3 Nachtansicht.
+
+- **Nachts nach der Uhr, nicht nach dem System:** Die erste Fassung (System-Einstellung) war schlecht lesbar, deshalb feste Zeiten 20–7 Uhr. Die Stunden stehen zweimal (`data/theme.ts` und `public/theme-init.js`), weil das Init-Skript vor dem App-Code laufen muss.
+- **Zwei Schalter statt Auswahlliste:** Der bestehende Schalter „Dunkles Design“ bleibt, wie er war (E2E-Tests und Gewohnheit); „Nachts automatisch“ steht darunter. Beide speichern in denselben Schlüssel, höchstens einer ist an.
+- **Nachtansicht nur mit „Nachts automatisch“:** Wer „Dunkles Design“ dauerhaft an hat, behält die gewohnte Ansicht auch nachts. Die Nachtansicht ist an die Nacht-Uhrzeit gebunden, nicht an das dunkle Design.
+- **Sonne/Mond statt Schalter:** Die Wahl „Tagesansicht“ liegt nur im Speicher (Modulvariable), gilt höchstens 12 Stunden und überlebt Tab-Wechsel, aber keinen Neustart – nachts soll beim Öffnen immer zuerst die ruhige Ansicht kommen.
+- **Ring = 3 Stunden:** Ein voller Ring heißt ungefähr „Zeit fürs nächste Stillen“; das ist eine grobe Orientierung, keine Empfehlung, und bleibt nach 3 Stunden voll.
+- **Tab-Leiste bleibt in der Nachtansicht** (Mockup zeigt keine): Ohne sie käme man nachts nicht in den Verlauf.
+- **Zeitleiste:** Positionen als Prozent des Tages in `logic/timeline.ts` (Unit-Tests), Darstellung mit Inline-`style` (CSP erlaubt `style-src 'unsafe-inline'`). Die Tageszähler-Leiste hat seit der Flasche vier Felder und bleibt mit `grid-auto-flow: column` einzeilig.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

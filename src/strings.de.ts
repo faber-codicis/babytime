@@ -78,10 +78,29 @@ export const t = {
     actionFeedRunning: 'Stillen läuft',
     actionFeedRunningA11y: (timer: string) => `Stillen läuft, ${timer}, zum Timer`,
     actionDiaper: 'Windel',
+    timelineA11y: 'Der heutige Tag von 0 bis 24 Uhr',
+    legendSleep: 'Schlaf',
+    legendFeed: 'Stillen',
+    legendDiaper: 'Windel',
+    legendBottle: 'Flasche/Abpumpen',
     actionBottle: 'Flasche',
     actionBottleA11y: 'Flasche oder Abpumpen',
     actionSleep: 'Schlaf',
     actionWake: 'Wach',
+  },
+
+  night: {
+    title: 'Nachtansicht',
+    lastFed: 'Zuletzt gestillt',
+    hoursSide: (side: string) => `Std · ${side}`,
+    hours: (hm: string) => `${hm} h`,
+    asleepSince: 'Schläft seit',
+    awakeSince: 'Wach seit',
+    feedStart: (side: string) => `Stillen ${side} starten`,
+    feedRunning: (timer: string) => `Stillen läuft · ${timer}`,
+    toTimer: 'Stillt gerade, zum Timer',
+    dayView: 'Tagesansicht zeigen',
+    nightView: 'Nachtansicht zeigen',
   },
 
   feeding: {
@@ -138,7 +157,9 @@ export const t = {
     deleteAllHint: 'Einträge und Profil von diesem Handy entfernen',
     versionCard: (version: string) => `Baby Time · Version ${version}`,
     darkMode: 'Dunkles Design',
-    darkModeHint: 'Gedämpfte Farben für die Nacht',
+    darkModeHint: 'Immer gedämpfte Farben',
+    nightMode: 'Nachts automatisch',
+    nightModeHint: 'Von 20 bis 7 Uhr dunkel, Heute zeigt dann die Nachtansicht',
   },
 
   encryptedExport: {

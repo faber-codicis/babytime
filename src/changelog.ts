@@ -10,6 +10,16 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.0',
+    date: '2026-11-05',
+    items: [
+      'Neu in den Einstellungen: „Nachts automatisch“ – von 20 bis 7 Uhr dunkel',
+      'Nachts zeigt Heute eine ruhige Nachtansicht mit großem Ring und großen Knöpfen',
+      'Mit der Sonne oben rechts kommst du zur gewohnten Ansicht, mit dem Mond zurück',
+      'Neu auf Heute: eine Zeitleiste von 0 bis 24 Uhr mit Schlaf, Stillen, Windeln und Flasche',
+    ],
+  },
+  {
     version: '0.6.0',
     date: '2026-11-05',
     items: [

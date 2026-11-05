@@ -4,7 +4,7 @@ import { loadToday } from '../data/overview';
 import type { Profile } from '../data/profile';
 import { nextSide } from '../logic/nextSide';
 import { dayStats } from '../logic/stats';
-import { dayRange, formatTimer, MINUTE } from '../logic/time';
+import { dayRange, formatTimer, HOUR, MINUTE } from '../logic/time';
 import { navigate } from '../router';
 import { t } from '../strings.de';
 import { BackupReminder } from '../ui/BackupReminder';
@@ -17,9 +17,19 @@ import { HeroCard } from '../ui/HeroCard';
 import { InstallHint } from '../ui/InstallHint';
 import { Snackbar, type SnackMessage } from '../ui/Snackbar';
 import { StatusCards } from '../ui/StatusCards';
+import { DayTimeline } from '../ui/DayTimeline';
+import { isNightView } from '../ui/theme';
 import { useLive, useNow } from '../ui/hooks';
+import { NightView } from './NightView';
 
 let snackId = 0;
+
+/**
+ * Sun button in the night view: the normal Today until the night is over (or the app restarts).
+ * Kept outside the component, so switching tabs does not bring the night view back.
+ */
+let dayViewChosenAt: number | undefined;
+const DAY_VIEW_MS = 12 * HOUR;
 
 export function Today({ profile }: { profile: Profile }) {
   // The query only depends on the local day; it re-runs at midnight and on every data change.
@@ -38,6 +48,14 @@ export function Today({ profile }: { profile: Profile }) {
   const latestAmounts = useLive(getLatestAmounts, []);
   const [snack, setSnack] = useState<SnackMessage>();
   const busy = useRef(false);
+  const [, rerender] = useState(0);
+  const dayViewChosen = dayViewChosenAt !== undefined && now - dayViewChosenAt < DAY_VIEW_MS;
+  const nightTime = isNightView(now);
+  const night = nightTime && !dayViewChosen;
+  const chooseDayView = (day: boolean) => {
+    dayViewChosenAt = day ? Date.now() : undefined;
+    rerender((n) => n + 1);
+  };
 
   /** Runs one write at a time, so a double tap on Schlaf cannot start and end at once. */
   const once = async (action: () => Promise<void>) => {
@@ -82,10 +100,37 @@ export function Today({ profile }: { profile: Profile }) {
       setSnack({ id: ++snackId, text, undo: change.undo });
     });
 
+  const sheets = (
+    <>
+      <BottleSheet open={bottleOpen} latest={latestAmounts} onClose={() => setBottleOpen(false)} onSave={(pick) => void onBottle(pick)} />
+      <DiaperSheet open={diaperOpen} onClose={() => setDiaperOpen(false)} onPick={(kind, minutesAgo) => void onDiaper(kind, minutesAgo)} />
+    </>
+  );
+
+  if (night) {
+    return (
+      <>
+        <NightView
+          data={data}
+          now={now}
+          onFeed={() => void onFeed()}
+          onDiaper={() => setDiaperOpen(true)}
+          onBottle={() => setBottleOpen(true)}
+          onSleep={() => void onSleep()}
+          onDayView={() => chooseDayView(true)}
+        />
+        <div class="snack-anchor">
+          <Snackbar message={snack} onDone={() => setSnack(undefined)} />
+        </div>
+        {sheets}
+      </>
+    );
+  }
+
   return (
     <div class="today">
       <InstallHint />
-      <Header profile={profile} now={now} />
+      <Header profile={profile} now={now} onNightView={nightTime ? () => chooseDayView(false) : undefined} />
       <BackupReminder
         now={now}
         feeding={Boolean(data?.runningFeed)}
@@ -94,6 +139,7 @@ export function Today({ profile }: { profile: Profile }) {
       <HeroCard data={data} now={now} />
       <StatusCards data={data} now={now} />
       <Chips stats={stats} />
+      <DayTimeline events={data?.dayEvents} dayStart={dayStart} dayEnd={dayEnd} now={now} />
       <div class="dock-area">
         <Snackbar message={snack} onDone={() => setSnack(undefined)} />
         <DockButtons
@@ -105,8 +151,7 @@ export function Today({ profile }: { profile: Profile }) {
           onSleep={() => void onSleep()}
         />
       </div>
-      <BottleSheet open={bottleOpen} latest={latestAmounts} onClose={() => setBottleOpen(false)} onSave={(pick) => void onBottle(pick)} />
-      <DiaperSheet open={diaperOpen} onClose={() => setDiaperOpen(false)} onPick={(kind, minutesAgo) => void onDiaper(kind, minutesAgo)} />
+      {sheets}
     </div>
   );
 }

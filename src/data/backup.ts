@@ -2,7 +2,7 @@ import { hasAmount, isAmount, isTimed, NOTE_MAX } from '../logic/validate';
 import { t } from '../strings.de';
 import { db, SCHEMA_VERSION, type BabyEvent, type DiaperKind, type EventType, type MilkKind, type PumpSide, type Side } from './db';
 import { sanitizeProfile, type Profile } from './profile';
-import { saveDarkTheme } from './theme';
+import { resetTheme } from './theme';
 
 /** Spec 13.5 limits. */
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;
@@ -220,5 +220,5 @@ export async function deleteAllData(): Promise<void> {
     await db.events.clear();
     await db.kv.clear();
   });
-  saveDarkTheme(false);
+  resetTheme();
 }

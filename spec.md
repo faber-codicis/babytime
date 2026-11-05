@@ -102,6 +102,8 @@ Referenzbreite der Mockups: 390 px. Layout fluid bis 480 px, darüber zentrierte
 
 Standard ist **immer hell**, unabhängig von der System-Einstellung. Das dunkle Design schaltet die Nutzerin in den Einstellungen (Abschnitt Darstellung, 6.10) mit dem Schalter **Dunkles Design** ein (Schalter-Look wie im Mockup „Einstellungen“). Die Wahl wird gemerkt, gilt ab dem ersten Bild (auch für den Splash) und wird durch „Alle Daten löschen“ zurückgesetzt. *(Geändert auf Wunsch der Besitzerin, 2026-10-21: Die erste Fassung folgte dem System und war schlecht lesbar.)*
 
+**Nachts automatisch** (seit 0.7.0): zweiter Schalter unter „Dunkles Design“. Die beiden sind eine Wahl (`light` | `dark` | `night` in `localStorage` `babytime-theme`), einer schaltet den anderen aus. Mit `night` ist das Design von **20:00 bis 07:00** Ortszeit dunkel, sonst hell – nach der Uhr, nicht nach der System-Einstellung. `theme-init.js` entscheidet vor dem ersten Bild, solange die App offen ist, wird jede Minute und beim Zurückkehren in die App nachgezogen. Nachts zeigt Heute zusätzlich die Nachtansicht (6.2a).
+
 Überarbeitete Tokens mit mehr Kontrast (Text auf jeder Fläche mindestens 6:1):
 
 | Token | Wert |
@@ -192,11 +194,22 @@ Von oben nach unten:
 3. **Zwei Karten** nebeneinander: **Windel** (`--peach`): „vor 35 Min“ und Art („nass“); **Schlaf** (`--lavender`): „schläft seit 25 Min“ oder „wach seit 40 Min“ (seit Ende des letzten Schlafs).
 4. **Tageszähler** (seit 0.5.0 eine feste Leiste aus drei gleich breiten weißen Feldern statt loser Chips, damit nichts umbricht): große Zahl, kleines Label darunter – „6×“ gestillt, „5“ Windeln, „9:25“ Std Schlaf (unter einer Stunde „40“ Min Schlaf), gezählt seit 00:00 lokal. Schlafsumme in Stunden und Minuten (unter einer Stunde „40 Min Schlaf“), weil Neugeborene in vielen kurzen Etappen schlafen; laufender Schlaf zählt bis jetzt. (Geändert auf Wunsch der Besitzerin, 2026-10-21; vorher ganze Stunden.)
 4a. **Update-Pille** oben rechts in der Kopfzeile: Seit 0.5.0 nur sichtbar, wenn eine neue Version bereit ist (rosé, ↻ **Update bereit**, Tippen startet neu); Version, Build-Zeitpunkt und „Nach Update suchen“ stehen in Einstellungen → Über die App. *Bis 0.4.2:* kleine Pille „v0.4.0“ (12 px / 700, `--ink-soft` auf `--surface`, Tippfläche ≥ 44 px). Tippen öffnet ein kleines Fenster (`role="dialog"`, Escape und Tippen außerhalb schließen, Fokus hinein und zurück) mit „Baby Time 0.4.0“, „Erstellt am <Build-Zeitpunkt>“, Statuszeile, Button **Nach Update suchen** und Link **Was ist neu**. Ist eine neue Version bereits aktiv (Service Worker übernommen), wird die Pille rosé mit ↻ **Update bereit**; Tippen startet die App neu. Nie automatisch neu laden. *(Ersetzt das zweizeilige Kästchen aus 0.3.1.)*
+4c. **Tages-Zeitleiste** (seit 0.7.0) unter den Tageszählern: weiße Karte mit einem 24-Stunden-Balken (0–24 Uhr). Schlaf als lavendelfarbene Abschnitte, Stillen als rosé Balken (mindestens 0,5 % breit, damit kurze sichtbar bleiben), Windeln als Punkte, Flasche/Abpumpen als Quadrate, „jetzt“ als senkrechter Strich, die Zukunft schraffiert. Darunter 0 · 6 · 12 · 18 · 24 und eine Legende (Information nicht nur über Farbe: Form unterscheidet Punkte und Quadrate, die Legende benennt alles). Schlaf über Mitternacht beginnt bei 0 Uhr.
 4b. **Sicherungs-Erinnerung** unter der Kopfzeile (seit 0.4.0): Karte „Zeit für eine Sicherung“ mit „Letzte Sicherung vor 16 Tagen“ bzw. „Noch keine Sicherung vorhanden.“, Button **Jetzt sichern** (Export wie in 6.8) und Schließen-Knopf. Erscheint, wenn die letzte Sicherung – ohne Sicherung: der älteste Eintrag – mindestens 14 Tage alt ist; nach dem Schließen frühestens nach weiteren 14 Tagen wieder. Nie, solange ein Stillen läuft.
 5. **Aktions-Dock** (weiße Pille, Radius 36, Padding 10, Gap 8) mit drei Buttons: **Stillen** (breiter, `--rose`, weißer Text, Tropfen-Icon), **Windel** (`--peach`), **Schlaf** (`--lavender`, wechselt zu **Wach**, solange ein Schlaf läuft). Höhe 68 px. Läuft ein Stillen, zeigt der Stillen-Button zweizeilig „Stillen läuft“ (mit pulsierendem Punkt, ohne Animation bei reduzierter Bewegung) und den Timer und führt zurück zum Stillen-Screen (seit 0.5.0).
 6. Tab-Leiste.
 
 Relative Zeit: unter 1 Min „gerade eben“; unter 60 Min „vor 35 Min“; ab 60 Min „vor 1 Std 40 Min“; ab 24 Std „vor 2 Tagen“. Anzeige aktualisiert sich alle 30 Sekunden und bei `visibilitychange`.
+
+### 6.2a Nachtansicht (seit 0.7.0, Mockup „Übersicht (Nachtmodus)“)
+
+Erscheint statt der normalen Ansicht von Heute, wenn **Nachts automatisch** an ist und es 20:00–07:00 Uhr ist (das Design ist dann dunkel). Tab-Leiste bleibt.
+
+- Kopf: „Nachtansicht“ und die Uhrzeit groß; rechts ein runder **Sonnen**-Knopf „Tagesansicht zeigen“. Er zeigt die normale Ansicht, bis die Nacht vorbei ist (höchstens 12 Stunden, auch über Tab-Wechsel; nach einem Neustart wieder die Nachtansicht). In der normalen Ansicht steht nachts dann ein **Mond**-Knopf „Nachtansicht zeigen“ in der Kopfzeile.
+- **Ring** (260 px, Strich 14, `--rose`): „Zuletzt gestillt“, groß `h:mm` seit Ende des letzten Stillens, darunter „Std · rechts“. Ein Umlauf = 3 Stunden, danach bleibt er voll. Läuft ein Stillen: „Stillt gerade“, Timer, Seite; der Ring führt zum Stillen-Screen.
+- Zwei Karten: **Windel** „0:50 h“, **Schläft seit** bzw. **Wach seit** „0:15 h“.
+- Großer Knopf (80 px) **Stillen links starten** (nächste Seite) bzw. „Stillen läuft · 04:12“; darunter **Windel**, **Flasche**, **Schlaf**/**Wach** (60 px). Gleiche Sheets und Snackbars wie auf Heute.
+- Keine Sicherungs-Erinnerung und kein Installationshinweis in der Nachtansicht.
 
 ### 6.3 Stillen läuft
 
@@ -283,7 +296,7 @@ Regel: Wer die Version in `package.json` erhöht, ergänzt **im selben Schritt**
 Eigener Tab `#/einstellungen` im Stil des Mockups „Einstellungen“, auf Wunsch der Besitzerin aus der Ausbaustufe vorgezogen. Von oben nach unten:
 
 1. **Profil-Karte:** Avatar, Name (ohne Namen „Dein Baby“ und darunter „Name eintragen“), „09.10.2026 · 12 Tage alt“, runder Stift-Knopf `aria-label="Profil bearbeiten"` → Sheet mit Name und Geburtsdatum (wie Erststart).
-2. **Darstellung:** Schalter **Dunkles Design** (`role="switch"`, ganze Zeile tippbar), siehe Abschnitt 4.
+2. **Darstellung:** Schalter **Dunkles Design** und **Nachts automatisch** (je `role="switch"`, ganze Zeile tippbar, höchstens einer an), siehe Abschnitt 4.
 3. **Daten:** **Daten exportieren** mit Zusatzzeile „Letzte Sicherung: heute / gestern / vor 12 Tagen“ bzw. „Noch keine Sicherung“ (Zeitpunkt wird beim erfolgreichen Export in `kv` `lastExportAt` gemerkt), **Daten wiederherstellen**, **Mit Passwort exportieren**, Hinweis zur unverschlüsselten Datei, **Alle Daten löschen** in eigener Gruppe (6.8).
 4. **Über die App:** „Baby Time x.y.z“, „Erstellt am …“, Statuszeile, **Nach Update suchen** (fragt nur den eigenen `sw.js` ab; Ergebnisse „Du hast die neueste Version.“, „Neue Version wird geladen …“, „Keine Verbindung. Versuch es später noch einmal.“; bei neuer Version **Jetzt neu starten**), Link **Was ist neu**; **Als App installieren** nur, solange nicht installiert (iOS: Schritte aus 6.7, Android: Button bzw. Hinweis auf das Chrome-Menü); Satz „Deine Einträge bleiben auf diesem Handy.“
 
@@ -520,4 +533,4 @@ Die Kriterien für Stufe A stehen in Abschnitt 2a. Sie müssen weiterhin gelten.
 
 ## 15. Danach (nicht jetzt)
 
-Avatar-Baukasten, Meilensteine, Tracker-Schalter, Akzentfarben, Nachtmodus-Ring, vollständige Einstellungen, Verlauf mit Wochenansicht, Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).
+Avatar-Baukasten, Meilensteine, Tracker-Schalter, Akzentfarben, vollständige Einstellungen, Verlauf mit Wochenansicht (die Tages-Zeitleiste von Heute ist seit 0.7.0 die Vorstufe; der Nachtmodus-Ring ist seit 0.7.0 umgesetzt, 6.2a), Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).
