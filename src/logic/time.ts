@@ -74,13 +74,38 @@ function ageInMonths(birthDate: string, now: number): number | undefined {
  * ("5 Wochen alt"), then months ("4 Monate alt"), from 24 months years ("2 Jahre alt").
  */
 export function formatAge(birthDate: string, now: number): string | undefined {
+  const age = ageUnit(birthDate, now);
+  if (!age) return undefined;
+  const [unit, n] = age;
+  return unit === 'days' ? t.time.ageDays(n) : unit === 'weeks' ? t.time.ageWeeks(n) : unit === 'months' ? t.time.ageMonths(n) : t.time.ageYears(n);
+}
+
+/** Same steps as formatAge, as unit and number. */
+function ageUnit(birthDate: string, now: number): ['days' | 'weeks' | 'months' | 'years', number] | undefined {
   const days = ageInDays(birthDate, now);
   const months = ageInMonths(birthDate, now);
   if (days === undefined || months === undefined) return undefined;
-  if (days < 14) return t.time.ageDays(days);
-  if (months < 3) return t.time.ageWeeks(Math.floor(days / 7));
-  if (months < 24) return t.time.ageMonths(months);
-  return t.time.ageYears(Math.floor(months / 12));
+  if (days < 14) return ['days', days];
+  if (months < 3) return ['weeks', Math.floor(days / 7)];
+  if (months < 24) return ['months', months];
+  return ['years', Math.floor(months / 12)];
+}
+
+/** Age on a past date for milestones: "mit 7 Wochen", "mit 5 Tagen", "am Tag der Geburt" (0.10.0). */
+export function formatAgeOn(birthDate: string, date: string): string | undefined {
+  const [y, m, d] = date.split('-').map(Number) as [number, number, number];
+  const age = ageUnit(birthDate, new Date(y, m - 1, d, 12).getTime());
+  if (!age) return undefined;
+  const [unit, n] = age;
+  return t.time.ageOn(unit, n);
+}
+
+const dateFormat = new Intl.DateTimeFormat(t.locale, { day: 'numeric', month: 'long', year: 'numeric' });
+
+/** "12. November 2026" from YYYY-MM-DD. */
+export function formatIsoDate(date: string): string {
+  const [y, m, d] = date.split('-').map(Number) as [number, number, number];
+  return dateFormat.format(new Date(y, m - 1, d, 12));
 }
 
 // ---------------------------------------------------------------- durations

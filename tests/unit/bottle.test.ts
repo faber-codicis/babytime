@@ -91,11 +91,11 @@ describe('backup with bottle and pump', () => {
   const file = (events: unknown[], schemaVersion = SCHEMA_VERSION) =>
     JSON.stringify({ app: 'babytime', schemaVersion, exportedAt: at(12), events });
 
-  it('exports with schema version 2 and parses the new types back', async () => {
+  it('exports with the current schema version and parses the new types back', async () => {
     await addBottle(90, 'formula', at(10));
     await addPump(40, 'right', at(11));
     const exported = await buildExport(NOW);
-    expect(exported.schemaVersion).toBe(2);
+    expect(exported.schemaVersion).toBe(3);
     const parsed = parseBackup(JSON.stringify(exported));
     expect(parsed.events.map((e) => [e.type, e.amountMl])).toEqual([
       ['bottle', 90],

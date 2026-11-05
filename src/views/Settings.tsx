@@ -79,6 +79,15 @@ export function Settings({ profile }: { profile: Profile }) {
             />
           ))}
         </div>
+        <div class="data-group">
+          <SwitchRow
+            icon="star"
+            label={t.trackers.milestones}
+            hint={t.trackers.milestonesHint}
+            checked={trackers?.milestones ?? true}
+            onChange={(on) => toggleTracker('milestones', on)}
+          />
+        </div>
         <p class="settings-note">{t.trackers.note}</p>
       </SettingsSection>
 

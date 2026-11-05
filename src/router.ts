@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'preact/hooks';
 
-export type Route = 'today' | 'history' | 'settings' | 'feeding' | 'whatsnew';
+export type Route = 'today' | 'history' | 'milestones' | 'settings' | 'feeding' | 'whatsnew';
 
 const HASHES: Record<Route, string> = {
   today: '#/',
   history: '#/verlauf',
+  milestones: '#/meilensteine',
   settings: '#/einstellungen',
   feeding: '#/stillen',
   whatsnew: '#/neu',

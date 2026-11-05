@@ -26,6 +26,19 @@ export interface BabyEvent {
   updatedAt: number;
 }
 
+/** A milestone the baby reached (0.10.0). Presets carry `preset`, own ones only `title`. */
+export interface Milestone {
+  id: string; // crypto.randomUUID()
+  /** Key of a suggested milestone (MILESTONE_PRESETS); missing for one the parent named. */
+  preset?: string;
+  /** Own milestones only. */
+  title?: string;
+  date: string; // YYYY-MM-DD, local
+  note?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface KvEntry {
   key: string;
   value: unknown;
@@ -33,14 +46,16 @@ export interface KvEntry {
 
 /**
  * Version of the backup file format (spec 13.5). 2 since 0.6.0: entries may be bottle or pump.
+ * 3 since 0.10.0: the file may contain `milestones`.
  * Older apps refuse such files with the "newer version" message instead of "entry n is broken".
- * The Dexie schema stays at version 1: the new fields need no index.
+ * Dexie: version 1 until 0.9.0, version 2 adds the `milestones` table (0.10.0).
  */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export class BabyTimeDb extends Dexie {
   events!: EntityTable<BabyEvent, 'id'>;
   kv!: EntityTable<KvEntry, 'key'>;
+  milestones!: EntityTable<Milestone, 'id'>;
 
   constructor(name = 'babytime') {
     super(name);
@@ -48,8 +63,10 @@ export class BabyTimeDb extends Dexie {
       events: 'id, type, start',
       kv: 'key',
     });
+    // 0.10.0: milestones in their own table; events and kv stay as they are, so no upgrade function.
+    this.version(2).stores({ milestones: 'id, date' });
     // Migrations: add new versions below and never edit the ones above, e.g.
-    // this.version(2).stores({ ... }).upgrade((tx) => tx.table('events').toCollection().modify(...));
+    // this.version(3).stores({ ... }).upgrade((tx) => tx.table('events').toCollection().modify(...));
     // Data may only be reset when the schema itself cannot be migrated (spec 2a).
   }
 }

@@ -156,6 +156,16 @@ Auf Wunsch des Besitzers (2026-11-05) umgesetzt: C1 „Nachts automatisch“, C2
 - **Kontrast als Unit-Test aus der echten CSS:** `accent.test.ts` liest `tokens.css`, `settings.css` und `theme-init.js` und prüft je Akzent die Verhältnisse und dass Farbfläche, Browserleiste und Startskript dieselbe Farbe haben. Wer eine Farbe ändert, merkt es sofort.
 - **Radiogruppe statt fünf Schalter:** genau eine Wahl; Pfeiltasten wechseln, nur die gewählte Fläche ist im Tab-Fokus. Farbe ist nie das einzige Merkmal: Name als zugänglicher Name, Ring und Häkchen an der gewählten, Name in der Zusatzzeile.
 
+## 0.11.0 (Meilensteine)
+
+- **Eigene Tabelle statt Eintragsart:** Meilensteine haben ein Datum statt einer Uhrzeit und keine Dauer; als Event würden sie Verlauf, Zähler und Wochenansicht stören. Dexie-Version 2 legt nur die neue Tabelle an, vorhandene Daten bleiben unberührt.
+- **Vorschläge ohne Altersnormen:** Eine Liste „normal mit 4 Monaten“ verunsichert Eltern eher; die App ist ein Tagebuch, keine Vorsorgeuntersuchung. Die Reihenfolge folgt grob dem üblichen Ablauf.
+- **Ein Vorschlag nur einmal:** Ihn erneut eintragen (z. B. nach dem Zusammenführen zweier Sicherungen) ändert den vorhandenen Eintrag.
+- **Datum statt Zeitpunkt** (`YYYY-MM-DD`, lokal): „Erstes Lächeln am 20. Oktober“ reicht; keine Zeitzonenfragen beim Wiederherstellen.
+- **Schalter standardmäßig an**, im Abschnitt „Was möchtest du festhalten?“, aber ohne Einfluss auf die Regel „mindestens ein Tracker an“.
+- **Sicherung `schemaVersion: 3`:** Ältere Apps lehnen neue Dateien mit „aus einer neueren Version“ ab. Dateien ohne `milestones` lassen beim Ersetzen die Meilensteine auf dem Handy stehen (wie das Profil).
+- **Tab-Labels 11 px bei vier Tabs**, damit „Einstellungen“ auf 360 px Breite nicht abgeschnitten wird (E2E-Test prüft das).
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

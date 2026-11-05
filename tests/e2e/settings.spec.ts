@@ -21,9 +21,9 @@ test.describe('settings tab', () => {
     await openApp(page);
   });
 
-  test('three tabs; profile, look, data and about sections', async ({ page }) => {
+  test('four tabs (Meilensteine on by default); profile, look, data and about sections', async ({ page }) => {
     const nav = page.getByRole('navigation', { name: 'Hauptnavigation' });
-    await expect(nav.getByRole('link')).toHaveText(['Heute', 'Verlauf', 'Einstellungen']);
+    await expect(nav.getByRole('link')).toHaveText(['Heute', 'Verlauf', 'Meilensteine', 'Einstellungen']);
     await nav.getByRole('link', { name: 'Einstellungen' }).click();
     await expect(nav.getByRole('link', { name: 'Einstellungen' })).toHaveAttribute('aria-current', 'page');
 

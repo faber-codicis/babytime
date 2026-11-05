@@ -23,6 +23,16 @@ export const t = {
     ageWeeks: (w: number) => `${w} ${plural(w, 'Woche', 'Wochen')} alt`,
     ageMonths: (m: number) => `${m} ${plural(m, 'Monat', 'Monate')} alt`,
     ageYears: (y: number) => `${y} ${plural(y, 'Jahr', 'Jahre')} alt`,
+    ageOn: (unit: 'days' | 'weeks' | 'months' | 'years', n: number) =>
+      unit === 'days'
+        ? n === 0
+          ? 'am Tag der Geburt'
+          : `mit ${n} ${plural(n, 'Tag', 'Tagen')}`
+        : unit === 'weeks'
+          ? `mit ${n} ${plural(n, 'Woche', 'Wochen')}`
+          : unit === 'months'
+            ? `mit ${n} ${plural(n, 'Monat', 'Monaten')}`
+            : `mit ${n} ${plural(n, 'Jahr', 'Jahren')}`,
   },
 
   side: {
@@ -207,6 +217,7 @@ export const t = {
       newerSchema: 'Die Sicherung stammt aus einer neueren Version von Baby Time. Bitte die App zuerst aktualisieren.',
       tooMany: 'Die Datei enthält zu viele Einträge. Es wurde nichts geändert.',
       invalidEntry: (n: number) => `Eintrag ${n} in der Datei ist fehlerhaft. Es wurde nichts geändert.`,
+      invalidMilestone: (n: number) => `Meilenstein ${n} in der Datei ist fehlerhaft. Es wurde nichts geändert.`,
       duplicate: (n: number) => `Eintrag ${n} kommt doppelt vor. Es wurde nichts geändert.`,
       running: 'Die Datei enthält mehr als ein laufendes Stillen oder mehr als einen laufenden Schlaf. Es wurde nichts geändert.',
       runningConflict: 'In der Datei und auf diesem Handy läuft gerade etwas. Bitte zuerst hier beenden und dann zusammenführen.',
@@ -247,6 +258,8 @@ export const t = {
     diaperHint: 'nass, voll oder beides',
     sleep: 'Schlaf',
     sleepHint: 'Start und Ende',
+    milestones: 'Meilensteine',
+    milestonesHint: 'Eigener Tab für die ersten Male',
   },
 
   week: {
@@ -311,10 +324,57 @@ export const t = {
     close: 'Erinnerung schließen',
   },
 
+  milestones: {
+    title: 'Meilensteine',
+    intro: 'Halte die ersten Male fest. Jedes Baby hat sein eigenes Tempo.',
+    add: 'Eigenen Meilenstein eintragen',
+    reached: 'Erreicht',
+    open: 'Vorschläge',
+    openHint: 'Antippen, wenn es so weit ist.',
+    empty: 'Noch nichts eingetragen.',
+    sheetAdd: 'Meilenstein eintragen',
+    sheetEdit: 'Meilenstein bearbeiten',
+    name: 'Was ist passiert?',
+    date: 'Wann?',
+    note: 'Notiz (freiwillig)',
+    save: 'Speichern',
+    delete: 'Löschen',
+    deleteConfirm: 'Diesen Meilenstein wirklich löschen?',
+    deleteYes: 'Ja, löschen',
+    deleteNo: 'Behalten',
+    saved: 'Meilenstein gespeichert',
+    deleted: 'Meilenstein gelöscht',
+    rowA11y: (title: string, when: string) => `${title}, ${when}`,
+    errors: {
+      titleMissing: 'Bitte einen Namen eingeben.',
+      titleTooLong: 'Höchstens 80 Zeichen.',
+      dateMissing: 'Bitte ein Datum wählen.',
+      dateFuture: 'Das Datum liegt in der Zukunft.',
+      noteTooLong: 'Höchstens 500 Zeichen.',
+    },
+    presets: {
+      smile: 'Erstes Lächeln',
+      laugh: 'Lacht laut',
+      headUp: 'Hält das Köpfchen',
+      grab: 'Greift nach Dingen',
+      rollTummy: 'Dreht sich auf den Bauch',
+      rollBack: 'Dreht sich auf den Rücken',
+      firstFood: 'Erster Brei',
+      tooth: 'Erster Zahn',
+      sit: 'Sitzt allein',
+      crawl: 'Krabbelt',
+      nightThrough: 'Schläft durch',
+      stand: 'Steht mit Festhalten',
+      firstWord: 'Erstes Wort',
+      steps: 'Erste Schritte',
+    },
+  },
+
   nav: {
     a11y: 'Hauptnavigation',
     today: 'Heute',
     history: 'Verlauf',
+    milestones: 'Meilensteine',
     settings: 'Einstellungen',
   },
 

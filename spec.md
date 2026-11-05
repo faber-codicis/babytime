@@ -26,10 +26,11 @@
 10. **Versionsanzeige und „Was ist neu“**: Version im Splash, auf Heute (Versions-Pille) und in den Einstellungen, Seite „Was ist neu“, **Popup einmalig beim ersten Start nach einem Update** (Abschnitt 6.9).
 11. **Flasche und Abpumpen** (seit 0.6.0, Wunsch des Besitzers), siehe Abschnitt 6.11.
 12. **Akzentfarben** (seit 0.10.0, Wunsch des Besitzers), siehe Abschnitt 4 „Akzentfarben“ und 6.10.
+13. **Meilensteine** (seit 0.11.0, Wunsch des Besitzers), siehe Abschnitt 6.12.
 
 ### Nicht im Umfang (nicht bauen, keine Platzhalter-UI)
 
-Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Meilensteine, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
+Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
 
 ## 2a. Lieferstufen (Reihenfolge verbindlich)
 
@@ -198,7 +199,7 @@ Navigation: Tab-Leiste unten mit **3 Tabs: Heute, Verlauf und Einstellungen** (s
 - Icon Heute: `M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z`
 - Icon Verlauf: `M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M12 7v5l3 2`
 - Icon Einstellungen (Regler): `M4 7h9M17 7h3M4 17h3M11 17h9M13 7a2 2 0 1 0 4 0a2 2 0 1 0-4 0M7 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0`. Der Tab heißt „Einstellungen“ (nicht „Mehr“). *(Ab 0.4.0 auf Wunsch der Besitzerin vorgezogen.)*
-- **Ausbaustufe (später):** vier Tabs *Heute, Verlauf, Meilensteine, Einstellungen*; ist Meilensteine ausgeschaltet, bleibt es bei drei Tabs.
+- **Seit 0.11.0:** vier Tabs *Heute, Verlauf, Meilensteine, Einstellungen* (Stern-Icon, Labels 11 px); ist Meilensteine ausgeschaltet (Einstellungen, 6.12), bleibt es bei drei Tabs.
 
 ### 6.2 Heute
 
@@ -329,6 +330,17 @@ Nicht in 0.4.0: Tracker-Schalter, Meilensteine, Akzentfarben, automatischer Nach
 - Danach Snackbar „Flasche gespeichert · 90 ml“ bzw. „Abpumpen gespeichert · 120 ml“ mit Rückgängig.
 - **Heute:** Die Tageszähler bekommen „150 ml Flasche“ bzw. „120 ml abgepumpt“ dazu, nur an Tagen mit solchen Einträgen (eine zweite Reihe der Leiste). Die Hero-Karte bleibt beim Stillen.
 - **Verlauf:** Zeilen „Flasche · 90 ml Muttermilch“ und „Abpumpen beide · 120 ml“ (Icon in `--sky`), Tagessumme ergänzt „· 150 ml Flasche · 120 ml abgepumpt“. Bearbeiten und Nachtragen mit Feld „Menge in ml“ und der passenden Auswahl; die Art des Eintrags steht beim Nachtragen in zwei Reihen.
+
+### 6.12 Meilensteine (seit 0.11.0)
+
+Vierter Tab `#/meilensteine` (Mockup „Navigation“, Stern), Wunsch des Besitzers.
+
+- Kopf wie im Verlauf: Titel „Meilensteine“, rechts **+** („Eigenen Meilenstein eintragen“). Darunter „Halte die ersten Male fest. Jedes Baby hat sein eigenes Tempo.“
+- **Erreicht:** Liste, neuestes Datum zuerst. Zeile mit Stern in Akzent-Tönung, Titel, „20. Oktober 2026 · mit 7 Wochen“ (Alter nur mit Geburtsdatum, gleiche Stufen wie im Kopf von Heute; am Geburtstag „am Tag der Geburt“), Notiz. Tippen öffnet das Sheet zum Bearbeiten mit **Löschen** (Rückfrage im Sheet, Standardfokus „Behalten“, danach Snackbar mit Rückgängig).
+- **Vorschläge:** runde Chips mit „+“ für noch nicht erreichte Vorschläge: Erstes Lächeln, Lacht laut, Hält das Köpfchen, Greift nach Dingen, Dreht sich auf den Bauch, Dreht sich auf den Rücken, Erster Brei, Erster Zahn, Sitzt allein, Krabbelt, Schläft durch, Steht mit Festhalten, Erstes Wort, Erste Schritte. Bewusst ohne Altersangaben oder „normal ab …“. Ein Vorschlag gibt es nur einmal; erreicht verschwindet er aus den Chips.
+- **Sheet:** Titel = Name des Vorschlags bzw. „Meilenstein eintragen“/„bearbeiten“; bei eigenen Meilensteinen Feld „Was ist passiert?“ (Pflicht, ≤ 80 Zeichen); „Wann?“ (`type="date"`, vorbelegt mit heute, nicht in der Zukunft); „Notiz (freiwillig)“ (≤ 500 Zeichen); **Speichern**.
+- **Daten:** eigene Dexie-Tabelle `milestones: 'id, date'` (Dexie-Version 2) mit `{ id, preset? | title?, date: 'YYYY-MM-DD', note?, createdAt, updatedAt }`. Sicherung ab `schemaVersion: 3` mit Feld `milestones` (geprüft wie Einträge, höchstens 1000). Ersetzen tauscht Meilensteine nur, wenn die Datei welche enthält; Zusammenführen nach `id`, neuere Bearbeitung gewinnt, ein Vorschlag bleibt einfach. „Alle Daten löschen“ leert auch die Meilensteine.
+- **Schalter** in Einstellungen → „Was möchtest du festhalten?“: **Meilensteine** („Eigener Tab für die ersten Male“), Standard an, in `kv` `trackers.milestones`. Aus: drei Tabs, `#/meilensteine` zeigt Heute; die Meilensteine bleiben gespeichert und in der Sicherung.
 
 ## 7. PWA-Anforderungen
 
@@ -554,4 +566,4 @@ Die Kriterien für Stufe A stehen in Abschnitt 2a. Sie müssen weiterhin gelten.
 
 ## 15. Danach (nicht jetzt)
 
-Avatar-Baukasten, Meilensteine (Tracker-Schalter seit 0.8.0, Akzentfarben seit 0.10.0; die Wochenansicht im Verlauf ist seit 0.9.0 umgesetzt, 6.6; der Nachtmodus-Ring seit 0.7.0, 6.2a), Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).
+Avatar-Baukasten (Tracker-Schalter seit 0.8.0, Akzentfarben seit 0.10.0, Meilensteine seit 0.11.0; die Wochenansicht im Verlauf ist seit 0.9.0 umgesetzt, 6.6; der Nachtmodus-Ring seit 0.7.0, 6.2a), Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).

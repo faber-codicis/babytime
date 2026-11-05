@@ -10,6 +10,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.11.0',
+    date: '2026-11-05',
+    items: [
+      'Neuer Tab „Meilensteine“: Halte das erste Lächeln, den ersten Zahn und mehr mit Datum fest',
+      'Vorschläge antippen oder eigene Meilensteine eintragen, gern mit Notiz',
+      'Mit Geburtsdatum steht dabei, wie alt dein Baby war',
+      'Meilensteine sind Teil der Sicherung',
+      'Kein Bedarf? Einstellungen → Meilensteine ausschalten',
+    ],
+  },
+  {
     version: '0.10.0',
     date: '2026-11-05',
     items: [

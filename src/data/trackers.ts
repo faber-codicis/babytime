@@ -12,13 +12,15 @@ export interface Trackers {
   diaper: boolean;
   sleep: boolean;
   timeline: boolean;
+  /** Fourth tab "Meilensteine" (0.10.0). */
+  milestones: boolean;
 }
 
 export type TrackerKey = keyof Trackers;
 export const TRACKER_KINDS = ['feed', 'bottle', 'pump', 'diaper', 'sleep'] as const;
 
 const KEY = 'trackers';
-export const DEFAULT_TRACKERS: Trackers = { feed: true, bottle: true, pump: true, diaper: true, sleep: true, timeline: true };
+export const DEFAULT_TRACKERS: Trackers = { feed: true, bottle: true, pump: true, diaper: true, sleep: true, timeline: true, milestones: true };
 
 /** Clean settings from untrusted input: only known keys, only booleans; missing means on. */
 export function sanitizeTrackers(input: unknown): Trackers {
@@ -46,5 +48,5 @@ export async function setTracker(key: TrackerKey, on: boolean): Promise<Trackers
 
 /** Whether switching `key` off would leave no tracker on (the switch then stays on). */
 export function isLastTracker(trackers: Trackers, key: TrackerKey): boolean {
-  return key !== 'timeline' && TRACKER_KINDS.filter((k) => trackers[k]).length === 1 && trackers[key];
+  return (TRACKER_KINDS as readonly string[]).includes(key) && TRACKER_KINDS.filter((k) => trackers[k]).length === 1 && trackers[key];
 }
