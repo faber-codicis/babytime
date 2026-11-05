@@ -139,6 +139,15 @@ Auf Wunsch des Besitzers (2026-11-05) umgesetzt: C1 „Nachts automatisch“, C2
 - **Kein Zoom** (Wunsch des Besitzers nach dem Test am Handy): bewusste Abweichung von WCAG 1.4.4. iOS Safari ignoriert `user-scalable=no` seit iOS 10, deshalb werden dort `gesturestart`/`gesturechange` abgefangen; nicht auf einem echten iPhone geprüft.
 - **Weniger gestaucht:** Statuskarten mit Symbol neben der Beschriftung statt darüber, kleinere Abstände in Hero und Liste (Gap 12 statt 16), Dock-Knöpfe mit Symbol über Text. Bei 390 × 844 passt Heute (mit Flasche-Zähler und Zeitleiste) ohne Scrollen.
 
+## 0.9.0 (Wochenansicht)
+
+- **Im Verlauf, nicht als vierter Tab:** Tage und Woche sind zwei Sichten auf dieselben Einträge; der Umschalter „Tage | Woche“ hält die Tab-Leiste bei drei.
+- **Kleine Balkendiagramme je Tracker** statt einer Tabelle oder eines gestapelten Diagramms: eine Einheit pro Diagramm (Anzahl, Stunden, ml), also nie zwei Skalen in einem Bild. Jede Karte hat ihre eigene Höhe nach dem größten Wert der Woche.
+- **Wert über jedem Balken:** Sieben Balken auf dem Handy sind wenig; die Zahl ist das, was die Hebamme wissen will. Kein Tooltip, weil die App auf Touch läuft; die ganzen Sätze stehen als zugänglicher Name an jedem Balken (ersetzt die Tabellenansicht).
+- **Schlaf als volle Stunden über dem Balken** („9h“, unter einer Stunde „<1h“), weil „9:25“ in einer schmalen Spalte nicht passt; der Durchschnitt zeigt Stunden und Minuten.
+- **Durchschnitt über begonnene Tage:** Am Mittwoch teilt er durch 3, nicht durch 7, sonst wäre er bis Sonntag zu niedrig.
+- **Woche beginnt am Montag** (Österreich). Die Wochenansicht öffnet immer auf der aktuellen Woche.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

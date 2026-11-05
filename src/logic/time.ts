@@ -203,6 +203,20 @@ export function formatWeekday(ts: number): string {
 const shortWeekdayFormat = new Intl.DateTimeFormat(t.locale, { weekday: 'short' });
 const dayMonthFormat = new Intl.DateTimeFormat(t.locale, { day: 'numeric', month: 'short' });
 
+/** Week range for the week view: "21.–27. Okt." or "27. Okt. – 2. Nov." (end is the Sunday). */
+export function formatWeekRange(weekStart: number): string {
+  const last = addDays(weekStart, 6);
+  const a = new Date(weekStart);
+  const b = new Date(last);
+  if (a.getMonth() === b.getMonth()) return `${a.getDate()}.–${dayMonthFormat.format(last)}`;
+  return `${dayMonthFormat.format(weekStart)} – ${dayMonthFormat.format(last)}`;
+}
+
+/** "Mo" for the bars of the week view. */
+export function formatWeekdayShort(ts: number): string {
+  return shortWeekdayFormat.format(ts).replace(/\.$/, '');
+}
+
 /** Day heading in the history: "Heute", "Gestern", otherwise "Mo, 19. Okt.". */
 export function formatDayHeading(dayStart: number, now: number): string {
   const today = startOfDay(now);

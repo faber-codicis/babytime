@@ -10,6 +10,16 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.9.0',
+    date: '2026-11-05',
+    items: [
+      'Neu im Verlauf: die Wochenansicht, oben über „Woche“',
+      'Für Stillen, Windeln, Schlaf und Milch je ein kleines Balkendiagramm von Montag bis Sonntag',
+      'Dazu der Durchschnitt pro Tag, zum Beispiel für die Hebamme',
+      'Mit den Pfeilen blätterst du zu früheren Wochen',
+    ],
+  },
+  {
     version: '0.8.0',
     date: '2026-11-05',
     items: [

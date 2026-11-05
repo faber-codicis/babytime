@@ -2,12 +2,14 @@ import { useMemo, useState } from 'preact/hooks';
 import { getEventsSince, hasEventsBefore, type BabyEvent, type Change } from '../data/events';
 import { dayStats, feedSessions } from '../logic/stats';
 import { addDays, formatDayHeading, formatDuration, HOUR, startOfDay } from '../logic/time';
+import { startOfWeek } from '../logic/week';
 import { t } from '../strings.de';
 import { EventEditor, type EditorTarget } from '../ui/EventEditor';
 import { EventRow } from '../ui/EventRow';
 import { Icon } from '../ui/icons';
 import { Snackbar, type SnackMessage } from '../ui/Snackbar';
 import { useLive, useNow } from '../ui/hooks';
+import { WeekView } from '../ui/WeekView';
 
 /** Days shown at first and added per "Ältere Einträge anzeigen". */
 const DAYS_STEP = 14;
@@ -50,6 +52,9 @@ export function History() {
     return map;
   }, [data]);
 
+  /** "Tage" (list) or "Woche" (charts, 0.9.0); the week view opens on the current week. */
+  const [view, setView] = useState<'days' | 'week'>('days');
+  const [weekStart, setWeekStart] = useState(() => startOfWeek(Date.now()));
   const [editor, setEditor] = useState<EditorTarget>();
   const [snack, setSnack] = useState<SnackMessage>();
   const done = (text: string) => (change: Change) => {
@@ -66,9 +71,28 @@ export function History() {
         </button>
       </header>
 
-      {data && days.length === 0 && !data.older && <p class="history-empty">{t.history.empty}</p>}
+      <div class="segmented segmented--small history-view" role="group" aria-label={t.week.viewA11y}>
+        {(['days', 'week'] as const).map((v) => (
+          <button
+            key={v}
+            type="button"
+            class={`segment${v === view ? ' is-active' : ''}`}
+            aria-pressed={v === view}
+            onClick={() => {
+              setView(v);
+              if (v === 'week') setWeekStart(startOfWeek(Date.now()));
+            }}
+          >
+            {t.week[v]}
+          </button>
+        ))}
+      </div>
 
-      {days.map((day) => {
+      {view === 'week' && <WeekView weekStart={weekStart} now={now} onWeek={setWeekStart} />}
+
+      {view === 'days' && data && days.length === 0 && !data.older && <p class="history-empty">{t.history.empty}</p>}
+
+      {view === 'days' && days.map((day) => {
         // All loaded events, not just this day's: a sleep over midnight counts on both days.
         const stats = dayStats(data?.events ?? [], day.start, addDays(day.start, 1), now);
         return (
@@ -95,7 +119,7 @@ export function History() {
         );
       })}
 
-      {data?.older && (
+      {view === 'days' && data?.older && (
         <button type="button" class="big-btn big-btn--white show-older" onClick={() => setDayCount((n) => n + DAYS_STEP)}>
           {t.history.showOlder}
         </button>

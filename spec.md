@@ -238,6 +238,7 @@ Tap auf **Schlaf** legt ein Event mit `start = jetzt` an, der Button wird zu **W
 - Tap auf eine Zeile öffnet ein **Bearbeiten-Sheet**: Startzeit (`<input type="datetime-local">`), Endzeit (bei feed und sleep), Seite oder Windelart, Notiz, **Speichern** und **Löschen** (mit Rückfrage). Ende vor Start ist unzulässig (Fehlermeldung am Feld).
 - **+ Nachtragen:** gleiches Sheet mit Typauswahl, Startzeit vorbelegt mit „jetzt“.
 - Leerer Zustand: „Hier erscheint alles, was du einträgst.“
+- **Wochenansicht** (seit 0.9.0, Wunsch des Besitzers): Unter dem Titel ein Umschalter **Tage | Woche**. „Woche“ öffnet immer die aktuelle Woche (Montag bis Sonntag, lokale Zeit). Kopf mit **‹** / **›** (Vorherige/Nächste Woche, › ist in der aktuellen Woche deaktiviert), Titel „Diese Woche“, „Letzte Woche“ oder „12.–18. Okt.“, darunter der Zeitraum. Je Tracker eine Karte (Icon, Titel, „Ø 7,4 pro Tag“) mit sieben Balken (Mo–So, heute fett, kommende Tage gestrichelt), Wert über jedem Balken. Gezählt wie auf Heute; der Durchschnitt teilt durch die schon begonnenen Tage der Woche. Stillen, Windeln und Schlaf erscheinen, solange ihr Tracker an ist (oder die Woche Einträge hat), Flasche und Abpumpen nur in Wochen mit Einträgen. Jeder Balken hat einen ganzen Satz als zugänglichen Namen („Di: 8× gestillt“). Ohne Einträge: „In dieser Woche ist nichts eingetragen.“
 
 ### 6.7 Erststart
 
@@ -536,4 +537,4 @@ Die Kriterien für Stufe A stehen in Abschnitt 2a. Sie müssen weiterhin gelten.
 
 ## 15. Danach (nicht jetzt)
 
-Avatar-Baukasten, Meilensteine, Tracker-Schalter, Akzentfarben, vollständige Einstellungen, Verlauf mit Wochenansicht (die Tages-Zeitleiste von Heute ist seit 0.7.0 die Vorstufe; der Nachtmodus-Ring ist seit 0.7.0 umgesetzt, 6.2a), Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).
+Avatar-Baukasten, Meilensteine, Tracker-Schalter, Akzentfarben, vollständige Einstellungen (die Wochenansicht im Verlauf ist seit 0.9.0 umgesetzt, 6.6; der Nachtmodus-Ring seit 0.7.0, 6.2a), Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).
