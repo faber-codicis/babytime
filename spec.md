@@ -110,7 +110,7 @@ Standard ist **immer hell**, unabhängig von der System-Einstellung. Das dunkle 
 | `--surface-2` | `#301E22` |
 | `--ink` | `#F6C2BA` |
 | `--ink-soft` | `#D79C93` |
-| `--rose` (Button-Fläche) | `#F09A8F`, Text darauf `#1A0D0F` |
+| `--rose` (Button-Fläche) | `#D9827A`, Text darauf `#1A0D0F` (6,7:1; seit 0.5.0 eine Stufe dunkler als `#F09A8F`, weil der Stillen-Button nachts die hellste Fläche war) |
 | `--rose-tint` / `--rose-ink` | `#3D2129` / `#F7B3C2` |
 | `--peach` / `--peach-ink` | `#3B2519` / `#F5C3A6` |
 | `--lavender` / `--lavender-ink` | `#2B2339` / `#CFC3F2` |
@@ -183,12 +183,12 @@ Navigation: Tab-Leiste unten mit **3 Tabs: Heute, Verlauf und Einstellungen** (s
 Von oben nach unten:
 
 1. **Kopfzeile:** runder Avatar 48 px (Logo-Gesicht aus Abschnitt 9, Hintergrund `#F3C7B8`), daneben Name (18 px / 800; ohne Namen „Dein Baby“) und darunter „12 Tage alt · Mittwoch, 14:20“ (13 px). Das Alter nur, wenn `birthDate` gesetzt ist: in den ersten 14 Tagen „x Tage alt“ („heute geboren“ am Geburtstag), danach bis 3 volle Monate „x Wochen alt“, dann „x Monate alt“, ab 24 Monaten „x Jahre alt“ (seit 0.4.2).
-2. **Hero-Karte** (`--rose-tint`, Radius 32): Kopfzeile „Zuletzt gestillt“ mit Tropfen-Icon in weißem Kreis; große Zeit „1 Std 40 Min“ seit **Ende** des letzten Stillens (läuft eins, „Stillt gerade · 07:42“); Zeile „rechts · 18 Minuten · um 12:40“; unten „Nächste Seite“ mit zwei Kreisen **L** und **R** (nächste Seite gefüllt in `--rose`, andere weiß). Nächste Seite = Gegenseite des letzten abgeschlossenen Stillens. Ohne Eintrag: „Noch nichts eingetragen“ und L hervorgehoben.
+2. **Hero-Karte** (`--rose-tint`, Radius 32): Kopfzeile „Zuletzt gestillt“ mit Tropfen-Icon in weißem Kreis; große Zeit „1 Std 40 Min“ seit **Ende** des letzten Stillens (läuft eins, „Stillt gerade · 07:42“); Zeile „rechts · 18 Minuten · um 12:40“; unten „Nächste Seite“ mit zwei Kreisen **L** und **R** (nächste Seite gefüllt in `--rose`, andere weiß). Nächste Seite = Gegenseite des letzten abgeschlossenen Stillens. Läuft ein Stillen, heißt die Zeile „Seite“ und hebt die gerade gestillte Seite hervor (seit 0.5.0; vorher stand dort „Nächste Seite“ und wirkte widersprüchlich). Ohne Eintrag: „Noch nichts eingetragen“ und L hervorgehoben.
 3. **Zwei Karten** nebeneinander: **Windel** (`--peach`): „vor 35 Min“ und Art („nass“); **Schlaf** (`--lavender`): „schläft seit 25 Min“ oder „wach seit 40 Min“ (seit Ende des letzten Schlafs).
-4. **Chips** (weiß): „6× gestillt“, „5 Windeln“, „9 Std 25 Min Schlaf“, gezählt seit 00:00 lokal. Schlafsumme in Stunden und Minuten (unter einer Stunde „40 Min Schlaf“), weil Neugeborene in vielen kurzen Etappen schlafen; laufender Schlaf zählt bis jetzt. (Geändert auf Wunsch der Besitzerin, 2026-10-21; vorher ganze Stunden.)
-4a. **Versions-Pille** oben rechts in der Kopfzeile (seit 0.4.0, Mockup-Varianten A + C): kleine Pille „v0.4.0“ (12 px / 700, `--ink-soft` auf `--surface`, Tippfläche ≥ 44 px). Tippen öffnet ein kleines Fenster (`role="dialog"`, Escape und Tippen außerhalb schließen, Fokus hinein und zurück) mit „Baby Time 0.4.0“, „Erstellt am <Build-Zeitpunkt>“, Statuszeile, Button **Nach Update suchen** und Link **Was ist neu**. Ist eine neue Version bereits aktiv (Service Worker übernommen), wird die Pille rosé mit ↻ **Update bereit**; Tippen startet die App neu. Nie automatisch neu laden. *(Ersetzt das zweizeilige Kästchen aus 0.3.1.)*
+4. **Tageszähler** (seit 0.5.0 eine feste Leiste aus drei gleich breiten weißen Feldern statt loser Chips, damit nichts umbricht): große Zahl, kleines Label darunter – „6×“ gestillt, „5“ Windeln, „9:25“ Std Schlaf (unter einer Stunde „40“ Min Schlaf), gezählt seit 00:00 lokal. Schlafsumme in Stunden und Minuten (unter einer Stunde „40 Min Schlaf“), weil Neugeborene in vielen kurzen Etappen schlafen; laufender Schlaf zählt bis jetzt. (Geändert auf Wunsch der Besitzerin, 2026-10-21; vorher ganze Stunden.)
+4a. **Update-Pille** oben rechts in der Kopfzeile: Seit 0.5.0 nur sichtbar, wenn eine neue Version bereit ist (rosé, ↻ **Update bereit**, Tippen startet neu); Version, Build-Zeitpunkt und „Nach Update suchen“ stehen in Einstellungen → Über die App. *Bis 0.4.2:* kleine Pille „v0.4.0“ (12 px / 700, `--ink-soft` auf `--surface`, Tippfläche ≥ 44 px). Tippen öffnet ein kleines Fenster (`role="dialog"`, Escape und Tippen außerhalb schließen, Fokus hinein und zurück) mit „Baby Time 0.4.0“, „Erstellt am <Build-Zeitpunkt>“, Statuszeile, Button **Nach Update suchen** und Link **Was ist neu**. Ist eine neue Version bereits aktiv (Service Worker übernommen), wird die Pille rosé mit ↻ **Update bereit**; Tippen startet die App neu. Nie automatisch neu laden. *(Ersetzt das zweizeilige Kästchen aus 0.3.1.)*
 4b. **Sicherungs-Erinnerung** unter der Kopfzeile (seit 0.4.0): Karte „Zeit für eine Sicherung“ mit „Letzte Sicherung vor 16 Tagen“ bzw. „Noch keine Sicherung vorhanden.“, Button **Jetzt sichern** (Export wie in 6.8) und Schließen-Knopf. Erscheint, wenn die letzte Sicherung – ohne Sicherung: der älteste Eintrag – mindestens 14 Tage alt ist; nach dem Schließen frühestens nach weiteren 14 Tagen wieder. Nie, solange ein Stillen läuft.
-5. **Aktions-Dock** (weiße Pille, Radius 36, Padding 10, Gap 8) mit drei Buttons: **Stillen** (breiter, `--rose`, weißer Text, Tropfen-Icon), **Windel** (`--peach`), **Schlaf** (`--lavender`, wechselt zu **Wach**, solange ein Schlaf läuft). Höhe 68 px.
+5. **Aktions-Dock** (weiße Pille, Radius 36, Padding 10, Gap 8) mit drei Buttons: **Stillen** (breiter, `--rose`, weißer Text, Tropfen-Icon), **Windel** (`--peach`), **Schlaf** (`--lavender`, wechselt zu **Wach**, solange ein Schlaf läuft). Höhe 68 px. Läuft ein Stillen, zeigt der Stillen-Button zweizeilig „Stillen läuft“ (mit pulsierendem Punkt, ohne Animation bei reduzierter Bewegung) und den Timer und führt zurück zum Stillen-Screen (seit 0.5.0).
 6. Tab-Leiste.
 
 Relative Zeit: unter 1 Min „gerade eben“; unter 60 Min „vor 35 Min“; ab 60 Min „vor 1 Std 40 Min“; ab 24 Std „vor 2 Tagen“. Anzeige aktualisiert sich alle 30 Sekunden und bei `visibilitychange`.
@@ -197,7 +197,8 @@ Relative Zeit: unter 1 Min „gerade eben“; unter 60 Min „vor 35 Min“; ab 
 
 - Kopf: Zurück-Button (44 px rund) und Titel „Stillen“.
 - **Segmentschalter** „Links | Rechts“ (weißer Container, Radius 30, aktives Segment `--rose`). Vorauswahl = nächste Seite. Umschalten **beendet das laufende Event und startet ein neues** auf der anderen Seite.
-- **Timer-Ring** 280 px: Kreisfläche `--rose-tint`, Fortschrittsring (Strichstärke 12, Rosé) für 15 Minuten pro Umlauf, danach neu beginnend. Mitte: „Linke Seite“, Zeit `mm:ss` (64 px / 800, tabellarische Ziffern), „gestartet um 14:12“.
+- **Timer-Ring** 280 px: Kreisfläche `--rose-tint`, Fortschrittsring (Strichstärke 12, Rosé) für 15 Minuten pro Umlauf, danach neu beginnend; kleine Markierungen bei 0, 5 und 10 Minuten (seit 0.5.0). Mitte: „Linke Seite“, Zeit `mm:ss` (64 px / 800, tabellarische Ziffern), „gestartet um 14:12“.
+- Zwei Felder „Links mm:ss | Rechts mm:ss“: Zeit pro Seite in diesem Stillen (nach einem Seitenwechsel zählen beide), aktive Seite rosé hinterlegt (seit 0.5.0).
 - Karte „Letztes Mal rechts · 18 Min · vor 1 Std 40 Min“.
 - Unten: **Abbrechen** (weiß, verwirft das laufende Event nach Rückfrage) und **Fertig** (`--rose`, breiter, setzt `end` und geht zurück zu Heute).
 - Der Start geschieht beim Öffnen des Screens über den Stillen-Button (Event wird sofort angelegt). Bildschirm wach halten über Wake Lock API, falls verfügbar, sonst ignorieren.
@@ -205,7 +206,7 @@ Relative Zeit: unter 1 Min „gerade eben“; unter 60 Min „vor 35 Min“; ab 
 
 ### 6.4 Windel
 
-Tap auf **Windel** öffnet ein Bottom-Sheet mit drei großen Buttons **Nass**, **Voll**, **Beides** (je mindestens 64 px hoch). Tap speichert sofort mit Zeit „jetzt“ und schließt. Danach Snackbar „Windel gespeichert · Rückgängig“ (6 Sekunden, Button mindestens 44 px). Schließen per Tap außerhalb.
+Tap auf **Windel** öffnet ein Bottom-Sheet mit drei großen Buttons **Nass**, **Voll**, **Beides** (je mindestens 64 px hoch, seit 0.5.0 mit Symbol: Tropfen, Kreis, beides). Darüber Zeit-Pillen **jetzt · vor 5 · vor 15 · vor 30** (Standard „jetzt“, bei jedem Öffnen zurückgesetzt; seit 0.5.0). Tap auf eine Art speichert sofort mit der gewählten Zeit und schließt; bei „vor x“ lautet die Snackbar „Windel gespeichert · vor 15 Min“. Danach Snackbar „Windel gespeichert · Rückgängig“ (6 Sekunden, Button mindestens 44 px). Schließen per Tap außerhalb.
 
 ### 6.5 Schlaf
 
@@ -214,8 +215,8 @@ Tap auf **Schlaf** legt ein Event mit `start = jetzt` an, der Button wird zu **W
 ### 6.6 Verlauf (light)
 
 - Titel „Verlauf“, rechts ein **+** zum Nachtragen. *(Bis 0.3.1 gab es daneben einen Icon-Button „Daten und Info“; dessen Inhalt steht seit 0.4.0 im Tab Einstellungen, 6.10.)*
-- Liste gruppiert nach Tag, neueste zuerst. Tageskopf: „Heute“, „Gestern“, sonst „Mo, 19. Okt.“.
-- Zeile (mindestens 64 px): farbiges Icon in Kreis (Tropfen rosé, Windel pfirsich, Mond lavendel), Titel („Stillen links · 18 Min“, „Windel nass“, „Schlaf · 2 Std 10 Min“), Uhrzeit rechts. Laufende Events zeigen „läuft“.
+- Liste gruppiert nach Tag, neueste zuerst. Tageskopf: „Heute“, „Gestern“, sonst „Mo, 19. Okt.“. Darunter (seit 0.5.0) die Tagessumme „8× gestillt · 6 Windeln · 14 Std Schlaf“, gezählt wie auf Heute (Schlaf über Mitternacht anteilig).
+- Zeile (mindestens 64 px): farbiges Icon in Kreis (Tropfen rosé, Windel pfirsich, Mond lavendel), Titel („Stillen links · 18 Min“, „Windel nass“, „Schlaf · 2 Std 10 Min“), Uhrzeit rechts. Laufende Events zeigen statt der Dauer ein farbiges Abzeichen **läuft** (seit 0.5.0). Die erste Zeile jedes Stillens hat eine zweite Zeile „Abstand 2 Std 10 Min“: Beginn zu Beginn des vorigen Stillens; ab 12 Stunden entfällt sie (dann fehlen Einträge).
 - Tap auf eine Zeile öffnet ein **Bearbeiten-Sheet**: Startzeit (`<input type="datetime-local">`), Endzeit (bei feed und sleep), Seite oder Windelart, Notiz, **Speichern** und **Löschen** (mit Rückfrage). Ende vor Start ist unzulässig (Fehlermeldung am Feld).
 - **+ Nachtragen:** gleiches Sheet mit Typauswahl, Startzeit vorbelegt mit „jetzt“.
 - Leerer Zustand: „Hier erscheint alles, was du einträgst.“

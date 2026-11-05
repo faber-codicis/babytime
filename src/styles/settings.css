@@ -241,18 +241,6 @@
   color: var(--on-rose);
 }
 
-.version-popover {
-  position: absolute;
-  z-index: 5;
-  top: calc(100% + 6px);
-  right: 0;
-  width: min(260px, calc(100vw - 40px));
-  padding: 16px;
-  border-radius: 22px;
-  background: var(--surface);
-  box-shadow: var(--shadow-dock);
-}
-
 .version-details {
   display: flex;
   flex-direction: column;

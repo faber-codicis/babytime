@@ -9,9 +9,9 @@ const LOOK: Record<BabyEvent['type'], { icon: IconName; tone: string }> = {
   sleep: { icon: 'moon', tone: 'lavender' },
 };
 
-/** "Stillen links · 18 Min", "Windel nass", "Schlaf · 2 Std 10 Min"; running events say "läuft". */
+/** "Stillen links · 18 Min", "Windel nass", "Schlaf · 2 Std 10 Min"; running events get no duration (badge instead). */
 export function eventTitle(event: BabyEvent): string {
-  const duration = event.end === undefined ? t.history.running : formatDuration(event.end - event.start);
+  const duration = event.end === undefined ? undefined : formatDuration(event.end - event.start);
   switch (event.type) {
     case 'feed':
       return t.history.rowFeed(event.side === 'right' ? t.side.right : t.side.left, duration);
@@ -22,8 +22,10 @@ export function eventTitle(event: BabyEvent): string {
   }
 }
 
-export function EventRow({ event, onOpen }: { event: BabyEvent; onOpen: (event: BabyEvent) => void }) {
+/** One history row; `sub` is an optional second line (e.g. the gap since the feeding before). */
+export function EventRow({ event, sub, onOpen }: { event: BabyEvent; sub?: string | undefined; onOpen: (event: BabyEvent) => void }) {
   const look = LOOK[event.type];
+  const running = event.type !== 'diaper' && event.end === undefined;
   return (
     <li>
       <button type="button" class="event-row" onClick={() => onOpen(event)}>
@@ -31,7 +33,12 @@ export function EventRow({ event, onOpen }: { event: BabyEvent; onOpen: (event: 
           <Icon name={look.icon} size={20} />
         </span>
         <span class="event-text">
-          <span class="event-title">{eventTitle(event)}</span>
+          <span class="event-title">
+            {eventTitle(event)}
+            {running && ' '}
+            {running && <span class={`run-badge run-badge--${look.tone}`}>{t.history.running}</span>}
+          </span>
+          {sub && <span class="event-sub">{sub}</span>}
           {event.note && <span class="event-note">{event.note}</span>}
         </span>
         <span class="event-time tabular">{formatClock(event.start)}</span>

@@ -35,8 +35,26 @@ test('a running feed survives an app restart', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#splash')).toHaveCount(0);
   await expect(page.getByText('Stillt gerade')).toBeVisible();
+  // While feeding, Today shows the side being fed (not "Nächste Seite") and the dock leads back.
+  await expect(page.getByText('Seite gerade: links')).toBeAttached();
+  await expect(page.getByText('Nächste Seite: links')).toHaveCount(0);
+  await expect(feedButton(page)).toHaveCount(0);
+  await page.getByRole('button', { name: /^Stillen läuft, \d\d:\d\d, zum Timer$/ }).click();
+  await expect(page.getByText('Linke Seite')).toBeVisible();
+  await page.goto('/');
   await page.getByRole('link', { name: /Stillt gerade/ }).click();
   await expect(page.getByText('Linke Seite')).toBeVisible();
+});
+
+test('the feeding screen shows the time per side after a switch', async ({ page }) => {
+  await page.clock.install();
+  await feedButton(page).click();
+  await page.clock.fastForward('02:00');
+  await page.getByRole('button', { name: 'Rechts' }).click();
+  await page.clock.fastForward('01:00');
+  const times = page.getByRole('definition');
+  await expect(times.first()).toHaveText(/^02:0\d$/);
+  await expect(times.nth(1)).toHaveText(/^01:0\d$/);
 });
 
 test('cancel asks first, then discards the running feed', async ({ page }) => {
@@ -54,6 +72,19 @@ test('cancel asks first, then discards the running feed', async ({ page }) => {
   await dialog.getByRole('button', { name: 'Verwerfen' }).click();
   await expect(page).not.toHaveURL(/stillen/);
   await expect(page.getByText('Noch nichts eingetragen')).toBeVisible();
+});
+
+test('diaper a little earlier: "vor 15" saves 15 minutes back, the next opening starts at "jetzt" again', async ({ page }) => {
+  await page.getByRole('button', { name: 'Windel', exact: true }).click();
+  const sheet = page.getByRole('dialog', { name: 'Windel' });
+  await expect(sheet.getByRole('button', { name: 'jetzt' })).toHaveAttribute('aria-pressed', 'true');
+  await sheet.getByRole('button', { name: 'vor 15 Minuten' }).click();
+  await sheet.getByRole('button', { name: 'Voll' }).click();
+  await expect(page.getByText('Windel gespeichert · vor 15 Min')).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Windel' })).toContainText(/vor 1[45] Min/); // the card refreshes every 30 s
+
+  await page.getByRole('button', { name: 'Windel', exact: true }).click();
+  await expect(sheet.getByRole('button', { name: 'jetzt' })).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('diaper in 2 taps, with undo', async ({ page }) => {

@@ -4,7 +4,7 @@ import { loadToday } from '../data/overview';
 import type { Profile } from '../data/profile';
 import { nextSide } from '../logic/nextSide';
 import { dayStats } from '../logic/stats';
-import { dayRange } from '../logic/time';
+import { dayRange, formatTimer, MINUTE } from '../logic/time';
 import { navigate } from '../router';
 import { t } from '../strings.de';
 import { BackupReminder } from '../ui/BackupReminder';
@@ -49,8 +49,17 @@ export function Today({ profile }: { profile: Profile }) {
 
   const onFeed = () =>
     once(async () => {
+      // A running feed is returned unchanged, so this also leads back to the timer.
       await startFeed(nextSide(data?.lastFinishedFeed));
       navigate('feeding');
+    });
+
+  const onDiaper = (kind: DiaperKind, minutesAgo: number) =>
+    once(async () => {
+      setDiaperOpen(false);
+      const change = await addDiaper(kind, Date.now() - minutesAgo * MINUTE);
+      const text = minutesAgo ? t.snackbar.diaperSavedAgo(minutesAgo) : t.snackbar.diaperSaved;
+      setSnack({ id: ++snackId, text, undo: change.undo });
     });
 
   const onSleep = () =>
@@ -58,13 +67,6 @@ export function Today({ profile }: { profile: Profile }) {
       const change = await toggleSleep();
       const text = change.action === 'started' ? t.snackbar.sleepStarted : t.snackbar.sleepEnded;
       setSnack({ id: ++snackId, text, undo: change.undo });
-    });
-
-  const onDiaper = (kind: DiaperKind) =>
-    once(async () => {
-      setDiaperOpen(false);
-      const change = await addDiaper(kind);
-      setSnack({ id: ++snackId, text: t.snackbar.diaperSaved, undo: change.undo });
     });
 
   return (
@@ -83,12 +85,13 @@ export function Today({ profile }: { profile: Profile }) {
         <Snackbar message={snack} onDone={() => setSnack(undefined)} />
         <DockButtons
           sleeping={Boolean(data?.runningSleep)}
+          feedTimer={data?.runningFeed ? formatTimer(now - data.runningFeed.start) : undefined}
           onFeed={() => void onFeed()}
           onDiaper={() => setDiaperOpen(true)}
           onSleep={() => void onSleep()}
         />
       </div>
-      <DiaperSheet open={diaperOpen} onClose={() => setDiaperOpen(false)} onPick={(kind) => void onDiaper(kind)} />
+      <DiaperSheet open={diaperOpen} onClose={() => setDiaperOpen(false)} onPick={(kind, minutesAgo) => void onDiaper(kind, minutesAgo)} />
     </div>
   );
 }

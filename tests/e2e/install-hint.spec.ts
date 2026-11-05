@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import pkg from '../../package.json' with { type: 'json' };
 import { openApp, waitForApp } from './helpers';
 
 /** Simulates iOS: `navigator.standalone` exists only there (false in a Safari tab, true from the home screen). */
@@ -67,16 +66,6 @@ test('Android Chrome: install button once Chrome offers installation', async ({ 
   await hint.getByRole('button', { name: 'Installieren' }).click();
   expect(await page.evaluate(() => (window as unknown as Record<string, boolean>)['promptShown'])).toBe(true);
   await expect(hint).toHaveCount(0);
-});
-
-test('version pill is visible at the top of Today, not covered by the dock', async ({ page }) => {
-  await openApp(page);
-  const version = page.getByRole('button', { name: `Version ${pkg.version}, Details anzeigen` });
-  await expect(version).toHaveText(`v${pkg.version}`);
-  const box = (await version.boundingBox())!;
-  const dock = (await page.getByRole('navigation', { name: 'Eintragen' }).boundingBox())!;
-  expect(box.y + box.height).toBeLessThan(dock.y);
-  expect(box.y).toBeLessThan(120);
 });
 
 test('Android / desktop: no hint', async ({ page }) => {

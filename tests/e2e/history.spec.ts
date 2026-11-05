@@ -33,10 +33,23 @@ test('groups by day, newest first, with titles from the spec', async ({ page }) 
 
   await expect(page.locator('.day-title')).toHaveText(['Heute', 'Gestern', 'Mo, 19. Okt.']);
   const today = page.getByRole('region', { name: 'Heute' });
-  await expect(today.locator('.event-title')).toHaveText(['Schlaf · läuft', 'Windel nass', 'Stillen links · 18 Min']);
+  await expect(today.locator('.event-title')).toHaveText(['Schlaf läuft', 'Windel nass', 'Stillen links · 18 Min']);
+  await expect(page.getByRole('region', { name: 'Gestern' }).locator('.day-summary')).toHaveText(
+    '0× gestillt · 0 Windeln · 2 Std 10 Min Schlaf',
+  );
   await expect(today.getByText('etwas gerötet')).toBeVisible();
   await expect(page.getByRole('region', { name: 'Gestern' }).locator('.event-title')).toHaveText(['Schlaf · 2 Std 10 Min']);
   await page.screenshot({ path: 'test-results/history.png', animations: 'disabled' });
+});
+
+test('feeds show the time since the feeding before (start to start); long gaps show nothing', async ({ page }) => {
+  await seed(page, [
+    { type: 'feed', side: 'left', start: at(21, 9, 0), end: at(21, 9, 15) },
+    { type: 'feed', side: 'right', start: at(21, 11, 30), end: at(21, 11, 45) },
+    { type: 'feed', side: 'left', start: at(19, 7, 0), end: at(19, 7, 15) },
+  ]);
+  const today = page.getByRole('region', { name: 'Heute' });
+  await expect(today.locator('.event-sub')).toHaveText(['Abstand 2 Std 30 Min']);
 });
 
 test('fix a wrong entry in 2 taps from the history: change the side', async ({ page }) => {
@@ -106,7 +119,7 @@ test('backfill: "+" with type choice, start prefilled with now', async ({ page }
 
   // The new sleep also counts on Today.
   await page.getByRole('link', { name: 'Heute' }).click();
-  await expect(page.getByRole('listitem').nth(2)).toHaveText('1 Std 30 Min Schlaf');
+  await expect(page.getByRole('listitem').nth(2)).toHaveText('1:30 Std Schlaf');
 });
 
 test('touch targets in history and edit sheet are at least 44 px', async ({ page }) => {

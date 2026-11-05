@@ -10,6 +10,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.5.0',
+    date: '2026-11-05',
+    items: [
+      'Läuft ein Stillen, zeigt Heute die Seite und unten „Stillen läuft“ mit Timer',
+      'Die Tageszähler stehen jetzt in einer festen Leiste',
+      'Windel auch „vor 5, 15 oder 30 Min“ eintragen, direkt im Windel-Fenster',
+      'Beim Stillen siehst du die Zeit pro Seite, der Ring hat Markierungen alle 5 Minuten',
+      'Im Verlauf: Tagessummen und der Abstand zwischen den Mahlzeiten',
+    ],
+  },
+  {
     version: '0.4.3',
     date: '2026-11-05',
     items: [

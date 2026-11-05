@@ -91,6 +91,17 @@ Kurz begründet, neueste unten. Paketänderungen stehen im Abschnitt „Abhängi
 - **HSTS** in `public/_headers` (1 Jahr, mit Subdomains; ohne `preload`, weil das schwer rückgängig zu machen ist).
 - **Abhängigkeiten:** `wrangler` aktualisiert, damit die hohe Lücke in `undici` weg ist. Die übrigen mittleren/niedrigen Meldungen (`minimatch`, `glob`, `deepmerge` unter eslint und vite-plugin-pwa) betreffen nur Build-Werkzeuge, nicht die ausgelieferte App. Ein `overrides` auf `minimatch@11` wurde getestet und verworfen: Danach fand Workbox nur noch 6 statt 22 Dateien für den Offline-Cache.
 
+## 0.5.0 (Designüberarbeitung)
+
+Vorschläge A1–A4 und B1–B3 aus der Designdurchsicht vom 2026-11-05, auf Wunsch des Besitzers umgesetzt. Nicht umgesetzt (ändern die Spec stärker, eher später): „Nachts automatisch dunkel“, Tages-Zeitleiste auf Heute, Nachtmodus-Layout.
+
+- **Laufendes Stillen auf Heute:** Die Hero-Zeile heißt dann „Seite“ und markiert die gerade gestillte Seite. Der Dock-Button wird zweizeilig „Stillen läuft“ + Timer; sein zugänglicher Name ist „Stillen läuft, mm:ss, zum Timer“. Er ruft weiter `startFeed`, das ein laufendes Stillen unverändert zurückgibt – also nur Navigation.
+- **Tageszähler als Leiste:** Drei gleich breite Felder, Schlaf als „9:25 Std“. Der Text jedes Felds bleibt als ganzer Satz lesbar („6× gestillt“, „9:25 Std Schlaf“), weil Wert und Label durch ein Leerzeichen getrennt sind.
+- **Versions-Pille nur bei Update:** Die Pille war für die Testphase gewünscht (Upload prüfen). Der Build-Zeitpunkt steht weiter in Einstellungen → Über die App und auf dem Splash; auf Heute erscheint nur noch „Update bereit“. Das Popover entfällt.
+- **Dunkles `--rose` #D9827A** statt #F09A8F: Der Stillen-Button war nachts die hellste Fläche. Dunkler Text darauf 6,7:1, gegen den Hintergrund 6,8:1 – die ≥ 6:1-Regel aus 0.3.1 hält.
+- **Windel „vor x Min“:** Zeit wird ab `Date.now()` beim Tippen gerechnet. Die Windel-Karte aktualisiert sich nur alle 30 Sekunden, kann also kurz „vor 14 Min“ zeigen.
+- **Abstand im Verlauf:** Beginn zu Beginn (so fragen Hebamme und Kinderärztin), pro Stillsitzung (Seitenwechsel zählt als eine), nur unter 12 Stunden.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

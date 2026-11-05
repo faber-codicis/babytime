@@ -64,6 +64,11 @@
   stroke: var(--surface);
 }
 
+.timer-tick {
+  stroke: var(--ink-soft);
+  opacity: 0.6;
+}
+
 .timer-disc {
   fill: var(--rose-tint);
 }
@@ -132,4 +137,46 @@
 
 .bottom-actions .big-btn {
   min-height: var(--action-height);
+}
+
+/* ---------------------------------------------------------------- time per side */
+
+.side-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0;
+}
+
+.side-time {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 10px;
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--card-ring);
+  color: var(--ink-soft);
+}
+
+.side-time dt {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.side-time dd {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.side-time.is-active {
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+}
+
+.side-time.is-active dd {
+  color: var(--ink);
 }

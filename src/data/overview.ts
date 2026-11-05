@@ -35,17 +35,19 @@ async function sessionOf(feed: BabyEvent | undefined): Promise<FeedSession | und
 /** Everything the running-feed screen shows. */
 export interface FeedingData {
   running: BabyEvent | undefined;
+  /** The feeding in progress, including sides already switched away from. */
+  currentSession: FeedSession | undefined;
   /** The feeding before the current one (not the side just switched away from). */
   previousSession: FeedSession | undefined;
 }
 
 export async function loadFeeding(): Promise<FeedingData> {
   const running = await getRunning('feed');
-  if (!running) return { running, previousSession: undefined };
+  if (!running) return { running, currentSession: undefined, previousSession: undefined };
   const recent = await getEventsBetween(running.start - SESSION_LOOKBACK, running.start + 1);
   const current = feedSessions(recent).find((s) => s.events.some((e) => e.id === running.id));
   const previous = await getLatestFinishedBefore('feed', current?.start ?? running.start);
-  return { running, previousSession: await sessionOf(previous) };
+  return { running, currentSession: current, previousSession: await sessionOf(previous) };
 }
 
 export async function loadToday(dayStart: number, dayEnd: number): Promise<TodayData> {

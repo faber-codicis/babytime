@@ -54,7 +54,7 @@
   --ink: #f6c2ba;
   --ink-soft: #d79c93;
 
-  --rose: #f09a8f;
+  --rose: #d9827a; /* one step dimmer than #f09a8f: the brightest area at night; dark text on it 6.7:1 */
   --on-rose: #1a0d0f;
   --rose-ink: #f7b3c2;
   --rose-tint: #3d2129;

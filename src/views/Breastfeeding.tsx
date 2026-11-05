@@ -54,6 +54,9 @@ export function Breastfeeding() {
   const side = running.side ?? 'left';
   const elapsed = now - running.start;
   const previous = data?.previousSession;
+  // Time per side in this feeding (after a switch both count), the running side until now.
+  const perSide = { left: 0, right: 0 };
+  for (const e of data?.currentSession?.events ?? [running]) perSide[e.side ?? 'left'] += Math.max(0, (e.end ?? now) - e.start);
 
   return (
     <div class="feeding">
@@ -85,6 +88,15 @@ export function Breastfeeding() {
         </p>
         <p class="timer-started">{t.feeding.startedAt(formatClock(running.start))}</p>
       </TimerRing>
+
+      <dl class="side-times" aria-label={t.feeding.sideTimesA11y}>
+        {SIDES.map((s) => (
+          <div key={s} class={`side-time${s === side ? ' is-active' : ''}`}>
+            <dt>{s === 'left' ? t.feeding.left : t.feeding.right}</dt>
+            <dd class="tabular">{formatTimer(perSide[s])}</dd>
+          </div>
+        ))}
+      </dl>
 
       {previous && previous.end !== undefined && (
         <div class="last-time">

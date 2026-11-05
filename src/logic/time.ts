@@ -85,7 +85,7 @@ export function formatAge(birthDate: string, now: number): string | undefined {
 
 // ---------------------------------------------------------------- durations
 
-function split(ms: number): { h: number; m: number } {
+export function split(ms: number): { h: number; m: number } {
   const totalMinutes = Math.floor(Math.max(0, ms) / MINUTE);
   return { h: Math.floor(totalMinutes / 60), m: totalMinutes % 60 };
 }

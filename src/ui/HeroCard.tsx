@@ -8,11 +8,12 @@ import { Icon } from './icons';
 
 const sideName = (side: Side | undefined) => (side === 'right' ? t.side.right : t.side.left);
 
-function NextSide({ side }: { side: Side }) {
+/** "Nächste Seite L R"; while a feed runs it shows the side being fed instead ("Seite L R"). */
+function NextSide({ side, current }: { side: Side; current: boolean }) {
   return (
     <div class="next-side">
-      <span aria-hidden="true">{t.today.nextSide}</span>
-      <span class="visually-hidden">{t.today.nextSideA11y(sideName(side))}</span>
+      <span aria-hidden="true">{current ? t.today.currentSide : t.today.nextSide}</span>
+      <span class="visually-hidden">{(current ? t.today.currentSideA11y : t.today.nextSideA11y)(sideName(side))}</span>
       <span class={`side-dot${side === 'left' ? ' is-next' : ''}`} aria-hidden="true">
         {t.side.leftShort}
       </span>
@@ -51,7 +52,7 @@ export function HeroCard({ data, now }: { data: TodayData | undefined; now: numb
       </div>
       <p class={`hero-big${data && !running && !session ? ' is-empty' : ''}`}>{data ? big : ' '}</p>
       {line && <p class="hero-line">{line}</p>}
-      <NextSide side={next} />
+      <NextSide side={running ? (running.side ?? 'left') : next} current={Boolean(running)} />
     </>
   );
 

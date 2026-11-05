@@ -45,17 +45,23 @@ export const t = {
     nothingYet: 'Noch nichts eingetragen',
     nextSide: 'Nächste Seite',
     nextSideA11y: (side: string) => `Nächste Seite: ${side}`,
+    currentSide: 'Seite',
+    currentSideA11y: (side: string) => `Seite gerade: ${side}`,
     diaper: 'Windel',
     sleep: 'Schlaf',
     sleeping: 'schläft gerade',
     awake: 'wach',
     noEntry: '–',
-    chipFeeds: (n: number) => `${n}× gestillt`,
-    chipDiapers: (n: number) => `${n} ${plural(n, 'Windel', 'Windeln')}`,
-    chipSleep: (duration: string) => `${duration} Schlaf`,
+    statFeeds: (n: number) => [`${n}×`, 'gestillt'] as const,
+    statDiapers: (n: number) => [`${n}`, plural(n, 'Windel', 'Windeln')] as const,
+    /** "9:25" + "Std Schlaf", under one hour "40" + "Min Schlaf": always one short line. */
+    statSleep: (h: number, m: number) =>
+      (h === 0 ? [`${m}`, 'Min Schlaf'] : [`${h}:${String(m).padStart(2, '0')}`, 'Std Schlaf']) as readonly [string, string],
     countersA11y: 'Heute seit Mitternacht',
     actionsA11y: 'Eintragen',
     actionFeed: 'Stillen',
+    actionFeedRunning: 'Stillen läuft',
+    actionFeedRunningA11y: (timer: string) => `Stillen läuft, ${timer}, zum Timer`,
     actionDiaper: 'Windel',
     actionSleep: 'Schlaf',
     actionWake: 'Wach',
@@ -70,6 +76,7 @@ export const t = {
     leftSide: 'Linke Seite',
     rightSide: 'Rechte Seite',
     startedAt: (clock: string) => `gestartet um ${clock}`,
+    sideTimesA11y: 'Zeit pro Seite',
     lastTime: (side: string, duration: string, ago: string) => `Letztes Mal ${side} · ${duration} · ${ago}`,
     cancel: 'Abbrechen',
     done: 'Fertig',
@@ -197,8 +204,6 @@ export const t = {
   },
 
   update: {
-    pill: (version: string) => `v${version}`,
-    pillA11y: (version: string) => `Version ${version}, Details anzeigen`,
     ready: 'Update bereit',
     readyA11y: 'Neue Version bereit, jetzt neu starten',
     about: (version: string) => `Baby Time ${version}`,
@@ -235,10 +240,13 @@ export const t = {
     empty: 'Hier erscheint alles, was du einträgst.',
     add: 'Eintrag nachtragen',
     running: 'läuft',
+    daySummary: (feeds: number, diapers: number, sleep: string) =>
+      `${feeds}× gestillt · ${diapers} ${plural(diapers, 'Windel', 'Windeln')} · ${sleep} Schlaf`,
+    gap: (duration: string) => `Abstand ${duration}`,
     showOlder: 'Ältere Einträge anzeigen',
-    rowFeed: (side: string, duration: string) => `Stillen ${side} · ${duration}`,
+    rowFeed: (side: string, duration?: string) => (duration ? `Stillen ${side} · ${duration}` : `Stillen ${side}`),
     rowDiaper: (kind: string) => `Windel ${kind}`,
-    rowSleep: (duration: string) => `Schlaf · ${duration}`,
+    rowSleep: (duration?: string) => (duration ? `Schlaf · ${duration}` : 'Schlaf'),
     deleted: 'Eintrag gelöscht',
     saved: 'Eintrag gespeichert',
   },
@@ -293,6 +301,10 @@ export const t = {
 
   diaperSheet: {
     title: 'Windel',
+    whenA11y: 'Wann',
+    now: 'jetzt',
+    minutesAgo: (m: number) => `vor ${m}`,
+    minutesAgoA11y: (m: number) => `vor ${m} Minuten`,
     wet: 'Nass',
     dirty: 'Voll',
     both: 'Beides',
@@ -301,6 +313,7 @@ export const t = {
 
   snackbar: {
     diaperSaved: 'Windel gespeichert',
+    diaperSavedAgo: (m: number) => `Windel gespeichert · vor ${m} Min`,
     sleepStarted: 'Schlaf gestartet',
     sleepEnded: 'Schlaf beendet',
     undo: 'Rückgängig',

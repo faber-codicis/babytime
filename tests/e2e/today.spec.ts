@@ -46,7 +46,7 @@ test('shows the mockup situation', async ({ page }) => {
   await expect(page.getByText('nass', { exact: true })).toBeVisible();
   await expect(page.getByText('seit 25 Min')).toBeVisible();
   await expect(page.getByText('schläft gerade')).toBeVisible();
-  await expect(page.getByRole('listitem')).toHaveText(['6× gestillt', '5 Windeln', '9 Std 25 Min Schlaf']);
+  await expect(page.getByRole('listitem')).toHaveText(['6× gestillt', '5 Windeln', '9:25 Std Schlaf']);
   await expect(page.getByRole('button', { name: 'Wach' })).toBeVisible();
   await page.screenshot({ path: 'test-results/today.png', fullPage: true });
 

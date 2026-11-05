@@ -116,6 +116,14 @@
   padding-left: 4px;
 }
 
+.day-summary {
+  margin-top: -4px;
+  padding-left: 4px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
 .event-list {
   margin: 0;
   padding: 0;
@@ -175,6 +183,31 @@
 .event-title {
   font-size: 16px;
   font-weight: 600;
+}
+
+.run-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  vertical-align: 2px;
+}
+
+.run-badge--rose {
+  background: var(--rose);
+  color: var(--on-rose);
+}
+
+.run-badge--lavender {
+  background: var(--lavender-ink);
+  color: var(--surface);
+}
+
+.event-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
 }
 
 .event-note {

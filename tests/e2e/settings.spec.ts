@@ -6,7 +6,6 @@ test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
 const DAY = 24 * 60 * 60 * 1000;
 const NOW = new Date(2026, 10, 20, 14, 20).getTime();
-const pillName = `Version ${pkg.version}, Details anzeigen`;
 
 async function touchTargets(page: Page) {
   for (const target of await page.locator(':is(button, a, input):visible:not([aria-hidden="true"])').all()) {
@@ -60,29 +59,16 @@ test.describe('settings tab', () => {
   });
 });
 
-test.describe('version pill on Today', () => {
+test.describe('update pill on Today', () => {
   test.beforeEach(async ({ page }) => {
     await openApp(page);
   });
 
-  test('tap shows version, build time and update check; Escape closes and returns focus', async ({ page }) => {
-    const pill = page.getByRole('button', { name: pillName });
-    await expect(pill).toHaveAttribute('aria-expanded', 'false');
-    await pill.click();
-    const popover = page.getByRole('dialog', { name: `Baby Time ${pkg.version}` });
-    await expect(popover).toBeVisible();
-    await expect(popover.getByText(/^Erstellt am /)).toBeVisible();
-    await expect(popover.getByRole('button', { name: 'Nach Update suchen' })).toBeFocused();
-    await page.screenshot({ path: 'test-results/version-popover.png', animations: 'disabled' });
-    await touchTargets(page);
-
-    await page.keyboard.press('Escape');
-    await expect(popover).toHaveCount(0);
-    await expect(pill).toBeFocused();
-
-    await pill.click();
-    await page.mouse.click(30, 400);
-    await expect(popover).toHaveCount(0);
+  test('nothing pending: no version pill on Today, version lives in Einstellungen', async ({ page }) => {
+    await expect(page.getByRole('button', { name: /^Version / })).toHaveCount(0);
+    await expect(page.getByText(`v${pkg.version}`)).toHaveCount(0);
+    await page.getByRole('link', { name: 'Einstellungen' }).click();
+    await expect(page.getByText(`Baby Time ${pkg.version}`)).toBeVisible();
   });
 
   test('a new active version turns the pill into "Update bereit"; tapping restarts', async ({ page }) => {
@@ -95,9 +81,13 @@ test.describe('version pill on Today', () => {
     await expect(ready).toHaveText('Update bereit');
     await page.screenshot({ path: 'test-results/version-ready.png', animations: 'disabled' });
 
+    const box = (await ready.boundingBox())!;
+    const dock = (await page.getByRole('navigation', { name: 'Eintragen' }).boundingBox())!;
+    expect(box.y + box.height).toBeLessThan(dock.y);
+
     await ready.click();
     await waitForApp(page);
-    await expect(page.getByRole('button', { name: pillName })).toBeVisible();
+    await expect(ready).toHaveCount(0);
   });
 });
 
