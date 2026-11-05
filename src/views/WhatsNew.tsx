@@ -2,6 +2,7 @@ import { changelog } from '../changelog';
 import { goBack } from '../router';
 import { t } from '../strings.de';
 import { Icon } from '../ui/icons';
+import { NewsHero } from '../ui/NewsHero';
 
 const dateFormat = new Intl.DateTimeFormat(t.locale, { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -21,6 +22,8 @@ export function WhatsNew() {
         </button>
         <h1 class="screen-title">{t.whatsNew.title}</h1>
       </header>
+
+      <NewsHero />
 
       {changelog.map((entry) => (
         <section key={entry.version} class="news-card" aria-labelledby={`news-${entry.version}`}>

@@ -72,17 +72,6 @@
   gap: 14px;
 }
 
-.update-star {
-  flex: none;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--rose-tint);
-  color: var(--rose-ink);
-}
-
 .update-subtitle {
   font-size: 14px;
   color: var(--ink-soft);
@@ -104,4 +93,102 @@
   color: var(--rose-ink);
   font-size: 15px;
   font-weight: 700;
+}
+
+/* ---------------------------------------------------------------- laughing-baby banner */
+
+.news-hero {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  height: 180px;
+  border-radius: var(--radius-card);
+  background: var(--rose);
+}
+
+.news-hero--compact {
+  height: 148px;
+}
+
+.news-hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.news-hero-blob--a {
+  width: 180px;
+  height: 180px;
+  left: -60px;
+  top: -70px;
+}
+
+.news-hero-blob--b {
+  width: 150px;
+  height: 150px;
+  right: -50px;
+  bottom: -60px;
+}
+
+.news-hero-dot {
+  position: absolute;
+  border-radius: 50%;
+  background: #f7dce2;
+}
+
+.news-hero-dot--peach {
+  background: #fce3d6;
+}
+
+.news-hero-dot--lavender {
+  background: #e9e3f3;
+}
+
+.laughing-baby {
+  position: relative;
+  animation: baby-giggle 1.2s ease-in-out 2;
+  transform-origin: 50% 80%;
+}
+
+@keyframes baby-giggle {
+  0%,
+  100% {
+    transform: rotate(0) translateY(0);
+  }
+  20% {
+    transform: rotate(-4deg) translateY(-3px);
+  }
+  40% {
+    transform: rotate(4deg) translateY(0);
+  }
+  60% {
+    transform: rotate(-3deg) translateY(-2px);
+  }
+  80% {
+    transform: rotate(2deg) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .laughing-baby {
+    animation: none;
+  }
+}
+
+/* Dark design: no bright rosé block at night, the baby dimmed like the avatar. */
+:root[data-theme='dark'] .news-hero {
+  background: var(--rose-tint);
+}
+
+:root[data-theme='dark'] .news-hero-blob {
+  background: rgba(246, 194, 186, 0.06);
+}
+
+:root[data-theme='dark'] .news-hero-dot {
+  opacity: 0.35;
+}
+
+:root[data-theme='dark'] .laughing-baby {
+  filter: brightness(0.8) saturate(0.85);
 }

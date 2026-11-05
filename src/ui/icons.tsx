@@ -65,3 +65,40 @@ export function BabyFace({ size = 48 }: { size?: number }) {
     </svg>
   );
 }
+
+/**
+ * The logo baby, laughing (for "Was ist neu" and the update popup): eyes squeezed shut, mouth wide
+ * open, rosier cheeks, little hands up, and "joy" strokes around the head. Same colours as the logo.
+ */
+export function LaughingBaby({ size = 120 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 200 200" aria-hidden="true" focusable="false" class="laughing-baby">
+      {/* joy strokes */}
+      <g stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" opacity="0.9">
+        <path d="M30 46 L42 58" />
+        <path d="M20 78 L36 82" />
+        <path d="M170 46 L158 58" />
+        <path d="M180 78 L164 82" />
+      </g>
+      <circle cx="100" cy="104" r="70" fill="#F7DCE2" />
+      {/* ears */}
+      <circle cx="44" cy="108" r="10" fill="#F5C4AE" />
+      <circle cx="156" cy="108" r="10" fill="#F5C4AE" />
+      <circle cx="100" cy="104" r="58" fill="#FBD9C7" />
+      {/* curl */}
+      <path d="M100 46 Q92 34 102 30 Q112 28 108 38" fill="none" stroke="#3A2630" stroke-width="4" stroke-linecap="round" />
+      {/* cheeks */}
+      <circle cx="64" cy="118" r="11" fill="#F4A6A0" opacity="0.85" />
+      <circle cx="136" cy="118" r="11" fill="#F4A6A0" opacity="0.85" />
+      {/* squeezed laughing eyes > < */}
+      <path d="M66 88 L80 95 L66 102" fill="none" stroke="#3A2630" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M134 88 L120 95 L134 102" fill="none" stroke="#3A2630" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      {/* wide open laughing mouth with tongue */}
+      <path d="M74 112 Q100 112 126 112 Q124 150 100 150 Q76 150 74 112 Z" fill="#8E2F47" stroke="#8E2F47" stroke-width="3" stroke-linejoin="round" />
+      <path d="M84 138 Q100 126 116 138 Q108 148 100 148 Q92 148 84 138 Z" fill="#F08A9B" />
+      {/* little hands up */}
+      <circle cx="34" cy="146" r="13" fill="#FBD9C7" stroke="#F5C4AE" stroke-width="3" />
+      <circle cx="166" cy="146" r="13" fill="#FBD9C7" stroke="#F5C4AE" stroke-width="3" />
+    </svg>
+  );
+}

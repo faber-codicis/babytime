@@ -1,6 +1,6 @@
 import type { ChangelogEntry } from '../changelog';
 import { t } from '../strings.de';
-import { Icon } from './icons';
+import { NewsHero } from './NewsHero';
 import { Sheet } from './Sheet';
 
 /** At most this many bullet points; the rest is behind "Alle Neuerungen ansehen". */
@@ -34,10 +34,8 @@ export function UpdateDialog({ entries, onDismiss, onShowAll }: UpdateDialogProp
 
   return (
     <Sheet open={Boolean(entries)} onClose={onDismiss} labelledBy="update-title">
+      <NewsHero compact />
       <div class="update-head">
-        <span class="update-star" aria-hidden="true">
-          <Icon name="star" size={24} />
-        </span>
         <div>
           <h2 id="update-title" class="sheet-title">
             {t.whatsNew.popupTitle(__APP_VERSION__)}

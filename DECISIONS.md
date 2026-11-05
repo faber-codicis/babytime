@@ -102,6 +102,8 @@ Vorschläge A1–A4 und B1–B3 aus der Designdurchsicht vom 2026-11-05, auf Wun
 - **Windel „vor x Min“:** Zeit wird ab `Date.now()` beim Tippen gerechnet. Die Windel-Karte aktualisiert sich nur alle 30 Sekunden, kann also kurz „vor 14 Min“ zeigen.
 - **Abstand im Verlauf:** Beginn zu Beginn (so fragen Hebamme und Kinderärztin), pro Stillsitzung (Seitenwechsel zählt als eine), nur unter 12 Stunden.
 
+- **Lachendes Baby bei Neuerungen** (Wunsch des Besitzers: „Splashscreen bei Changelog mit einem lachenden Baby“): umgesetzt als Banner im Splash-Look oben im Update-Popup und auf „Was ist neu“, nicht als eigener Vollbild-Screen, der den Start verzögern würde. Das Gesicht ist eine Variante des Logos (`LaughingBaby` in `ui/icons.tsx`), gleiche Farben. Keine eigene Versionsnummer: Der Banner kommt mit der nächsten Version.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |
