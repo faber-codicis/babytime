@@ -4,6 +4,10 @@ const PATHS = {
   diaper: 'M4 7h16l-2 9a4 4 0 0 1-4 3h-4a4 4 0 0 1-4-3z',
   dirty: 'M12 7a5 5 0 1 0 0 10a5 5 0 1 0 0-10',
   both: 'M7.5 5c2 2.6 4 4.6 4 7.2a4 4 0 0 1-8 0c0-2.6 2-4.6 4-7.2zM17 10a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7',
+  // Bottle (teat, cap ring, body with a fill line) and pump (breast shield funnel), since 0.6.0.
+  bottle: 'M10 3h4M10.5 3v2.5L9 7h6l-1.5-1.5V3M8 7h8v12a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2zM8 12h8',
+  pump: 'M4 4h16l-5.5 7v7a2.5 2.5 0 0 1-5 0v-7z',
+  minus: 'M5 12h14',
   moon: 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',
   back: 'M15 18l-6-6 6-6',
   heart: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',

@@ -7,11 +7,12 @@ interface DockProps {
   feedTimer?: string | undefined;
   onFeed: () => void;
   onDiaper: () => void;
+  onBottle: () => void;
   onSleep: () => void;
 }
 
-/** The three main actions, always within thumb reach at the bottom. */
-export function DockButtons({ sleeping, feedTimer, onFeed, onDiaper, onSleep }: DockProps) {
+/** The main actions, always within thumb reach at the bottom (Flasche since 0.6.0). */
+export function DockButtons({ sleeping, feedTimer, onFeed, onDiaper, onBottle, onSleep }: DockProps) {
   return (
     <nav class="dock" aria-label={t.today.actionsA11y}>
       {feedTimer ? (
@@ -37,6 +38,9 @@ export function DockButtons({ sleeping, feedTimer, onFeed, onDiaper, onSleep }: 
       )}
       <button type="button" class="dock-btn dock-btn--diaper" onClick={onDiaper}>
         {t.today.actionDiaper}
+      </button>
+      <button type="button" class="dock-btn dock-btn--bottle" aria-label={t.today.actionBottleA11y} onClick={onBottle}>
+        {t.today.actionBottle}
       </button>
       <button type="button" class="dock-btn dock-btn--sleep" onClick={onSleep}>
         {sleeping ? t.today.actionWake : t.today.actionSleep}

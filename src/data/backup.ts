@@ -1,6 +1,6 @@
-import { NOTE_MAX } from '../logic/validate';
+import { hasAmount, isAmount, isTimed, NOTE_MAX } from '../logic/validate';
 import { t } from '../strings.de';
-import { db, SCHEMA_VERSION, type BabyEvent, type DiaperKind, type EventType, type Side } from './db';
+import { db, SCHEMA_VERSION, type BabyEvent, type DiaperKind, type EventType, type MilkKind, type PumpSide, type Side } from './db';
 import { sanitizeProfile, type Profile } from './profile';
 import { saveDarkTheme } from './theme';
 
@@ -9,9 +9,11 @@ export const MAX_FILE_BYTES = 10 * 1024 * 1024;
 export const MAX_EVENTS = 100_000;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const TYPES: readonly EventType[] = ['feed', 'diaper', 'sleep'];
+const TYPES: readonly EventType[] = ['feed', 'diaper', 'sleep', 'bottle', 'pump'];
 const SIDES: readonly Side[] = ['left', 'right'];
 const DIAPERS: readonly DiaperKind[] = ['wet', 'dirty', 'both'];
+const MILKS: readonly MilkKind[] = ['breast', 'formula'];
+const PUMP_SIDES: readonly PumpSide[] = ['left', 'right', 'both'];
 /** Plausible time range for entries: from 2000 until far ahead (catches seconds-vs-ms mistakes). */
 const MIN_TIME = Date.UTC(2000, 0, 1);
 const MAX_TIME = Date.UTC(2200, 0, 1);
@@ -79,6 +81,9 @@ export function rebuildEvent(raw: unknown): BabyEvent | undefined {
   const end = own(raw, 'end');
   const side = own(raw, 'side');
   const diaper = own(raw, 'diaper');
+  const amountMl = own(raw, 'amountMl');
+  const milk = own(raw, 'milk');
+  const pumpSide = own(raw, 'pumpSide');
   const note = own(raw, 'note');
   const createdAt = own(raw, 'createdAt');
   const updatedAt = own(raw, 'updatedAt');
@@ -90,7 +95,7 @@ export function rebuildEvent(raw: unknown): BabyEvent | undefined {
   const event: BabyEvent = { id: id.toLowerCase(), type: type as EventType, start, createdAt, updatedAt };
 
   if (end !== undefined) {
-    if (type === 'diaper' || !isTime(end) || end < start) return undefined;
+    if (!isTimed(type as EventType) || !isTime(end) || end < start) return undefined;
     event.end = end;
   }
   if (type === 'feed') {
@@ -101,6 +106,18 @@ export function rebuildEvent(raw: unknown): BabyEvent | undefined {
     if (typeof diaper !== 'string' || !DIAPERS.includes(diaper as DiaperKind)) return undefined;
     event.diaper = diaper as DiaperKind;
   } else if (diaper !== undefined) return undefined;
+  if (hasAmount(type as EventType)) {
+    if (!isAmount(amountMl)) return undefined;
+    event.amountMl = amountMl;
+  } else if (amountMl !== undefined) return undefined;
+  if (type === 'bottle') {
+    if (typeof milk !== 'string' || !MILKS.includes(milk as MilkKind)) return undefined;
+    event.milk = milk as MilkKind;
+  } else if (milk !== undefined) return undefined;
+  if (type === 'pump') {
+    if (typeof pumpSide !== 'string' || !PUMP_SIDES.includes(pumpSide as PumpSide)) return undefined;
+    event.pumpSide = pumpSide as PumpSide;
+  } else if (pumpSide !== undefined) return undefined;
   if (note !== undefined) {
     if (typeof note !== 'string' || note.length > NOTE_MAX) return undefined;
     if (note.trim()) event.note = note.trim();
@@ -137,7 +154,7 @@ export function parseBackup(text: string, byteSize = new Blob([text]).size): Par
     if (!event) throw new BackupError(e.invalidEntry(index + 1));
     if (ids.has(event.id)) throw new BackupError(e.duplicate(index + 1));
     ids.add(event.id);
-    if (event.type !== 'diaper' && event.end === undefined) running[event.type]++;
+    if (isTimed(event.type) && event.end === undefined) running[event.type]++;
     events.push(event);
   }
   if (running.feed > 1 || running.sleep > 1) throw new BackupError(e.running);

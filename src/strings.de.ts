@@ -32,6 +32,19 @@ export const t = {
     rightShort: 'R',
   },
 
+  milk: {
+    breast: 'Muttermilch',
+    formula: 'Pulvermilch',
+  },
+
+  pumpSide: {
+    left: 'links',
+    right: 'rechts',
+    both: 'beide',
+  },
+
+  ml: (n: number) => `${n} ml`,
+
   diaper: {
     wet: 'nass',
     dirty: 'voll',
@@ -57,12 +70,16 @@ export const t = {
     /** "9:25" + "Std Schlaf", under one hour "40" + "Min Schlaf": always one short line. */
     statSleep: (h: number, m: number) =>
       (h === 0 ? [`${m}`, 'Min Schlaf'] : [`${h}:${String(m).padStart(2, '0')}`, 'Std Schlaf']) as readonly [string, string],
+    statBottle: (ml: number) => [`${ml}`, 'ml Flasche'] as const,
+    statPump: (ml: number) => [`${ml}`, 'ml abgepumpt'] as const,
     countersA11y: 'Heute seit Mitternacht',
     actionsA11y: 'Eintragen',
     actionFeed: 'Stillen',
     actionFeedRunning: 'Stillen läuft',
     actionFeedRunningA11y: (timer: string) => `Stillen läuft, ${timer}, zum Timer`,
     actionDiaper: 'Windel',
+    actionBottle: 'Flasche',
+    actionBottleA11y: 'Flasche oder Abpumpen',
     actionSleep: 'Schlaf',
     actionWake: 'Wach',
   },
@@ -242,11 +259,15 @@ export const t = {
     running: 'läuft',
     daySummary: (feeds: number, diapers: number, sleep: string) =>
       `${feeds}× gestillt · ${diapers} ${plural(diapers, 'Windel', 'Windeln')} · ${sleep} Schlaf`,
+    daySummaryBottle: (ml: number) => ` · ${ml} ml Flasche`,
+    daySummaryPump: (ml: number) => ` · ${ml} ml abgepumpt`,
     gap: (duration: string) => `Abstand ${duration}`,
     showOlder: 'Ältere Einträge anzeigen',
     rowFeed: (side: string, duration?: string) => (duration ? `Stillen ${side} · ${duration}` : `Stillen ${side}`),
     rowDiaper: (kind: string) => `Windel ${kind}`,
     rowSleep: (duration?: string) => (duration ? `Schlaf · ${duration}` : 'Schlaf'),
+    rowBottle: (amount: string, milk: string) => `Flasche · ${amount} ${milk}`,
+    rowPump: (side: string, amount: string) => `Abpumpen ${side} · ${amount}`,
     deleted: 'Eintrag gelöscht',
     saved: 'Eintrag gespeichert',
   },
@@ -258,6 +279,11 @@ export const t = {
     typeFeed: 'Stillen',
     typeDiaper: 'Windel',
     typeSleep: 'Schlaf',
+    typeBottle: 'Flasche',
+    typePump: 'Abpumpen',
+    amount: 'Menge in ml',
+    milk: 'Inhalt',
+    pumpSide: 'Seite',
     start: 'Beginn',
     time: 'Zeitpunkt',
     end: 'Ende',
@@ -281,6 +307,7 @@ export const t = {
       runningFeed: 'ein Stillen',
       runningSleep: 'ein Schlaf',
       noteTooLong: (max: number) => `Höchstens ${max} Zeichen.`,
+      amount: (min: number, max: number) => `Bitte eine Menge zwischen ${min} und ${max} ml angeben.`,
     },
   },
 
@@ -311,7 +338,28 @@ export const t = {
     close: 'Schließen',
   },
 
+  bottleSheet: {
+    title: 'Flasche',
+    titlePump: 'Abpumpen',
+    modeA11y: 'Was eintragen',
+    bottle: 'Flasche',
+    pump: 'Abpumpen',
+    amountA11y: 'Menge',
+    less: (step: number) => `${step} ml weniger`,
+    more: (step: number) => `${step} ml mehr`,
+    milk: 'Inhalt',
+    breast: 'Muttermilch',
+    formula: 'Pulvermilch',
+    side: 'Seite',
+    left: 'Links',
+    right: 'Rechts',
+    both: 'Beide',
+    save: 'Speichern',
+  },
+
   snackbar: {
+    bottleSaved: (ml: number) => `Flasche gespeichert · ${ml} ml`,
+    pumpSaved: (ml: number) => `Abpumpen gespeichert · ${ml} ml`,
     diaperSaved: 'Windel gespeichert',
     diaperSavedAgo: (m: number) => `Windel gespeichert · vor ${m} Min`,
     sleepStarted: 'Schlaf gestartet',

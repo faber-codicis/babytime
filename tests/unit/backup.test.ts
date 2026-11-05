@@ -52,7 +52,7 @@ describe('export', () => {
     await startFeed('left', at(9));
     await addDiaper('wet', at(9, 30));
     const backup = await buildExport(at(12));
-    expect(backup).toMatchObject({ app: 'babytime', schemaVersion: 1, exportedAt: at(12), profile: { babyName: 'Lena', onboarded: true } });
+    expect(backup).toMatchObject({ app: 'babytime', schemaVersion: 2, exportedAt: at(12), profile: { babyName: 'Lena', onboarded: true } });
     expect(backup.events).toHaveLength(2);
     expect(exportFileName(at(12))).toBe('babytime-2026-10-21.json');
   });
@@ -79,7 +79,7 @@ describe('parseBackup refuses manipulated files', () => {
     expect(refused('{ kaputt')).toMatch(/nicht lesen/);
     expect(refused(JSON.stringify({ app: 'andere', schemaVersion: 1, events: [] }))).toMatch(/keine Baby-Time-Sicherung/);
     expect(refused(JSON.stringify([1, 2, 3]))).toMatch(/keine Baby-Time-Sicherung/);
-    expect(refused(file([], { schemaVersion: 2 }))).toMatch(/neueren Version/);
+    expect(refused(file([], { schemaVersion: 3 }))).toMatch(/neueren Version/);
     expect(refused(file([], { schemaVersion: '1' }))).toMatch(/keine Baby-Time-Sicherung/);
   });
 

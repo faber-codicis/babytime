@@ -24,10 +24,11 @@
 8. **Installationshinweis** für iPhone-Safari (nicht installiert).
 9. **Deployment-Konfiguration** (Cloudflare Worker mit statischen Dateien) und **Sicherheits-Härtung** (CSP, Import-Validierung, Abhängigkeitsregeln), siehe Abschnitt 13.
 10. **Versionsanzeige und „Was ist neu“**: Version im Splash, auf Heute (Versions-Pille) und in den Einstellungen, Seite „Was ist neu“, **Popup einmalig beim ersten Start nach einem Update** (Abschnitt 6.9).
+11. **Flasche und Abpumpen** (seit 0.6.0, Wunsch des Besitzers), siehe Abschnitt 6.11.
 
 ### Nicht im Umfang (nicht bauen, keine Platzhalter-UI)
 
-Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Meilensteine, Flasche, Abpumpen, Tracker-Schalter, Akzentfarben, Wochenansicht, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
+Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Meilensteine, Tracker-Schalter, Akzentfarben, Wochenansicht, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
 
 ## 2a. Lieferstufen (Reihenfolge verbindlich)
 
@@ -129,7 +130,7 @@ Dunkel bewusst rötlich-gedämpft, **kein reines Weiß**, damit nachts nichts bl
 ## 5. Datenmodell
 
 ```ts
-type EventType = 'feed' | 'diaper' | 'sleep';
+type EventType = 'feed' | 'diaper' | 'sleep' | 'bottle' | 'pump'; // bottle, pump seit 0.6.0
 
 interface BabyEvent {
   id: string;            // crypto.randomUUID()
@@ -138,6 +139,9 @@ interface BabyEvent {
   end?: number;          // epoch ms; fehlt = läuft noch (nur feed und sleep)
   side?: 'left' | 'right';            // nur feed
   diaper?: 'wet' | 'dirty' | 'both';  // nur diaper
+  amountMl?: number;                  // nur bottle und pump: ganze ml, 1 bis 1000
+  milk?: 'breast' | 'formula';        // nur bottle
+  pumpSide?: 'left' | 'right' | 'both'; // nur pump
   note?: string;
   createdAt: number;
   updatedAt: number;
@@ -156,7 +160,8 @@ Regeln:
 - Zeiten immer als epoch ms, Tagesgrenzen in **lokaler** Zeitzone des Geräts.
 - Ein **Stillen-Event hat genau eine Seite**. Seite wechseln beendet das laufende Event und startet sofort ein neues mit der anderen Seite.
 - Höchstens ein laufendes Stillen und ein laufender Schlaf gleichzeitig. Laufende Timer überleben Reload und App-Neustart (Zustand kommt aus der Datenbank, nicht aus dem Speicher).
-- Windel-Events haben keine Dauer (`end` fehlt, `start` = Zeitpunkt).
+- Windel-, Flaschen- und Abpump-Events haben keine Dauer (`end` fehlt, `start` = Zeitpunkt).
+- Sicherungsdateien haben seit 0.6.0 `schemaVersion: 2`; Dateien mit Version 1 werden weiter gelesen. Das Dexie-Schema bleibt Version 1 (keine neuen Indizes).
 - Alle Schreibzugriffe über ein Repository-Modul (`src/data/events.ts`), UI greift nie direkt auf Dexie zu.
 
 ## 6. Screens
@@ -283,6 +288,14 @@ Eigener Tab `#/einstellungen` im Stil des Mockups „Einstellungen“, auf Wunsc
 4. **Über die App:** „Baby Time x.y.z“, „Erstellt am …“, Statuszeile, **Nach Update suchen** (fragt nur den eigenen `sw.js` ab; Ergebnisse „Du hast die neueste Version.“, „Neue Version wird geladen …“, „Keine Verbindung. Versuch es später noch einmal.“; bei neuer Version **Jetzt neu starten**), Link **Was ist neu**; **Als App installieren** nur, solange nicht installiert (iOS: Schritte aus 6.7, Android: Button bzw. Hinweis auf das Chrome-Menü); Satz „Deine Einträge bleiben auf diesem Handy.“
 
 Nicht in 0.4.0: Tracker-Schalter, Meilensteine, Akzentfarben, automatischer Nachtmodus, Benachrichtigungen.
+
+### 6.11 Flasche und Abpumpen (seit 0.6.0)
+
+- **Dock:** vierter Button **Flasche** (`--sky`, zugänglicher Name „Flasche oder Abpumpen“) zwischen Windel und Schlaf. Die drei kleinen Buttons haben 15 px Schrift, damit alles auf 360 px Breite passt.
+- **Sheet:** Kopf mit Flaschen- bzw. Pumpen-Icon; Umschalter **Flasche | Abpumpen**; Mengenfeld „60 ml“ mit runden Buttons **−** / **+** (je 10 ml, 1 bis 1000 ml); bei Flasche **Muttermilch | Pulvermilch**, bei Abpumpen **Links | Rechts | Beide**; Zeit-Pillen **jetzt / vor 5 / vor 15 / vor 30** wie bei der Windel; Button **Speichern**. Alles startet mit dem letzten Eintrag (Menge, Inhalt, Seite, Flasche oder Abpumpen); ohne Eintrag 60 ml, Muttermilch, beide. Der übliche Fall braucht 2 Taps.
+- Danach Snackbar „Flasche gespeichert · 90 ml“ bzw. „Abpumpen gespeichert · 120 ml“ mit Rückgängig.
+- **Heute:** Die Tageszähler bekommen „150 ml Flasche“ bzw. „120 ml abgepumpt“ dazu, nur an Tagen mit solchen Einträgen (eine zweite Reihe der Leiste). Die Hero-Karte bleibt beim Stillen.
+- **Verlauf:** Zeilen „Flasche · 90 ml Muttermilch“ und „Abpumpen beide · 120 ml“ (Icon in `--sky`), Tagessumme ergänzt „· 150 ml Flasche · 120 ml abgepumpt“. Bearbeiten und Nachtragen mit Feld „Menge in ml“ und der passenden Auswahl; die Art des Eintrags steht beim Nachtragen in zwei Reihen.
 
 ## 7. PWA-Anforderungen
 
@@ -507,4 +520,4 @@ Die Kriterien für Stufe A stehen in Abschnitt 2a. Sie müssen weiterhin gelten.
 
 ## 15. Danach (nicht jetzt)
 
-Avatar-Baukasten, Meilensteine, Tracker-Schalter, Flasche und Abpumpen, Akzentfarben, Nachtmodus-Ring, vollständige Einstellungen, Verlauf mit Wochenansicht, Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).
+Avatar-Baukasten, Meilensteine, Tracker-Schalter, Akzentfarben, Nachtmodus-Ring, vollständige Einstellungen, Verlauf mit Wochenansicht, Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).

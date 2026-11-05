@@ -68,7 +68,7 @@ describe('dayStats', () => {
   });
 
   it('is empty without events', () => {
-    expect(dayStats([], dayStart, dayEnd, at(14))).toEqual({ feeds: 0, diapers: 0, sleepMs: 0 });
+    expect(dayStats([], dayStart, dayEnd, at(14))).toEqual({ feeds: 0, diapers: 0, sleepMs: 0, bottles: 0, bottleMl: 0, pumpMl: 0 });
   });
 });
 

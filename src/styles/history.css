@@ -378,3 +378,17 @@
   background: var(--rose-ink);
   color: var(--on-rose);
 }
+
+.event-icon--sky {
+  background: var(--sky);
+  color: var(--sky-ink);
+}
+
+/* Entry type in the backfill sheet: five options in rows of three (since 0.6.0). */
+.segmented--wrap {
+  flex-wrap: wrap;
+}
+
+.segmented--wrap .segment {
+  flex: 1 1 30%;
+}

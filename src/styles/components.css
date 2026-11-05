@@ -280,3 +280,75 @@
 .diaper-btn {
   gap: 10px;
 }
+
+/* ---------------------------------------------------------------- bottle and pump sheet (since 0.6.0) */
+
+.icon-bubble--sky {
+  background: var(--sky);
+  color: var(--sky-ink);
+}
+
+.big-btn--sky {
+  background: var(--sky-ink);
+  color: var(--surface);
+}
+
+.segmented--small.segmented--sky {
+  border-color: var(--sky);
+}
+
+.segmented--sky .segment.is-active {
+  background: var(--sky-ink);
+  color: var(--surface);
+}
+
+.bottle-mode {
+  margin-bottom: 14px;
+}
+
+.amount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 8px;
+  border-radius: var(--radius-card);
+  background: var(--sky);
+}
+
+.amount-btn {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  color: var(--sky-ink);
+}
+
+.amount-btn:disabled {
+  opacity: 0.4;
+}
+
+.amount-value {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: var(--sky-ink);
+}
+
+.when-pills--sky .when-pill {
+  border-color: var(--sky);
+}
+
+.when-pills--sky .when-pill.is-active {
+  background: var(--sky-ink);
+  border-color: var(--sky-ink);
+  color: var(--surface);
+}
+
+.bottle-field {
+  margin-bottom: 14px;
+}

@@ -321,3 +321,14 @@
   background: var(--lavender);
   color: var(--lavender-ink);
 }
+
+.dock-btn--bottle {
+  background: var(--sky);
+  color: var(--sky-ink);
+}
+
+/* Four buttons since 0.6.0: a little less text size and padding, so "Flasche" fits on a 360 px phone. */
+.dock-btn:not(.dock-btn--feed) {
+  font-size: 15px;
+  padding: 0 2px;
+}

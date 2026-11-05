@@ -1,8 +1,12 @@
-import type { DiaperKind, EventType, Side } from '../data/events';
+import type { DiaperKind, EventType, MilkKind, PointEventType, PumpSide, Side, TimedEventType } from '../data/events';
 import { t } from '../strings.de';
 import { MINUTE } from './time';
 
 export const NOTE_MAX = 500;
+
+/** Bottle and pump amounts in whole millilitres (since 0.6.0). More than a litre at once is a typo. */
+export const AMOUNT_MIN = 1;
+export const AMOUNT_MAX = 1000;
 
 /** Times may lie this far ahead, because datetime-local inputs only have minute precision. */
 const FUTURE_TOLERANCE = MINUTE;
@@ -17,13 +21,23 @@ export interface EventDraft {
   endInvalid?: boolean;
   side?: Side | undefined;
   diaper?: DiaperKind | undefined;
+  /** Bottle and pump: parsed amount (undefined = empty or not a number). */
+  amountMl?: number | undefined;
+  milk?: MilkKind | undefined;
+  pumpSide?: PumpSide | undefined;
   note: string;
 }
 
-export type DraftField = 'start' | 'end' | 'note';
+export type DraftField = 'start' | 'end' | 'amount' | 'note';
 export type DraftErrors = Partial<Record<DraftField, string>>;
 
-export const isTimed = (type: EventType): type is 'feed' | 'sleep' => type !== 'diaper';
+export const isTimed = (type: EventType): type is TimedEventType => type === 'feed' || type === 'sleep';
+export const isPoint = (type: EventType): type is PointEventType => !isTimed(type);
+export const hasAmount = (type: EventType): type is 'bottle' | 'pump' => type === 'bottle' || type === 'pump';
+
+/** A valid amount: whole millilitres within AMOUNT_MIN..AMOUNT_MAX. */
+export const isAmount = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isInteger(value) && value >= AMOUNT_MIN && value <= AMOUNT_MAX;
 
 /** Field errors for a draft; empty object means valid. The "already running" rule needs the database (repository). */
 export function validateDraft(draft: EventDraft, now: number): DraftErrors {
@@ -42,6 +56,8 @@ export function validateDraft(draft: EventDraft, now: number): DraftErrors {
       else if (draft.end > latest) errors.end = e.endFuture;
     }
   }
+
+  if (hasAmount(draft.type) && !isAmount(draft.amountMl)) errors.amount = e.amount(AMOUNT_MIN, AMOUNT_MAX);
 
   if (draft.note.trim().length > NOTE_MAX) errors.note = e.noteTooLong(NOTE_MAX);
   return errors;

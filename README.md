@@ -1,12 +1,12 @@
 # Baby Time
 
-PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, ohne Konto. Testversion 0.4.2.
+PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, ohne Konto. Testversion 0.6.0.
 
 **Datenschutz:** Alle Einträge bleiben auf dem Gerät. Es gibt keinen Upload, keine Weitergabe, keine Analyse.
 
 ## Was die App kann
 
-- **Heute:** zuletzt gestillt, nächste Seite, letzte Windel, Schlaf, Tageszähler. Stillen mit Timer und Seitenwechsel, Windel in 2 Taps, Schlaf in 1 Tap, jeweils mit „Rückgängig“.
+- **Heute:** zuletzt gestillt, nächste Seite, letzte Windel, Schlaf, Tageszähler. Stillen mit Timer und Seitenwechsel, Windel in 2 Taps, Schlaf in 1 Tap, Flasche und Abpumpen mit Menge, jeweils mit „Rückgängig“.
 - **Verlauf:** Liste nach Tagen, Einträge ändern, löschen und nachtragen.
 - **Erststart** mit Babyname und Geburtsdatum (beides freiwillig).
 - **Einstellungen** (eigener Tab): Profil, **Dunkles Design** ein/aus (Standard: hell), Sicherung exportieren (mit „Letzte Sicherung: vor x Tagen“) und wiederherstellen, alle Daten löschen, Version mit **Nach Update suchen**, „Was ist neu“, Installationshinweis.

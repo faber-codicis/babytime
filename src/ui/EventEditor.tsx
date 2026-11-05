@@ -7,10 +7,12 @@ import {
   type Change,
   type DiaperKind,
   type EventType,
+  type MilkKind,
+  type PumpSide,
   type Side,
 } from '../data/events';
 import { fromLocalInput, toLocalInput } from '../logic/time';
-import { hasErrors, isTimed, NOTE_MAX, validateDraft, type DraftErrors, type EventDraft } from '../logic/validate';
+import { hasAmount, hasErrors, isTimed, NOTE_MAX, validateDraft, type DraftErrors, type EventDraft } from '../logic/validate';
 import { t } from '../strings.de';
 import { Sheet } from './Sheet';
 
@@ -29,6 +31,10 @@ interface FormState {
   end: string;
   side: Side;
   diaper: DiaperKind;
+  /** Raw text of the amount field (bottle and pump). */
+  amount: string;
+  milk: MilkKind;
+  pumpSide: PumpSide;
   note: string;
 }
 
@@ -40,18 +46,28 @@ function initialForm(target: EditorTarget | undefined): FormState {
     end: event?.end !== undefined ? toLocalInput(event.end) : '',
     side: event?.side ?? 'left',
     diaper: event?.diaper ?? 'wet',
+    amount: event?.amountMl !== undefined ? String(event.amountMl) : '',
+    milk: event?.milk ?? 'breast',
+    pumpSide: event?.pumpSide ?? 'both',
     note: event?.note ?? '',
   };
 }
 
 /** A row of toggle buttons (same look as the Links | Rechts switch). */
-function Choice<T extends string>(props: { label: string; value: T; options: [T, string][]; onChange: (value: T) => void }) {
+function Choice<T extends string>(props: {
+  label: string;
+  value: T;
+  options: [T, string][];
+  onChange: (value: T) => void;
+  /** Five entry types do not fit one row on a phone: wrap into rows of three. */
+  wrap?: boolean;
+}) {
   return (
     <div class="field">
       <span class="field-label" id={`choice-${props.label}`}>
         {props.label}
       </span>
-      <div class="segmented segmented--small" role="group" aria-labelledby={`choice-${props.label}`}>
+      <div class={`segmented segmented--small${props.wrap ? ' segmented--wrap' : ''}`} role="group" aria-labelledby={`choice-${props.label}`}>
         {props.options.map(([value, text]) => (
           <button
             key={value}
@@ -120,6 +136,9 @@ export function EventEditor({ target, onClose, onSaved, onDeleted }: EditorProps
       endInvalid: form.end !== '' && end === undefined,
       side: form.side,
       diaper: form.diaper,
+      amountMl: /^\d+$/.test(form.amount.trim()) ? Number(form.amount.trim()) : undefined,
+      milk: form.milk,
+      pumpSide: form.pumpSide,
       note: form.note,
     };
   };
@@ -172,7 +191,10 @@ export function EventEditor({ target, onClose, onSaved, onDeleted }: EditorProps
               ['feed', t.editor.typeFeed],
               ['diaper', t.editor.typeDiaper],
               ['sleep', t.editor.typeSleep],
+              ['bottle', t.editor.typeBottle],
+              ['pump', t.editor.typePump],
             ]}
+            wrap
             onChange={(type) => set('type', type)}
           />
         )}
@@ -241,6 +263,51 @@ export function EventEditor({ target, onClose, onSaved, onDeleted }: EditorProps
               ['both', t.diaperSheet.both],
             ]}
             onChange={(kind) => set('diaper', kind)}
+          />
+        )}
+
+        {hasAmount(form.type) && (
+          <div class="field">
+            <label class="field-label" for="editor-amount">
+              {t.editor.amount}
+            </label>
+            <input
+              id="editor-amount"
+              class="input"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              autoComplete="off"
+              value={form.amount}
+              onInput={(e) => set('amount', e.currentTarget.value)}
+              {...invalid('amount')}
+            />
+            <FieldError id="editor-amount-error" message={errors.amount} />
+          </div>
+        )}
+
+        {form.type === 'bottle' && (
+          <Choice
+            label={t.editor.milk}
+            value={form.milk}
+            options={[
+              ['breast', t.bottleSheet.breast],
+              ['formula', t.bottleSheet.formula],
+            ]}
+            onChange={(milk) => set('milk', milk)}
+          />
+        )}
+
+        {form.type === 'pump' && (
+          <Choice
+            label={t.editor.pumpSide}
+            value={form.pumpSide}
+            options={[
+              ['left', t.bottleSheet.left],
+              ['right', t.bottleSheet.right],
+              ['both', t.bottleSheet.both],
+            ]}
+            onChange={(side) => set('pumpSide', side)}
           />
         )}
 

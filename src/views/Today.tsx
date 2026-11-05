@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'preact/hooks';
-import { addDiaper, startFeed, toggleSleep, type DiaperKind } from '../data/events';
+import { addBottle, addDiaper, addPump, getLatestAmounts, startFeed, toggleSleep, type DiaperKind } from '../data/events';
 import { loadToday } from '../data/overview';
 import type { Profile } from '../data/profile';
 import { nextSide } from '../logic/nextSide';
@@ -8,6 +8,7 @@ import { dayRange, formatTimer, MINUTE } from '../logic/time';
 import { navigate } from '../router';
 import { t } from '../strings.de';
 import { BackupReminder } from '../ui/BackupReminder';
+import { BottleSheet, type BottlePick } from '../ui/BottleSheet';
 import { Chips } from '../ui/Chips';
 import { DiaperSheet } from '../ui/DiaperSheet';
 import { DockButtons } from '../ui/DockButtons';
@@ -33,6 +34,8 @@ export function Today({ profile }: { profile: Profile }) {
   );
 
   const [diaperOpen, setDiaperOpen] = useState(false);
+  const [bottleOpen, setBottleOpen] = useState(false);
+  const latestAmounts = useLive(getLatestAmounts, []);
   const [snack, setSnack] = useState<SnackMessage>();
   const busy = useRef(false);
 
@@ -62,6 +65,16 @@ export function Today({ profile }: { profile: Profile }) {
       setSnack({ id: ++snackId, text, undo: change.undo });
     });
 
+  const onBottle = (pick: BottlePick) =>
+    once(async () => {
+      setBottleOpen(false);
+      const at = Date.now() - pick.minutesAgo * MINUTE;
+      const change =
+        pick.mode === 'bottle' ? await addBottle(pick.amountMl, pick.milk, at) : await addPump(pick.amountMl, pick.pumpSide, at);
+      const text = pick.mode === 'bottle' ? t.snackbar.bottleSaved(pick.amountMl) : t.snackbar.pumpSaved(pick.amountMl);
+      setSnack({ id: ++snackId, text, undo: change.undo });
+    });
+
   const onSleep = () =>
     once(async () => {
       const change = await toggleSleep();
@@ -88,9 +101,11 @@ export function Today({ profile }: { profile: Profile }) {
           feedTimer={data?.runningFeed ? formatTimer(now - data.runningFeed.start) : undefined}
           onFeed={() => void onFeed()}
           onDiaper={() => setDiaperOpen(true)}
+          onBottle={() => setBottleOpen(true)}
           onSleep={() => void onSleep()}
         />
       </div>
+      <BottleSheet open={bottleOpen} latest={latestAmounts} onClose={() => setBottleOpen(false)} onSave={(pick) => void onBottle(pick)} />
       <DiaperSheet open={diaperOpen} onClose={() => setDiaperOpen(false)} onPick={(kind, minutesAgo) => void onDiaper(kind, minutesAgo)} />
     </div>
   );

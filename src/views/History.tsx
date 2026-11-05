@@ -76,7 +76,11 @@ export function History() {
             <h2 id={`day-${day.start}`} class="day-title">
               {formatDayHeading(day.start, now)}
             </h2>
-            <p class="day-summary">{t.history.daySummary(stats.feeds, stats.diapers, formatDuration(stats.sleepMs))}</p>
+            <p class="day-summary">
+              {t.history.daySummary(stats.feeds, stats.diapers, formatDuration(stats.sleepMs))}
+              {stats.bottleMl > 0 && t.history.daySummaryBottle(stats.bottleMl)}
+              {stats.pumpMl > 0 && t.history.daySummaryPump(stats.pumpMl)}
+            </p>
             <ul class="event-list">
               {day.events.map((event) => (
                 <EventRow

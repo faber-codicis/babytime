@@ -1,9 +1,9 @@
 import { liveQuery } from 'dexie';
-import { hasErrors, isTimed, NOTE_MAX, validateDraft, type DraftErrors, type EventDraft } from '../logic/validate';
+import { hasErrors, isAmount, isTimed, NOTE_MAX, validateDraft, type DraftErrors, type EventDraft } from '../logic/validate';
 import { t } from '../strings.de';
-import { db, type BabyEvent, type DiaperKind, type EventType, type Side, type TimedEventType } from './db';
+import { db, type BabyEvent, type DiaperKind, type EventType, type MilkKind, type PumpSide, type Side, type TimedEventType } from './db';
 
-export type { BabyEvent, DiaperKind, EventType, Side, TimedEventType } from './db';
+export type { BabyEvent, DiaperKind, EventType, MilkKind, PointEventType, PumpSide, Side, TimedEventType } from './db';
 
 /** Result of a write that the UI can offer to undo (snackbar). */
 export interface Change {
@@ -18,7 +18,7 @@ const newId = (): string => crypto.randomUUID();
 /** An end time never lies before the start, even if the device clock jumped back. */
 const clampEnd = (start: number, end: number): number => Math.max(start, end);
 
-function createEvent(type: EventType, start: number, extra: Pick<BabyEvent, 'side' | 'diaper'> = {}): BabyEvent {
+function createEvent(type: EventType, start: number, extra: Pick<BabyEvent, 'side' | 'diaper' | 'amountMl' | 'milk' | 'pumpSide'> = {}): BabyEvent {
   return { id: newId(), type, start, ...extra, createdAt: start, updatedAt: start };
 }
 
@@ -96,8 +96,8 @@ export async function getEventsBetween(from: number, to: number): Promise<BabyEv
   return db.events.where('start').between(from, to, true, false).toArray();
 }
 
-/** Point in time an event stops counting: its end, its start for diapers, open-ended while running. */
-const effectiveEnd = (e: BabyEvent): number => e.end ?? (e.type === 'diaper' ? e.start : Number.POSITIVE_INFINITY);
+/** Point in time an event stops counting: its end, its start for point events, open-ended while running. */
+const effectiveEnd = (e: BabyEvent): number => e.end ?? (isTimed(e.type) ? Number.POSITIVE_INFINITY : e.start);
 
 /** Events that overlap [from, to): started before `to` and not over before `from`. */
 export async function getEventsOverlapping(from: number, to: number): Promise<BabyEvent[]> {
@@ -169,6 +169,30 @@ export async function addDiaper(kind: DiaperKind, now = Date.now()): Promise<Cha
   return { event, undo: undoCreate(event.id) };
 }
 
+// ---------------------------------------------------------------- bottle and pump (since 0.6.0)
+
+/** A bottle given at `at` (default now). Amount must be whole millilitres within the allowed range. */
+export async function addBottle(amountMl: number, milk: MilkKind, at = Date.now()): Promise<Change> {
+  if (!isAmount(amountMl)) throw new RangeError('Baby Time: invalid bottle amount');
+  const event = createEvent('bottle', at, { amountMl, milk });
+  await db.events.add(event);
+  return { event, undo: undoCreate(event.id) };
+}
+
+/** Milk pumped at `at` (default now), from one or both sides. */
+export async function addPump(amountMl: number, pumpSide: PumpSide, at = Date.now()): Promise<Change> {
+  if (!isAmount(amountMl)) throw new RangeError('Baby Time: invalid pump amount');
+  const event = createEvent('pump', at, { amountMl, pumpSide });
+  await db.events.add(event);
+  return { event, undo: undoCreate(event.id) };
+}
+
+/** Newest bottle or pump entry, so the sheet can start with the last amount and choice. */
+export async function getLatestAmounts(): Promise<{ bottle: BabyEvent | undefined; pump: BabyEvent | undefined }> {
+  const [bottle, pump] = await Promise.all([getLatest('bottle'), getLatest('pump')]);
+  return { bottle, pump };
+}
+
 // ---------------------------------------------------------------- sleep
 
 /** Starts a sleep, or ends the running one. One tap, undoable. */
@@ -225,6 +249,9 @@ export async function saveEvent(draft: EventDraft, now = Date.now()): Promise<Ch
     if (isTimed(draft.type) && draft.end !== undefined) event.end = draft.end;
     if (draft.type === 'feed') event.side = draft.side ?? 'left';
     if (draft.type === 'diaper') event.diaper = draft.diaper ?? 'wet';
+    if (draft.type === 'bottle' || draft.type === 'pump') event.amountMl = draft.amountMl!;
+    if (draft.type === 'bottle') event.milk = draft.milk ?? 'breast';
+    if (draft.type === 'pump') event.pumpSide = draft.pumpSide ?? 'both';
     const note = draft.note.trim().slice(0, NOTE_MAX);
     if (note) event.note = note;
 

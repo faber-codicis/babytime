@@ -104,6 +104,19 @@ Vorschläge A1–A4 und B1–B3 aus der Designdurchsicht vom 2026-11-05, auf Wun
 
 - **Lachendes Baby bei Neuerungen** (Wunsch des Besitzers: „Splashscreen bei Changelog mit einem lachenden Baby“): umgesetzt als Banner im Splash-Look oben im Update-Popup und auf „Was ist neu“, nicht als eigener Vollbild-Screen, der den Start verzögern würde. Das Gesicht ist eine Variante des Logos (`LaughingBaby` in `ui/icons.tsx`), gleiche Farben. Keine eigene Versionsnummer: Der Banner kommt mit der nächsten Version.
 
+## 0.6.0 (Flasche und Abpumpen)
+
+- **Eigene Eintragsarten `bottle` und `pump`** statt Erweiterung von `feed`: Stillen hat Timer, Seite und Sitzungen; Flasche und Abpumpen sind Zeitpunkte mit Menge. Sie zählen nicht als „gestillt“ und ändern die nächste Stillseite nicht.
+- **Kein Timer fürs Abpumpen:** Hebamme und Kinderärztin fragen nach Menge, nicht nach Dauer; ein zweiter laufender Timer neben Stillen und Schlaf wäre nachts verwirrend. Bei Bedarf später.
+- **`pumpSide` als eigenes Feld** (mit „beide“), damit `side` beim Stillen nur links/rechts kennt.
+- **„Pulvermilch“** als Gegenstück zu Muttermilch: deckt Pre- und 1er-Nahrung ab, ohne eine Marke oder Stufe zu nennen.
+- **Ein Dock-Button für beides** (Flasche, darin Umschalter Abpumpen) statt fünf Buttons. Das Sheet öffnet in der Art des letzten Eintrags, so braucht eine Mutter, die nur abpumpt, ebenfalls 2 Taps.
+- **Menge per − / + in 10-ml-Schritten** statt Zahlentastatur: einhändig und nachts ohne Tippen; „+“ springt auf die nächste 10er-Marke. Beim Bearbeiten im Verlauf gibt es ein Zahlenfeld für genaue Werte.
+- **Grenzen 1 bis 1000 ml, nur ganze ml**, bei Eingabe, beim Speichern und beim Import geprüft.
+- **Sicherungsformat Version 2:** Ältere Apps lehnen Dateien mit Flaschen sonst mit „Eintrag n ist fehlerhaft“ ab; so sagen sie „aus einer neueren Version“. Version-1-Dateien werden weiter gelesen. Dexie bleibt bei Version 1, weil keine Indizes dazukommen.
+- **Neue Farbe `--sky`** (hell #DCEBF2 / Schrift #1D4A5E, 7,8:1; dunkel #1C2A31 / #B4D8E8, 9,8:1), damit Flasche sich von Stillen (Rosé) abhebt.
+- **Ml-Felder nur an Tagen mit Einträgen:** Ein voll gestilltes Baby sieht Heute wie bisher.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

@@ -10,6 +10,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.6.0',
+    date: '2026-11-05',
+    items: [
+      'Neu: Flasche und Abpumpen, unten über den Knopf „Flasche“',
+      'Menge mit Plus und Minus, dazu Muttermilch oder Pulvermilch bzw. die Seite',
+      'Das Fenster merkt sich deine letzte Menge, meist reicht ein Tipp auf „Speichern“',
+      'Heute und der Verlauf zeigen, wie viel Milch es am Tag war',
+      'Bei den Neuerungen begrüßt dich jetzt ein lachendes Baby',
+    ],
+  },
+  {
     version: '0.5.0',
     date: '2026-11-05',
     items: [

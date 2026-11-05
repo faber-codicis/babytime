@@ -17,6 +17,9 @@
   --peach-ink: #6e301a;
   --lavender: #e9e3f3;
   --lavender-ink: #3f3166;
+  /* Bottle and pump (since 0.6.0). */
+  --sky: #dcebf2;
+  --sky-ink: #1d4a5e;
 
   --avatar-bg: #f3c7b8;
   --switch-off: #8f7c83;
@@ -63,6 +66,8 @@
   --peach-ink: #f5c3a6;
   --lavender: #2b2339;
   --lavender-ink: #cfc3f2;
+  --sky: #1c2a31;
+  --sky-ink: #b4d8e8;
 
   --avatar-bg: var(--rose-tint);
   --switch-off: #6f5c63;
