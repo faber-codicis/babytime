@@ -148,6 +148,14 @@ Auf Wunsch des Besitzers (2026-11-05) umgesetzt: C1 „Nachts automatisch“, C2
 - **Durchschnitt über begonnene Tage:** Am Mittwoch teilt er durch 3, nicht durch 7, sonst wäre er bis Sonntag zu niedrig.
 - **Woche beginnt am Montag** (Österreich). Die Wochenansicht öffnet immer auf der aktuellen Woche.
 
+## 0.10.0 (Akzentfarben)
+
+- **Nur die vier `--rose`-Tokens wechseln:** Alles, was „Akzent“ ist (Knöpfe, Schalter, Ring, Markierungen, Stillen-Farbe), hängt schon an diesen Tokens. Pfirsich, Lavendel und Himmelblau bleiben, weil sie Windel, Schlaf und Flasche bedeuten; deshalb gibt es keine Akzentfarbe, die einer dieser drei gleicht (Blau ist kräftiger als `--sky`, Lila kräftiger als `--lavender`).
+- **`localStorage` statt `kv`:** wie das Design, damit `theme-init.js` den Akzent vor dem ersten Bild setzt und nichts rosé aufblitzt. Nicht Teil der Sicherung; „Alle Daten löschen“ setzt zurück.
+- **Logo, App-Icon und Splash bleiben rosé:** Das ist die Marke; das Icon im Startbildschirm lässt sich ohnehin nicht pro Nutzerin umfärben.
+- **Kontrast als Unit-Test aus der echten CSS:** `accent.test.ts` liest `tokens.css`, `settings.css` und `theme-init.js` und prüft je Akzent die Verhältnisse und dass Farbfläche, Browserleiste und Startskript dieselbe Farbe haben. Wer eine Farbe ändert, merkt es sofort.
+- **Radiogruppe statt fünf Schalter:** genau eine Wahl; Pfeiltasten wechseln, nur die gewählte Fläche ist im Tab-Fokus. Farbe ist nie das einzige Merkmal: Name als zugänglicher Name, Ring und Häkchen an der gewählten, Name in der Zusatzzeile.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

@@ -7,9 +7,10 @@ import { Avatar } from '../ui/Avatar';
 import { useLive, useNow } from '../ui/hooks';
 import { Icon } from '../ui/icons';
 import { InstallSection } from '../ui/InstallSection';
-import { ActionRow, SettingsSection, SwitchRow } from '../ui/SettingsRows';
+import { AccentRow, ActionRow, SettingsSection, SwitchRow } from '../ui/SettingsRows';
 import { Snackbar, type SnackMessage } from '../ui/Snackbar';
-import { useThemeMode } from '../ui/theme';
+import { useAccent, useThemeMode } from '../ui/theme';
+import { ACCENTS } from '../data/theme';
 import { getTrackers, isLastTracker, setTracker, TRACKER_KINDS, type TrackerKey } from '../data/trackers';
 import type { IconName } from '../ui/icons';
 import { useDataActions } from '../ui/useDataActions';
@@ -35,6 +36,7 @@ export function Settings({ profile }: { profile: Profile }) {
   const message = (text: string) => setSnack({ id: ++snackId, text });
   const data = useDataActions(profile, message);
   const [themeMode, setThemeMode] = useThemeMode();
+  const [accent, setAccent] = useAccent();
   const lastExportAt = useLive(getLastExportAt, []);
   const trackers = useLive(getTrackers, []);
   const toggleTracker = (key: TrackerKey, on: boolean) => {
@@ -103,6 +105,14 @@ export function Settings({ profile }: { profile: Profile }) {
             hint={t.data.nightModeHint}
             checked={themeMode === 'night'}
             onChange={(on) => setThemeMode(on ? 'night' : 'light')}
+          />
+          <AccentRow
+            label={t.data.accent}
+            hint={t.data.accentHint}
+            options={ACCENTS}
+            names={t.data.accentNames}
+            value={accent}
+            onChange={setAccent}
           />
         </div>
       </SettingsSection>

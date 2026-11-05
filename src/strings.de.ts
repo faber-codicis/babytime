@@ -163,6 +163,9 @@ export const t = {
     timelineHint: 'Der Tag von 0 bis 24 Uhr auf einen Blick',
     nightMode: 'Nachts automatisch',
     nightModeHint: 'Von 20 bis 7 Uhr dunkel, Heute zeigt dann die Nachtansicht',
+    accent: 'Akzentfarbe',
+    accentHint: 'Für Knöpfe, Schalter und Markierungen',
+    accentNames: { rose: 'Rosé', green: 'Grün', purple: 'Lila', blue: 'Blau', orange: 'Orange' },
   },
 
   encryptedExport: {

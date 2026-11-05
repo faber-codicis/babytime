@@ -191,6 +191,80 @@
   background: var(--ink);
 }
 
+/* Accent colour (Einstellungen → Darstellung): head like a switch row, five 44 px swatches below. */
+.data-action.accent-row {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 14px 16px 16px;
+}
+
+.accent-row-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.accent-swatches {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-left: 54px; /* under the label, past the icon */
+}
+
+.accent-swatch {
+  flex: none;
+  width: var(--touch);
+  height: var(--touch);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--on-rose);
+  background: var(--swatch);
+}
+
+.accent-swatch.is-on {
+  box-shadow:
+    0 0 0 3px var(--surface),
+    0 0 0 5px var(--swatch);
+}
+
+.accent-swatch:focus-visible {
+  outline-offset: 6px;
+}
+
+/* Same values as --rose per accent in tokens.css. */
+.accent-swatch[data-color='rose'] {
+  --swatch: #b04a63;
+}
+.accent-swatch[data-color='green'] {
+  --swatch: #2f7a55;
+}
+.accent-swatch[data-color='purple'] {
+  --swatch: #7353b8;
+}
+.accent-swatch[data-color='blue'] {
+  --swatch: #2f6aa3;
+}
+.accent-swatch[data-color='orange'] {
+  --swatch: #b0521f;
+}
+:root[data-theme='dark'] .accent-swatch[data-color='rose'] {
+  --swatch: #d9827a;
+}
+:root[data-theme='dark'] .accent-swatch[data-color='green'] {
+  --swatch: #6fb38e;
+}
+:root[data-theme='dark'] .accent-swatch[data-color='purple'] {
+  --swatch: #a48ad8;
+}
+:root[data-theme='dark'] .accent-swatch[data-color='blue'] {
+  --swatch: #7aa8d6;
+}
+:root[data-theme='dark'] .accent-swatch[data-color='orange'] {
+  --swatch: #e0905a;
+}
+
 /* ---------------------------------------------------------------- version pill (mockup variants A + C) */
 
 .header {

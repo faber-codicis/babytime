@@ -11,7 +11,7 @@ import { useLive } from './hooks';
 import { ProfileSheet } from './ProfileSheet';
 import { RestoreSheet, type RestoreState } from './RestoreSheet';
 import { Sheet } from './Sheet';
-import { useThemeMode } from './theme';
+import { applyAccent, useThemeMode } from './theme';
 
 /**
  * The export action, or undefined while the file is being prepared. The file is prepared in advance
@@ -62,7 +62,8 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
 
   const deleteAll = async () => {
     await deleteAllData();
-    setThemeMode('light'); // like a fresh install: light design
+    setThemeMode('light'); // like a fresh install: light design in rosé
+    applyAccent('rose');
     setDeleteOpen(false);
     // The app now shows the first start, like a fresh install.
     navigate('today', { replace: true });

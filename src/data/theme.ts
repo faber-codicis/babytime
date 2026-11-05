@@ -40,7 +40,42 @@ export function isDarkAt(mode: ThemeMode, ts: number): boolean {
   return mode === 'dark' || (mode === 'night' && isNightTime(ts));
 }
 
-/** Back to light (used by "Alle Daten löschen"). */
+/** Back to light and rosé (used by "Alle Daten löschen"). */
 export function resetTheme(): void {
   saveThemeMode('light');
+  saveAccent('rose');
+}
+
+// ---------------------------------------------------------------- accent colour
+
+/**
+ * Accent colour: rosé (default, the logo colour), green, purple, blue or orange. Like the design it lives in
+ * localStorage, because public/theme-init.js sets it before the first paint. Key and values are repeated there.
+ * The colours themselves are CSS tokens in src/styles/tokens.css ([data-accent] on <html>).
+ */
+export const ACCENT_KEY = 'babytime-accent';
+
+export const ACCENTS = ['rose', 'green', 'purple', 'blue', 'orange'] as const;
+export type Accent = (typeof ACCENTS)[number];
+
+export function isAccent(value: unknown): value is Accent {
+  return typeof value === 'string' && (ACCENTS as readonly string[]).includes(value);
+}
+
+export function getAccent(): Accent {
+  try {
+    const value = localStorage.getItem(ACCENT_KEY);
+    return isAccent(value) ? value : 'rose';
+  } catch {
+    return 'rose';
+  }
+}
+
+export function saveAccent(accent: Accent): void {
+  try {
+    if (accent === 'rose') localStorage.removeItem(ACCENT_KEY);
+    else localStorage.setItem(ACCENT_KEY, accent);
+  } catch {
+    // Not persisted; the choice still applies until the app is closed.
+  }
 }

@@ -10,6 +10,15 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.10.0',
+    date: '2026-11-05',
+    items: [
+      'Neu in den Einstellungen: Akzentfarbe – Rosé, Grün, Lila, Blau oder Orange',
+      'Knöpfe, Schalter und Markierungen nehmen die Farbe sofort an, hell wie dunkel',
+      'Alle Farben sind gut lesbar geprüft',
+    ],
+  },
+  {
     version: '0.9.0',
     date: '2026-11-05',
     items: [

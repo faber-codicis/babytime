@@ -1,12 +1,26 @@
 import { useEffect, useState } from 'preact/hooks';
-import { getThemeMode, isDarkAt, isNightTime, saveThemeMode, type ThemeMode } from '../data/theme';
+import { getAccent, getThemeMode, isDarkAt, isNightTime, saveAccent, saveThemeMode, type Accent, type ThemeMode } from '../data/theme';
 
-const THEME_COLOR = { light: '#B04A63', dark: '#150D10' } as const;
+/** Browser bar colour: the accent in the light design (same as --rose in tokens.css), the background in dark. */
+export const BAR_COLOR: Record<Accent, string> = {
+  rose: '#B04A63',
+  green: '#2F7A55',
+  purple: '#7353B8',
+  blue: '#2F6AA3',
+  orange: '#B0521F',
+};
+const DARK_BAR = '#150D10';
 
 /** Sets the design on <html> (CSS tokens switch on [data-theme='dark']) and the browser bar colour. */
 export function applyTheme(dark: boolean): void {
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? THEME_COLOR.dark : THEME_COLOR.light);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? DARK_BAR : BAR_COLOR[getAccent()]);
+}
+
+/** Sets the accent on <html> (CSS tokens switch on [data-accent]); rosé is the default without attribute. */
+export function applyAccent(accent: Accent): void {
+  if (accent === 'rose') delete document.documentElement.dataset.accent;
+  else document.documentElement.dataset.accent = accent;
 }
 
 /** Applies the saved choice for this moment. */
@@ -48,4 +62,18 @@ export function useThemeMode(): [ThemeMode, (mode: ThemeMode) => void] {
 /** Night view on Today: "Nachts automatisch" is on and it is night now. */
 export function isNightView(now: number): boolean {
   return getThemeMode() === 'night' && isNightTime(now);
+}
+
+/** The accent choice in Einstellungen: state, persisted and applied immediately (also the browser bar). */
+export function useAccent(): [Accent, (accent: Accent) => void] {
+  const [accent, setAccent] = useState(getAccent);
+  return [
+    accent,
+    (next) => {
+      saveAccent(next);
+      applyAccent(next);
+      applyThemeNow();
+      setAccent(next);
+    },
+  ];
 }

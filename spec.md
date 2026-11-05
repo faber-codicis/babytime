@@ -25,10 +25,11 @@
 9. **Deployment-Konfiguration** (Cloudflare Worker mit statischen Dateien) und **Sicherheits-Härtung** (CSP, Import-Validierung, Abhängigkeitsregeln), siehe Abschnitt 13.
 10. **Versionsanzeige und „Was ist neu“**: Version im Splash, auf Heute (Versions-Pille) und in den Einstellungen, Seite „Was ist neu“, **Popup einmalig beim ersten Start nach einem Update** (Abschnitt 6.9).
 11. **Flasche und Abpumpen** (seit 0.6.0, Wunsch des Besitzers), siehe Abschnitt 6.11.
+12. **Akzentfarben** (seit 0.10.0, Wunsch des Besitzers), siehe Abschnitt 4 „Akzentfarben“ und 6.10.
 
 ### Nicht im Umfang (nicht bauen, keine Platzhalter-UI)
 
-Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Meilensteine, Akzentfarben, Wochenansicht, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
+Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Meilensteine, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
 
 ## 2a. Lieferstufen (Reihenfolge verbindlich)
 
@@ -120,6 +121,20 @@ Standard ist **immer hell**, unabhängig von der System-Einstellung. Das dunkle 
 | Karten | feine Kontur `rgba(246, 194, 186, 0.1)` statt Schatten |
 
 Dunkel bewusst rötlich-gedämpft, **kein reines Weiß**, damit nachts nichts blendet.
+
+### Akzentfarben (seit 0.10.0)
+
+Wahl in Einstellungen → Darstellung → **Akzentfarbe**. Sie ersetzt nur `--rose`, `--rose-ink` und `--rose-tint` (`--on-rose` bleibt: weiß im hellen, `#1A0D0F` im dunklen Design). Rosé ist der Standard und die Markenfarbe; Logo, App-Icon und Splash bleiben immer rosé. Gespeichert in `localStorage` `babytime-accent` (ohne Eintrag: rosé), gesetzt vor dem ersten Bild als `data-accent` auf `<html>`. Die Browserleiste nimmt im hellen Design die Akzentfarbe.
+
+| Akzent | Hell `--rose` / `-ink` / `-tint` | Dunkel `--rose` / `-ink` / `-tint` |
+| --- | --- | --- |
+| Rosé | `#B04A63` / `#80304A` / `#F7DCE2` | `#D9827A` / `#F7B3C2` / `#3D2129` |
+| Grün | `#2F7A55` / `#1F5A3D` / `#D6ECE0` | `#6FB38E` / `#A9DCC0` / `#1D3127` |
+| Lila | `#7353B8` / `#4F3591` / `#E6DDF5` | `#A48AD8` / `#D0C1F2` / `#2C2340` |
+| Blau | `#2F6AA3` / `#1F4C7A` / `#D8E6F4` | `#7AA8D6` / `#B8D4EF` / `#1C2A3B` |
+| Orange | `#B0521F` / `#7E3612` / `#F8E0D0` | `#E0905A` / `#F6C4A0` / `#3A2416` |
+
+Kontrast (Unit-Test `accent.test.ts` rechnet ihn aus der echten CSS nach): hell Weiß auf Akzent ≥ 5,1:1, Akzent auf `--bg` ≥ 4,7:1, `-ink` auf `-tint` ≥ 6,5:1; dunkel Text auf Akzent ≥ 6,5:1 (Hausregel ≥ 6:1), `-ink` auf `-tint` ≥ 8,4:1.
 
 ### Form und Schrift
 
@@ -303,7 +318,9 @@ Eigener Tab `#/einstellungen` im Stil des Mockups „Einstellungen“, auf Wunsc
 
 Nicht in 0.4.0: Tracker-Schalter, Meilensteine, Akzentfarben, automatischer Nachtmodus, Benachrichtigungen.
 
-**Seit 0.8.0 – „Was möchtest du festhalten?“** (Mockup „Einstellungen“, erster Abschnitt nach dem Profil): je ein Schalter für **Stillen** („Timer mit Links/Rechts“), **Flasche** („Menge und Uhrzeit“), **Abpumpen** („Menge pro Seite“), **Windel** („nass, voll oder beides“), **Schlaf** („Start und Ende“), alle standardmäßig an, gespeichert in `kv` `trackers`. Ausgeschaltetes verschwindet von Heute (Knopf, Karte, Zähler, Zeitleiste) und aus der Nachtansicht; Einträge bleiben im Verlauf, in der Sicherung und beim Nachtragen wählbar. Mindestens einer bleibt an (sonst Hinweis „Mindestens eins bleibt eingeschaltet“). Ist nur Flasche oder nur Abpumpen an, heißt der Knopf so und das Sheet hat keinen Umschalter. Ohne Stillen gibt es keine Nachtansicht. Unter **Darstellung** zusätzlich **Zeitleiste auf Heute** (an/aus). Meilensteine und Akzentfarben weiter später.
+**Seit 0.8.0 – „Was möchtest du festhalten?“** (Mockup „Einstellungen“, erster Abschnitt nach dem Profil): je ein Schalter für **Stillen** („Timer mit Links/Rechts“), **Flasche** („Menge und Uhrzeit“), **Abpumpen** („Menge pro Seite“), **Windel** („nass, voll oder beides“), **Schlaf** („Start und Ende“), alle standardmäßig an, gespeichert in `kv` `trackers`. Ausgeschaltetes verschwindet von Heute (Knopf, Karte, Zähler, Zeitleiste) und aus der Nachtansicht; Einträge bleiben im Verlauf, in der Sicherung und beim Nachtragen wählbar. Mindestens einer bleibt an (sonst Hinweis „Mindestens eins bleibt eingeschaltet“). Ist nur Flasche oder nur Abpumpen an, heißt der Knopf so und das Sheet hat keinen Umschalter. Ohne Stillen gibt es keine Nachtansicht. Unter **Darstellung** zusätzlich **Zeitleiste auf Heute** (an/aus).
+
+**Seit 0.10.0 – Akzentfarbe** (Mockup „Einstellungen“): letzte Zeile unter **Darstellung**, darunter fünf runde Farbflächen (44 px) Rosé, Grün, Lila, Blau, Orange als Radiogruppe (`role="radiogroup"`, Pfeiltasten wechseln). Die gewählte hat Ring und Häkchen, ihr Name steht in der Zusatzzeile („Grün · Für Knöpfe, Schalter und Markierungen“). Wirkt sofort und ab dem nächsten Start vor dem ersten Bild; „Alle Daten löschen“ setzt auf Rosé zurück. Farbwerte in Abschnitt 4.
 
 ### 6.11 Flasche und Abpumpen (seit 0.6.0)
 
@@ -537,4 +554,4 @@ Die Kriterien für Stufe A stehen in Abschnitt 2a. Sie müssen weiterhin gelten.
 
 ## 15. Danach (nicht jetzt)
 
-Avatar-Baukasten, Meilensteine, Tracker-Schalter, Akzentfarben, vollständige Einstellungen (die Wochenansicht im Verlauf ist seit 0.9.0 umgesetzt, 6.6; der Nachtmodus-Ring seit 0.7.0, 6.2a), Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).
+Avatar-Baukasten, Meilensteine (Tracker-Schalter seit 0.8.0, Akzentfarben seit 0.10.0; die Wochenansicht im Verlauf ist seit 0.9.0 umgesetzt, 6.6; der Nachtmodus-Ring seit 0.7.0, 6.2a), Benachrichtigungen (Web Push mit Server, frühestens Version 1.1).

@@ -30,6 +30,9 @@ const PATHS = {
   refresh: 'M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5',
   phone: 'M8 3h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM11 18h2',
   shield: 'M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6z',
+  check: 'M5 12.5l4.5 4.5L19 7',
+  // Akzentfarbe (Einstellungen → Darstellung).
+  palette: 'M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.4-1.9-.5-1.1.3-2.4 1.6-2.4H17a4 4 0 0 0 4-4c0-5.4-4-9.7-9-9.7zM7.5 11.5v.01M9.5 7.5v.01M14.5 7.5v.01',
 } as const;
 
 export type IconName = keyof typeof PATHS;

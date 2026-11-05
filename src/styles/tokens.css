@@ -77,6 +77,61 @@
   --shadow-dock: 0 0 0 1px rgba(246, 194, 186, 0.1), 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
+/*
+ * Accent colours (Einstellungen → Darstellung): override only the four --rose tokens; rosé above is the default
+ * without attribute. Contrast checked like rosé: white on --rose >= 5.1:1, --rose-ink on --rose-tint and --bg >= 6.5:1;
+ * dark: --on-rose on --rose >= 6.5:1, --rose on --surface >= 5.9:1, --rose-ink on --rose-tint >= 8.4:1.
+ * The dark blocks need both attributes so they win over the light accent blocks.
+ */
+
+:root[data-accent='green'] {
+  --rose: #2f7a55;
+  --rose-ink: #1f5a3d;
+  --rose-tint: #d6ece0;
+}
+
+:root[data-theme='dark'][data-accent='green'] {
+  --rose: #6fb38e;
+  --rose-ink: #a9dcc0;
+  --rose-tint: #1d3127;
+}
+
+:root[data-accent='purple'] {
+  --rose: #7353b8;
+  --rose-ink: #4f3591;
+  --rose-tint: #e6ddf5;
+}
+
+:root[data-theme='dark'][data-accent='purple'] {
+  --rose: #a48ad8;
+  --rose-ink: #d0c1f2;
+  --rose-tint: #2c2340;
+}
+
+:root[data-accent='blue'] {
+  --rose: #2f6aa3;
+  --rose-ink: #1f4c7a;
+  --rose-tint: #d8e6f4;
+}
+
+:root[data-theme='dark'][data-accent='blue'] {
+  --rose: #7aa8d6;
+  --rose-ink: #b8d4ef;
+  --rose-tint: #1c2a3b;
+}
+
+:root[data-accent='orange'] {
+  --rose: #b0521f;
+  --rose-ink: #7e3612;
+  --rose-tint: #f8e0d0;
+}
+
+:root[data-theme='dark'][data-accent='orange'] {
+  --rose: #e0905a;
+  --rose-ink: #f6c4a0;
+  --rose-tint: #3a2416;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion: 0ms;
