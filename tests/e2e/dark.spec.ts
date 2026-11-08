@@ -53,7 +53,7 @@ test('the switch turns the dark design on, it survives a restart (splash include
   await waitForApp(page);
 
   await page.getByRole('link', { name: 'Heute' }).click();
-  await page.getByRole('button', { name: 'Schlaf' }).click();
+  await page.getByRole('button', { name: 'Schlaf', exact: true }).click();
   await expect(page.getByText('schläft gerade')).toBeVisible();
   expect(await pureWhite(page)).toEqual([]);
   await page.screenshot({ path: 'test-results/dark-today.png', animations: 'disabled' });

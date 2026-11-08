@@ -102,3 +102,24 @@ describe('accent colours have enough contrast', () => {
     });
   }
 });
+
+// 0.12.0, after an outside UX review: secondary text ("rechts · 22 Minuten · um 12:06", "Nächste Seite") and the
+// outlined "other side" ring must stay readable on every card, in both designs and with every accent.
+describe('secondary text and the L/R ring are readable on every card', () => {
+  const light = block(':root');
+  const dark = block(":root[data-theme='dark']");
+  const cards = ['--bg', '--surface', '--surface-2', '--rose-tint', '--peach', '--lavender', '--sky'];
+
+  for (const accent of ACCENTS) {
+    const l = accent === 'rose' ? light : { ...light, ...block(`:root[data-accent='${accent}']`) };
+    const d = accent === 'rose' ? dark : { ...dark, ...block(`:root[data-theme='dark'][data-accent='${accent}']`) };
+    for (const [name, tokens] of [['light', l], ['dark', d]] as const) {
+      it(`${accent}, ${name}: --ink-soft >= 4.5:1 (WCAG AA text, also enough for the ring)`, () => {
+        for (const card of cards) expect(ratio(tokens['--ink-soft']!, tokens[card]!), card).toBeGreaterThanOrEqual(4.5);
+      });
+      it(`${accent}, ${name}: the filled "next side" stands out from its card >= 3:1 (WCAG 1.4.11)`, () => {
+        expect(ratio(tokens['--rose']!, tokens['--rose-tint']!)).toBeGreaterThanOrEqual(3);
+      });
+    }
+  }
+});

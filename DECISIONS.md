@@ -166,6 +166,17 @@ Auf Wunsch des Besitzers (2026-11-05) umgesetzt: C1 „Nachts automatisch“, C2
 - **Sicherung `schemaVersion: 3`:** Ältere Apps lehnen neue Dateien mit „aus einer neueren Version“ ab. Dateien ohne `milestones` lassen beim Ersetzen die Meilensteine auf dem Handy stehen (wie das Profil).
 - **Tab-Labels 11 px bei vier Tabs**, damit „Einstellungen“ auf 360 px Breite nicht abgeschnitten wird (E2E-Test prüft das).
 
+## 0.12.0 (UX-Bewertung umgesetzt)
+
+Grundlage: eine externe KI-Bewertung anhand der Screenshots von 0.11.0. Jeder Punkt wurde am Code geprüft.
+
+- **Sekundärtexte im Dunkelmodus nicht geändert:** „rechts · 22 Minuten“ (`--ink-soft` auf `--rose-tint`) hat schon 6,3:1, also über WCAG AA (4,5:1). Neu ist ein Unit-Test, der `--ink-soft` auf allen Kartenfarben, hell und dunkel, mit jeder Akzentfarbe gegen 4,5:1 prüft, damit das so bleibt.
+- **L/R-Schalter:** Der echte Mangel war die nicht nächste Seite: ein gefüllter Kreis fast in Kartenfarbe (1,2:1 dunkel, 1,3:1 hell). Jetzt ein Ring in `--ink-soft` (≥ 4,5:1); die nächste Seite bekommt zusätzlich einen Doppelring. So unterscheiden sich beide auch ohne Farbe.
+- **Stift auf den Karten statt Long-Press:** Rückgängig im Snackbar gab es schon, aber nur 6 Sekunden. Eine versteckte Geste müsste man erst erklären; der Stift ist sichtbar und öffnet denselben Editor wie der Verlauf (Bearbeiten und Löschen mit Rückgängig). Nur da, wo es einen Eintrag gibt; beim laufenden Stillen führt die Karte weiter zum Timer.
+- **Laufend-Zustand:** Stillen hatte schon den laufenden Timer im Knopf. Neu sind Rand und blinkender Punkt auf der Stillen- und der Schlaf-Karte; bei „Bewegung reduzieren“ blinkt nichts.
+- **Zeitleiste:** Balken 28 → 34 px, Punkte 9 → 13 px, „jetzt“ als 3 px breite Linie über den Balken hinaus, mit Kappe und Beschriftung; eine Stundenzahl, die zu nah daran liegt, macht Platz. Heute passt weiter ohne Scrollen auf 390 × 844.
+- **Vibration:** 20 ms nach Speichern über die Knöpfe (auch in der Nachtansicht) und nach „Fertig“ beim Stillen. Nur Android; Safari auf dem iPhone kennt die Vibration API nicht, dort passiert nichts. Kein eigener Schalter: kurz genug, und die Systemeinstellung „Vibration aus“ gilt ohnehin.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

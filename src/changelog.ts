@@ -10,6 +10,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.12.0',
+    date: '2026-11-08',
+    items: [
+      'Vertippt? Der kleine Stift auf den Karten von Heute öffnet den letzten Eintrag zum Bearbeiten oder Löschen',
+      'Läuft Stillen oder Schlaf, hat die Karte einen farbigen Rand und einen blinkenden Punkt',
+      '„Nächste Seite“: Die andere Seite ist jetzt ein Ring, die nächste deutlich hervorgehoben',
+      'Die Zeitleiste ist höher, mit gut sichtbarer Markierung „jetzt“',
+      'Auf Android-Handys vibriert es kurz, wenn ein Eintrag gespeichert ist',
+    ],
+  },
+  {
     version: '0.11.0',
     date: '2026-11-05',
     items: [

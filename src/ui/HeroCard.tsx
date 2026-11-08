@@ -1,9 +1,10 @@
 import type { TodayData } from '../data/overview';
-import type { Side } from '../data/events';
+import type { BabyEvent, Side } from '../data/events';
 import { nextSide } from '../logic/nextSide';
 import { sessionDuration } from '../logic/stats';
 import { formatClock, formatDurationLong, formatElapsed, formatTimer } from '../logic/time';
 import { t } from '../strings.de';
+import { EditButton } from './EditButton';
 import { Icon } from './icons';
 
 const sideName = (side: Side | undefined) => (side === 'right' ? t.side.right : t.side.left);
@@ -25,7 +26,7 @@ function NextSide({ side, current }: { side: Side; current: boolean }) {
 }
 
 /** "Zuletzt gestillt": time since the end of the last feed, or the running feed. */
-export function HeroCard({ data, now }: { data: TodayData | undefined; now: number }) {
+export function HeroCard({ data, now, onEdit }: { data: TodayData | undefined; now: number; onEdit?: (event: BabyEvent) => void }) {
   const running = data?.runningFeed;
   const session = data?.lastFeedSession;
   const next = nextSide(data?.lastFinishedFeed);
@@ -49,6 +50,10 @@ export function HeroCard({ data, now }: { data: TodayData | undefined; now: numb
           <Icon name="drop" size={18} />
         </span>
         <span>{running ? t.today.feedingNow : t.today.lastFed}</span>
+        {running && <span class="live-dot" aria-hidden="true" />}
+        {!running && data?.lastFinishedFeed && onEdit && (
+          <EditButton label={t.today.editFeed} event={data.lastFinishedFeed} onEdit={onEdit} />
+        )}
       </div>
       <p class={`hero-big${data && !running && !session ? ' is-empty' : ''}`}>{data ? big : ' '}</p>
       {line && <p class="hero-line">{line}</p>}
@@ -58,7 +63,7 @@ export function HeroCard({ data, now }: { data: TodayData | undefined; now: numb
 
   // While a feed runs, the card leads back to the timer.
   return running ? (
-    <a class="card hero is-link" href="#/stillen">
+    <a class="card hero is-link is-running" href="#/stillen">
       {content}
     </a>
   ) : (

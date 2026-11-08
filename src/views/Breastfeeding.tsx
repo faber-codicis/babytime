@@ -5,6 +5,7 @@ import { sessionDuration } from '../logic/stats';
 import { formatClock, formatDuration, formatRelative, formatTimer } from '../logic/time';
 import { navigate } from '../router';
 import { t } from '../strings.de';
+import { haptic } from '../ui/haptics';
 import { Icon } from '../ui/icons';
 import { Sheet } from '../ui/Sheet';
 import { TimerRing } from '../ui/TimerRing';
@@ -41,6 +42,7 @@ export function Breastfeeding() {
 
   const onDone = once(async () => {
     await finishFeed();
+    haptic();
     navigate('today', { replace: true });
   });
   const onDiscard = once(async () => {

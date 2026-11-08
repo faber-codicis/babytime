@@ -47,7 +47,7 @@ test('shows the mockup situation', async ({ page }) => {
   await expect(page.getByText('seit 25 Min')).toBeVisible();
   await expect(page.getByText('schläft gerade')).toBeVisible();
   await expect(page.getByRole('listitem')).toHaveText(['6× gestillt', '5 Windeln', '9:25 Std Schlaf']);
-  await expect(page.getByRole('button', { name: 'Wach' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Wach', exact: true })).toBeVisible();
   await page.screenshot({ path: 'test-results/today.png', fullPage: true });
 
   // Stillen starts on the next side and shows the previous feeding, as in mockup "Stillen läuft".
@@ -59,11 +59,11 @@ test('shows the mockup situation', async ({ page }) => {
 });
 
 test('sleep toggles with one tap', async ({ page }) => {
-  await page.getByRole('button', { name: 'Schlaf' }).click();
-  await expect(page.getByRole('button', { name: 'Wach' })).toBeVisible();
+  await page.getByRole('button', { name: 'Schlaf', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Wach', exact: true })).toBeVisible();
   await expect(page.getByText('schläft gerade')).toBeVisible();
-  await page.getByRole('button', { name: 'Wach' }).click();
-  await expect(page.getByRole('button', { name: 'Schlaf' })).toBeVisible();
+  await page.getByRole('button', { name: 'Wach', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Schlaf', exact: true })).toBeVisible();
   await expect(page.getByText('wach', { exact: true })).toBeVisible();
 });
 
@@ -86,4 +86,29 @@ test('all touch targets are at least 44 px (Heute, Windel-Sheet, Stillen)', asyn
   await page.getByRole('button', { name: 'Stillen', exact: true }).click();
   await expect(page.getByText('Linke Seite')).toBeVisible();
   await expectTouchTargets(page);
+});
+
+test('a wrong tap is corrected right on Today (pencil on the card, 0.12.0)', async ({ page }) => {
+  await seed(page, [
+    { type: 'feed', side: 'right', start: at(12, 22), end: at(12, 40) },
+    { type: 'sleep', start: at(13, 55) }, // running
+  ]);
+  // No diaper yet: no pencil on the Windel card.
+  await expect(page.getByRole('button', { name: 'Letzte Windel bearbeiten' })).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Schlaf' })).toHaveClass(/is-running/);
+
+  await page.getByRole('button', { name: 'Windel', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Windel' }).getByRole('button', { name: 'Nass' }).click();
+  await expect(page.getByText('Windel gespeichert')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Letzte Windel bearbeiten' }).click();
+  const editor = page.getByRole('dialog');
+  await expect(editor).toBeVisible();
+  await editor.getByRole('button', { name: 'Löschen', exact: true }).click();
+  await editor.getByRole('button', { name: 'Ja, löschen' }).click();
+  await expect(page.getByText('Eintrag gelöscht')).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Windel' })).toContainText('–');
+
+  await page.getByRole('button', { name: 'Letztes Stillen bearbeiten' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
 });

@@ -35,8 +35,8 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('export, delete everything, restore in the fresh app: all entries are back', async ({ page }) => {
-  await page.getByRole('button', { name: 'Schlaf' }).click();
-  await page.getByRole('button', { name: 'Wach' }).click();
+  await page.getByRole('button', { name: 'Schlaf', exact: true }).click();
+  await page.getByRole('button', { name: 'Wach', exact: true }).click();
   await page.getByRole('button', { name: 'Windel', exact: true }).click();
   await page.getByRole('dialog', { name: 'Windel' }).getByRole('button', { name: 'Voll' }).click();
 

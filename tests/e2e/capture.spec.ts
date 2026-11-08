@@ -122,14 +122,14 @@ test('diaper sheet closes with a tap outside and with Escape, saving nothing', a
 });
 
 test('sleep in 1 tap, and undo after "Wach" keeps the sleep running', async ({ page }) => {
-  await page.getByRole('button', { name: 'Schlaf' }).click();
+  await page.getByRole('button', { name: 'Schlaf', exact: true }).click();
   await expect(page.getByText('Schlaf gestartet')).toBeVisible();
-  await page.getByRole('button', { name: 'Wach' }).click();
+  await page.getByRole('button', { name: 'Wach', exact: true }).click();
   await expect(page.getByText('Schlaf beendet')).toBeVisible();
   await page.screenshot({ path: 'test-results/snackbar.png', animations: 'disabled' });
 
   await page.getByRole('button', { name: 'Rückgängig' }).click();
-  await expect(page.getByRole('button', { name: 'Wach' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Wach', exact: true })).toBeVisible();
   await expect(page.getByText('schläft gerade')).toBeVisible();
 });
 
@@ -137,7 +137,7 @@ test('the snackbar disappears after 6 seconds', async ({ page }) => {
   await page.clock.install();
   await page.reload();
   await expect(page.locator('#splash')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Schlaf' }).click();
+  await page.getByRole('button', { name: 'Schlaf', exact: true }).click();
   await expect(page.getByText('Schlaf gestartet')).toBeVisible();
   // Let the frame run in which Preact starts the snackbar timer (WebKit fakes requestAnimationFrame too).
   await page.clock.runFor(100);

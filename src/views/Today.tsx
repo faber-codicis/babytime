@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'preact/hooks';
-import { addBottle, addDiaper, addPump, getLatestAmounts, startFeed, toggleSleep, type DiaperKind } from '../data/events';
+import { addBottle, addDiaper, addPump, getLatestAmounts, startFeed, toggleSleep, type BabyEvent, type Change, type DiaperKind } from '../data/events';
 import { loadToday } from '../data/overview';
 import { DEFAULT_TRACKERS, getTrackers } from '../data/trackers';
 import type { Profile } from '../data/profile';
@@ -13,6 +13,8 @@ import { BottleSheet, type BottlePick } from '../ui/BottleSheet';
 import { Chips } from '../ui/Chips';
 import { DiaperSheet } from '../ui/DiaperSheet';
 import { DockButtons } from '../ui/DockButtons';
+import { EventEditor, type EditorTarget } from '../ui/EventEditor';
+import { haptic } from '../ui/haptics';
 import { Header } from '../ui/Header';
 import { HeroCard } from '../ui/HeroCard';
 import { InstallHint } from '../ui/InstallHint';
@@ -75,6 +77,7 @@ export function Today({ profile }: { profile: Profile }) {
     once(async () => {
       // A running feed is returned unchanged, so this also leads back to the timer.
       await startFeed(nextSide(data?.lastFinishedFeed));
+      haptic();
       navigate('feeding');
     });
 
@@ -82,6 +85,7 @@ export function Today({ profile }: { profile: Profile }) {
     once(async () => {
       setDiaperOpen(false);
       const change = await addDiaper(kind, Date.now() - minutesAgo * MINUTE);
+      haptic();
       const text = minutesAgo ? t.snackbar.diaperSavedAgo(minutesAgo) : t.snackbar.diaperSaved;
       setSnack({ id: ++snackId, text, undo: change.undo });
     });
@@ -92,6 +96,7 @@ export function Today({ profile }: { profile: Profile }) {
       const at = Date.now() - pick.minutesAgo * MINUTE;
       const change =
         pick.mode === 'bottle' ? await addBottle(pick.amountMl, pick.milk, at) : await addPump(pick.amountMl, pick.pumpSide, at);
+      haptic();
       const text = pick.mode === 'bottle' ? t.snackbar.bottleSaved(pick.amountMl) : t.snackbar.pumpSaved(pick.amountMl);
       setSnack({ id: ++snackId, text, undo: change.undo });
     });
@@ -99,12 +104,22 @@ export function Today({ profile }: { profile: Profile }) {
   const onSleep = () =>
     once(async () => {
       const change = await toggleSleep();
+      haptic();
       const text = change.action === 'started' ? t.snackbar.sleepStarted : t.snackbar.sleepEnded;
       setSnack({ id: ++snackId, text, undo: change.undo });
     });
 
+  /** Correcting a wrong tap right on Today (0.12.0): the pencil on a card opens the same editor as the Verlauf. */
+  const [editor, setEditor] = useState<EditorTarget>();
+  const onEdit = (event: BabyEvent) => setEditor({ mode: 'edit', event });
+  const edited = (text: string) => (change: Change) => {
+    setEditor(undefined);
+    setSnack({ id: ++snackId, text, undo: change.undo });
+  };
+
   const sheets = (
     <>
+      <EventEditor target={editor} onClose={() => setEditor(undefined)} onSaved={edited(t.history.saved)} onDeleted={edited(t.history.deleted)} />
       <BottleSheet open={bottleOpen} latest={latestAmounts} modes={{ bottle: show.bottle, pump: show.pump }} onClose={() => setBottleOpen(false)} onSave={(pick) => void onBottle(pick)} />
       <DiaperSheet open={diaperOpen} onClose={() => setDiaperOpen(false)} onPick={(kind, minutesAgo) => void onDiaper(kind, minutesAgo)} />
     </>
@@ -140,8 +155,8 @@ export function Today({ profile }: { profile: Profile }) {
         feeding={Boolean(data?.runningFeed)}
         onMessage={(text) => setSnack({ id: ++snackId, text })}
       />
-      {show.feed && <HeroCard data={data} now={now} />}
-      <StatusCards data={data} now={now} diaper={show.diaper} sleep={show.sleep} />
+      {show.feed && <HeroCard data={data} now={now} onEdit={onEdit} />}
+      <StatusCards data={data} now={now} diaper={show.diaper} sleep={show.sleep} onEdit={onEdit} />
       <Chips stats={stats} show={show} />
       {show.timeline && <DayTimeline events={data?.dayEvents} show={show} dayStart={dayStart} dayEnd={dayEnd} now={now} />}
       <div class="dock-area">
