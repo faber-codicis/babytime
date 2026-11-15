@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks';
 import { completeOnboarding } from '../data/profile';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Icon } from '../ui/icons';
 import { InstallHint } from '../ui/InstallHint';
 import { birthDateError, ProfileFields, type ProfileForm } from '../ui/ProfileFields';

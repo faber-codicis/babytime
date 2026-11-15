@@ -1,6 +1,6 @@
 import { liveQuery } from 'dexie';
 import { hasErrors, isAmount, isTimed, NOTE_MAX, validateDraft, type DraftErrors, type EventDraft } from '../logic/validate';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { db, type BabyEvent, type DiaperKind, type EventType, type MilkKind, type PumpSide, type Side, type TimedEventType } from './db';
 
 export type { BabyEvent, DiaperKind, EventType, MilkKind, PointEventType, PumpSide, Side, TimedEventType } from './db';

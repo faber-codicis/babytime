@@ -1,7 +1,7 @@
 import type { BabyEvent } from '../data/events';
 import type { TodayData } from '../data/overview';
 import { formatRelative, formatSince } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { EditButton } from './EditButton';
 import { Icon, type IconName } from './icons';
 

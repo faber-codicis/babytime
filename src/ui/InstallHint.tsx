@@ -1,5 +1,5 @@
 import { getFlag, setFlag } from '../data/flags';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { useLive } from './hooks';
 import { Icon } from './icons';
 import { useInstallPrompt } from './installPrompt';

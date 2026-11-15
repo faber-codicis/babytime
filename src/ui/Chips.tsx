@@ -1,7 +1,7 @@
 import type { Trackers } from '../data/trackers';
 import type { DayStats } from '../logic/stats';
 import { split } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 
 function Stat({ value }: { value: readonly [string, string] }) {
   return (

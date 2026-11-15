@@ -3,7 +3,7 @@ import { getEventsSince, hasEventsBefore, type BabyEvent, type Change } from '..
 import { dayStats, feedSessions } from '../logic/stats';
 import { addDays, formatDayHeading, formatDuration, HOUR, startOfDay } from '../logic/time';
 import { startOfWeek } from '../logic/week';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { EventEditor, type EditorTarget } from '../ui/EventEditor';
 import { EventRow } from '../ui/EventRow';
 import { Icon } from '../ui/icons';

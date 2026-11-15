@@ -177,6 +177,27 @@ Grundlage: eine externe KI-Bewertung anhand der Screenshots von 0.11.0. Jeder Pu
 - **Zeitleiste:** Balken 28 → 34 px, Punkte 9 → 13 px, „jetzt“ als 3 px breite Linie über den Balken hinaus, mit Kappe und Beschriftung; eine Stundenzahl, die zu nah daran liegt, macht Platz. Heute passt weiter ohne Scrollen auf 390 × 844.
 - **Vibration:** 20 ms nach Speichern über die Knöpfe (auch in der Nachtansicht) und nach „Fertig“ beim Stillen. Nur Android; Safari auf dem iPhone kennt die Vibration API nicht, dort passiert nichts. Kein eigener Schalter: kurz genug, und die Systemeinstellung „Vibration aus“ gilt ohnehin.
 
+## 0.13.0 (Vorbereitung Beta-Test)
+
+Grundlage: Beta-Check vom 2026-11-15 (Tester außerhalb des Freundeskreises).
+
+- **Feedback per `mailto:` statt Formular:** Die App bleibt ohne Netzwerkaufrufe (CSP `connect-src 'self'` unverändert). Der Entwurf geht an `kontakt@mraz.app` (dieselbe Adresse wie auf der Projektseite) und enthält nur Version, Build-Zeit, „installiert ja/nein“ und den User-Agent – keine Einträge, kein Babyname. Der Tester sieht alles vor dem Senden. Als Link (`<a>`), nicht als Knopf: Es ist ein Navigationsziel, und der Link ist testbar.
+- **Hinweise unter „Über die App“ statt beim Erststart:** Testversion, „ersetzt keinen Rat von Hebamme, Ärztin oder Arzt“ und ein Satz zu Cloudflare (IP-Adresse beim Laden, nie Einträge). Der Erststart bleibt kurz. Das ist keine Rechtsberatung; ob für die öffentliche Adresse eine eigene Datenschutzerklärung oder Offenlegung nötig ist, entscheidet der Besitzer.
+- **Unit-Test liest CSS mit normalisierten Zeilenenden:** Auf Windows mit `core.autocrlf=true` liegen die Dateien mit CRLF vor, `accent.test.ts` suchte `{\n` und schlug fehl.
+
+## 0.14.0 (Englisch)
+
+Auftrag des Besitzers über die Portfolio-Sitzung („Cant we implement an english mode fast?“), 2026-11-15. Baut auf `beta-vorbereitung` (0.13.0) auf, damit Version, Changelog und Texte nicht kollidieren.
+
+- **Sprache fest pro Start, Umschalten = Neustart:** Viele Module legen beim Laden `Intl`-Formate mit `t.locale` an. Ein Neustart ist einfacher und sicherer als alles reaktiv zu machen; Einträge und ein laufendes Stillen überleben ihn (getestet).
+- **Erkennung:** gespeicherte Wahl, sonst erste Handysprache `de`/`de-*` → Deutsch, alles andere → Englisch. `theme-init.js` setzt `<html lang>` vor dem ersten Bild (Splash-Text per CSS `:lang()`), `src/strings.ts` wählt dieselbe Sprache. Schlüssel `babytime-lang` in `localStorage` wie Design und Akzent; nicht in der Sicherung, „Alle Daten löschen“ setzt sie nicht zurück (Geräteeinstellung, keine persönlichen Daten).
+- **Typ `Strings` aus den deutschen Texten abgeleitet** (Literaltypen verbreitert): fehlende oder zusätzliche Schlüssel in `strings.en.ts` brechen die Typprüfung; ein Unit-Test vergleicht zusätzlich Schlüssel, Art und Funktionsstellen zur Laufzeit.
+- **Englisch `en-GB`:** 24-Stunden-Uhr und Tag-Monat-Reihenfolge passen zur bestehenden Darstellung. „Diaper“ statt „nappy“, weil international verständlicher.
+- **„seit“ zweigeteilt:** Deutsch nutzt „seit“ für Uhrzeit und Dauer, Englisch braucht „since 14:12“ bzw. „for 25 min“; `en.time.since` erkennt die Uhrzeit.
+- **Zeile „Sprache · Language“ zweisprachig, Optionen in ihrer eigenen Sprache** (Deutsch, English), damit man auch in der falschen Sprache zurückfindet.
+- **Anleitung für neue Funktionen** (feste Regel des Besitzers): `ChangelogEntry.guide` mit Schritten und Knopf zum Ziel (Zeile in den Einstellungen wird angesprungen, fokussiert und kurz markiert). Im Popup nur die neueste Anleitung, damit es kurz bleibt; alle stehen dauerhaft unter „Was ist neu“. Rückwirkend auch für „Feedback senden“ (0.13.0).
+- **Nicht übersetzt:** Manifest (`lang: de`, Name ist sprachneutral), `<meta name="description">`, Hash-Routen (`#/einstellungen`) und Dateinamen der Sicherung – nicht sichtbar oder sprachneutral.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

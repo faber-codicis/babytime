@@ -3,7 +3,7 @@ import type { Side } from '../data/events';
 import type { Trackers } from '../data/trackers';
 import { nextSide } from '../logic/nextSide';
 import { HOUR, formatClock, formatHoursMinutes, formatTimer } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Icon } from '../ui/icons';
 
 /** One ring lap = 3 hours since the last feed: a full ring means "about time again". */

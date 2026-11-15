@@ -1,5 +1,5 @@
 import type { Trackers } from '../data/trackers';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Icon } from './icons';
 
 interface DockProps {

@@ -4,10 +4,10 @@ import { changelog, type ChangelogEntry } from '../../src/changelog';
 import { compareSemver, decideUpdate } from '../../src/version';
 
 const log: ChangelogEntry[] = [
-  { version: '0.10.0', date: '2026-12-01', items: ['zehn'] },
-  { version: '0.9.0', date: '2026-11-15', items: ['neun'] },
-  { version: '0.3.0', date: '2026-11-01', items: ['drei a', 'drei b'] },
-  { version: '0.2.0', date: '2026-10-21', items: ['zwei'] },
+  { version: '0.10.0', date: '2026-12-01', items: { de: ['zehn'], en: ['ten'] } },
+  { version: '0.9.0', date: '2026-11-15', items: { de: ['neun'], en: ['nine'] } },
+  { version: '0.3.0', date: '2026-11-01', items: { de: ['drei a', 'drei b'], en: ['three a', 'three b'] } },
+  { version: '0.2.0', date: '2026-10-21', items: { de: ['zwei'], en: ['two'] } },
 ];
 
 describe('compareSemver', () => {
@@ -52,12 +52,28 @@ describe('changelog', () => {
     expect(changelog.map((e) => e.version)).toContain(version);
   });
 
-  it('is sorted newest first, with 3 to 5 items and ISO dates', () => {
+  it('is sorted newest first, with 3 to 5 items per language and ISO dates', () => {
     for (let i = 1; i < changelog.length; i++) expect(compareSemver(changelog[i - 1]!.version, changelog[i]!.version)).toBe(1);
     for (const entry of changelog) {
-      expect(entry.items.length).toBeGreaterThanOrEqual(3);
-      expect(entry.items.length).toBeLessThanOrEqual(5);
+      for (const items of [entry.items.de, entry.items.en]) {
+        expect(items.length, entry.version).toBeGreaterThanOrEqual(3);
+        expect(items.length, entry.version).toBeLessThanOrEqual(5);
+      }
+      // Same news in both languages (0.14.0).
+      expect(entry.items.en.length, entry.version).toBe(entry.items.de.length);
       expect(entry.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+  });
+
+  it('guides have 2 to 5 numbered steps and a button in both languages', () => {
+    for (const { version, guide } of changelog) {
+      if (!guide) continue;
+      for (const text of [guide.text.de, guide.text.en]) {
+        expect(text.steps.length, version).toBeGreaterThanOrEqual(2);
+        expect(text.steps.length, version).toBeLessThanOrEqual(5);
+        expect(text.button, version).not.toBe('');
+      }
+      expect(guide.text.en.steps.length, version).toBe(guide.text.de.steps.length);
     }
   });
 });

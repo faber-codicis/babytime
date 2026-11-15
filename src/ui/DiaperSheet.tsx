@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { DiaperKind } from '../data/events';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Icon, type IconName } from './icons';
 import { Sheet } from './Sheet';
 

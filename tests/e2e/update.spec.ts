@@ -24,7 +24,9 @@ test('after an update the popup appears exactly once', async ({ page }) => {
   await expect(popup).toBeVisible();
   await expect(popup.getByText('Das hat sich geändert')).toBeVisible();
   await expect(popup.getByRole('listitem').first()).toBeVisible();
-  expect(await popup.getByRole('listitem').count()).toBeLessThanOrEqual(5);
+  // At most 5 news items; the guide's numbered steps (0.14.0) come on top.
+  expect(await popup.locator('.news-list li').count()).toBeLessThanOrEqual(5);
+  await expect(popup.getByText('So geht’s')).toBeVisible();
   await expect(popup.getByRole('button', { name: 'Alles klar' })).toBeFocused();
   await page.screenshot({ path: 'test-results/update-popup.png', animations: 'disabled' });
 

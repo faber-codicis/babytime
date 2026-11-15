@@ -48,9 +48,11 @@ describe('accent colour storage', () => {
 
 // ---------------------------------------------------------------- contrast (WCAG 2.x), read from the real CSS
 
-const css = readFileSync('src/styles/tokens.css', 'utf8');
-const swatchCss = readFileSync('src/styles/settings.css', 'utf8');
-const initJs = readFileSync('public/theme-init.js', 'utf8');
+// Line endings normalised: on Windows with core.autocrlf the checkout has CRLF.
+const read = (path: string) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+const css = read('src/styles/tokens.css');
+const swatchCss = read('src/styles/settings.css');
+const initJs = read('public/theme-init.js');
 
 function block(selector: string): Record<string, string> {
   const start = css.indexOf(`${selector} {`);

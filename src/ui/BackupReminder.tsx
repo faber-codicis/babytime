@@ -2,7 +2,7 @@ import { dismissBackupReminder, getBackupReminderDismissedAt, getLastExportAt } 
 import { getFirstEventStart } from '../data/events';
 import { shouldRemindBackup } from '../logic/backupReminder';
 import { formatDaysAgo } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { useLive } from './hooks';
 import { Icon } from './icons';
 import { useExport } from './useDataActions';

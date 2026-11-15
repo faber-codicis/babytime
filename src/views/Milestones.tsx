@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks';
 import { getMilestones, MILESTONE_PRESETS, type Milestone } from '../data/milestones';
 import type { Profile } from '../data/profile';
 import { formatAgeOn, formatIsoDate } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { useLive } from '../ui/hooks';
 import { Icon } from '../ui/icons';
 import { MilestoneSheet, milestoneTitle, type MilestoneTarget } from '../ui/MilestoneSheet';

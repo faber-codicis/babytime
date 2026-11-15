@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'preact/hooks';
 import { BackupError, importBackup, parseBackup, type ImportMode, type ParsedBackup } from '../data/backup';
 import { decryptBackup, DecryptError, type EncryptedEnvelope } from '../data/backupCrypto';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Sheet } from './Sheet';
 
 export type RestoreState = { backup: ParsedBackup } | { encrypted: EncryptedEnvelope } | { error: string };

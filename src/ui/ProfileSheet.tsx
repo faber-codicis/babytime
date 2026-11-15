@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'preact/hooks';
 import { saveProfile, type Profile } from '../data/profile';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { birthDateError, ProfileFields, type ProfileForm } from './ProfileFields';
 import { Sheet } from './Sheet';
 

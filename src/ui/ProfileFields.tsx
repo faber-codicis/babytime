@@ -1,6 +1,6 @@
 import { BABY_NAME_MAX } from '../data/profile';
 import { birthDateProblem, earliestBirthDate, isoDate } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 
 export interface ProfileForm {
   babyName: string;

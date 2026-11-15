@@ -1,5 +1,5 @@
 import type { DiaperKind, EventType, MilkKind, PointEventType, PumpSide, Side, TimedEventType } from '../data/events';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { MINUTE } from './time';
 
 export const NOTE_MAX = 500;

@@ -1,6 +1,6 @@
 import { formatStamp } from '../logic/time';
 import { hashOf } from '../router';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { checkForUpdate, restartApp, useAppUpdate, type UpdateStatus } from './appUpdate';
 import { Icon } from './icons';
 

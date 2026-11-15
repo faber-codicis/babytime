@@ -1,6 +1,7 @@
 import { changelog } from '../changelog';
 import { goBack } from '../router';
-import { t } from '../strings.de';
+import { lang, t } from '../strings';
+import { GuideCard, openGuideTarget } from '../ui/Guide';
 import { Icon } from '../ui/icons';
 import { NewsHero } from '../ui/NewsHero';
 
@@ -35,10 +36,11 @@ export function WhatsNew() {
           </div>
           <p class="news-date">{formatChangelogDate(entry.date)}</p>
           <ul class="news-list">
-            {entry.items.map((item) => (
+            {entry.items[lang].map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
+          {entry.guide && <GuideCard guide={entry.guide} onGo={() => openGuideTarget(entry.guide!.target)} />}
         </section>
       ))}
     </div>

@@ -45,6 +45,11 @@ export function Sheet({ open, onClose, labelledBy, children }: SheetProps) {
     if (open && !dialog.open) {
       returnFocus.current = openerElement();
       dialog.showModal();
+      // A tall sheet (e.g. the update popup with a guide, 0.14.0) starts at its title, even when its default
+      // button ([data-autofocus]) sits further down: focus it without scrolling, then back to the top.
+      dialog.querySelector<HTMLElement>('[data-autofocus]')?.focus({ preventScroll: true });
+      dialog.scrollTop = 0;
+      requestAnimationFrame(() => (dialog.scrollTop = 0));
     } else if (!open && dialog.open) {
       dialog.close();
     }

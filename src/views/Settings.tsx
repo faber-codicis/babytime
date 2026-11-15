@@ -1,13 +1,16 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { getLastExportAt } from '../data/appState';
+import { getLanguageChoice, saveLanguageChoice, type LanguageChoice } from '../data/language';
 import type { Profile } from '../data/profile';
-import { formatAge, formatDaysAgo } from '../logic/time';
-import { t } from '../strings.de';
+import { formatAge, formatDaysAgo, formatStamp } from '../logic/time';
+import { t } from '../strings';
 import { Avatar } from '../ui/Avatar';
+import { FEEDBACK_EMAIL, feedbackMailto } from '../ui/feedback';
+import { GUIDE_ANCHOR, showPendingGuideTarget } from '../ui/Guide';
 import { useLive, useNow } from '../ui/hooks';
 import { Icon } from '../ui/icons';
-import { InstallSection } from '../ui/InstallSection';
-import { AccentRow, ActionRow, SettingsSection, SwitchRow } from '../ui/SettingsRows';
+import { InstallSection, isInstalled } from '../ui/InstallSection';
+import { AccentRow, ActionRow, ChoiceRow, LinkRow, SettingsSection, SwitchRow } from '../ui/SettingsRows';
 import { Snackbar, type SnackMessage } from '../ui/Snackbar';
 import { useAccent, useThemeMode } from '../ui/theme';
 import { ACCENTS } from '../data/theme';
@@ -18,8 +21,26 @@ import { VersionDetails } from '../ui/VersionPill';
 
 let snackId = 0;
 
-/** "09.10.2026" from YYYY-MM-DD. */
-const formatBirthDate = (iso: string) => iso.split('-').reverse().join('.');
+const birthFormat = new Intl.DateTimeFormat(t.locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+/** "09.10.2026" (German) or "09/10/2026" (English) from YYYY-MM-DD, as a local date. */
+const formatBirthDate = (iso: string) => {
+  const [y, m, d] = iso.split('-').map(Number) as [number, number, number];
+  return birthFormat.format(new Date(y, m - 1, d));
+};
+
+/** Option names in their own language, so each is recognisable whatever language is showing (0.14.0). */
+const LANGUAGE_OPTIONS = [
+  ['auto', t.language.auto],
+  ['de', 'Deutsch'],
+  ['en', 'English'],
+] as const satisfies readonly (readonly [LanguageChoice, string])[];
+
+/** The whole UI text is fixed per start, so a new language means a restart (entries stay, a running feed too). */
+function changeLanguage(choice: LanguageChoice): void {
+  saveLanguageChoice(choice);
+  location.reload();
+}
 
 const TRACKER_ICON: Record<(typeof TRACKER_KINDS)[number], IconName> = {
   feed: 'drop',
@@ -39,6 +60,8 @@ export function Settings({ profile }: { profile: Profile }) {
   const [accent, setAccent] = useAccent();
   const lastExportAt = useLive(getLastExportAt, []);
   const trackers = useLive(getTrackers, []);
+  // A guide's button ("Zur Sprache", "Zum Feedback") leads here: show and mark that row.
+  useEffect(showPendingGuideTarget, []);
   const toggleTracker = (key: TrackerKey, on: boolean) => {
     if (!trackers) return;
     if (!on && isLastTracker(trackers, key)) {
@@ -123,6 +146,16 @@ export function Settings({ profile }: { profile: Profile }) {
             value={accent}
             onChange={setAccent}
           />
+          <ChoiceRow
+            id={GUIDE_ANCHOR.language}
+            icon="globe"
+            label={t.language.label}
+            hint={t.language.hint}
+            groupLabel={t.language.a11y}
+            options={LANGUAGE_OPTIONS}
+            value={getLanguageChoice()}
+            onChange={changeLanguage}
+          />
         </div>
       </SettingsSection>
 
@@ -148,11 +181,23 @@ export function Settings({ profile }: { profile: Profile }) {
         <div class="settings-card">
           <VersionDetails />
         </div>
+        <div class="data-group">
+          <LinkRow
+            id={GUIDE_ANCHOR.feedback}
+            icon="mail"
+            label={t.feedback.label}
+            hint={t.feedback.hint(FEEDBACK_EMAIL)}
+            href={feedbackMailto(__APP_VERSION__, formatStamp(__BUILD_TIME__), navigator.userAgent, isInstalled())}
+          />
+        </div>
         <InstallSection />
         <p class="settings-note settings-privacy">
           <Icon name="shield" size={16} />
           {t.settings.privacy}
         </p>
+        <p class="settings-note">{t.settings.privacyMore}</p>
+        <p class="settings-note">{t.settings.beta}</p>
+        <p class="settings-note">{t.settings.medical}</p>
       </SettingsSection>
 
       <div class="snack-anchor">

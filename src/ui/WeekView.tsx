@@ -3,7 +3,7 @@ import { getEventsOverlapping } from '../data/events';
 import { getTrackers, type Trackers } from '../data/trackers';
 import { addDays, formatDuration, formatWeekdayShort, formatWeekRange, HOUR, startOfDay } from '../logic/time';
 import { startOfWeek, weekStats, type WeekStats } from '../logic/week';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { useLive } from './hooks';
 import { Icon, type IconName } from './icons';
 

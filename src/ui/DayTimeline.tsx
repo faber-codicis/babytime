@@ -1,7 +1,7 @@
 import type { BabyEvent } from '../data/events';
 import { DEFAULT_TRACKERS, type Trackers } from '../data/trackers';
 import { timelineMarks } from '../logic/timeline';
-import { t } from '../strings.de';
+import { t } from '../strings';
 
 const HOURS = [0, 6, 12, 18, 24];
 /** An hour label closer than this to "jetzt" (in % of the bar) makes room for it. */

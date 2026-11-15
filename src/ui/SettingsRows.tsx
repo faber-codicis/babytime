@@ -23,6 +23,63 @@ export function ActionRow(props: {
   );
 }
 
+/**
+ * One choice out of a few, shown as a segmented control under the label (e.g. the language, 0.14.0).
+ * `id` makes the row a target for a guide's button (focusable, but not in the tab order).
+ */
+export function ChoiceRow<K extends string>(props: {
+  id?: string;
+  icon: IconName;
+  label: string;
+  hint: string;
+  groupLabel: string;
+  options: readonly (readonly [K, string])[];
+  value: K;
+  onChange: (value: K) => void;
+}) {
+  return (
+    <div class="data-action choice-row" id={props.id} tabIndex={props.id ? -1 : undefined}>
+      <div class="choice-row-head">
+        <span class="data-action-icon" aria-hidden="true">
+          <Icon name={props.icon} size={20} />
+        </span>
+        <span class="data-action-text">
+          <span class="data-action-label">{props.label}</span>
+          <span class="data-action-hint">{props.hint}</span>
+        </span>
+      </div>
+      <div class="segmented segmented--small segmented--wrap" role="group" aria-label={props.groupLabel}>
+        {props.options.map(([value, text]) => (
+          <button
+            key={value}
+            type="button"
+            class={`segment${value === props.value ? ' is-active' : ''}`}
+            aria-pressed={value === props.value}
+            onClick={() => value !== props.value && props.onChange(value)}
+          >
+            {text}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Same look as ActionRow, but a link (e.g. mailto for "Feedback senden", 0.13.0). */
+export function LinkRow(props: { id?: string; icon: IconName; label: string; hint?: string | undefined; href: string }) {
+  return (
+    <a class="data-action data-action--link" id={props.id} href={props.href}>
+      <span class="data-action-icon" aria-hidden="true">
+        <Icon name={props.icon} size={20} />
+      </span>
+      <span class="data-action-text">
+        <span class="data-action-label">{props.label}</span>
+        {props.hint && <span class="data-action-hint">{props.hint}</span>}
+      </span>
+    </a>
+  );
+}
+
 /** On/off row (mockup "Einstellungen"): the whole row is the switch, at least 64 px high. */
 export function SwitchRow(props: { icon: IconName; label: string; hint: string; checked: boolean; onChange: (on: boolean) => void }) {
   return (

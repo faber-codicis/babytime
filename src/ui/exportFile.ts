@@ -1,6 +1,6 @@
 import { buildExport, exportFileName } from '../data/backup';
 import { encryptBackup } from '../data/backupCrypto';
-import { t } from '../strings.de';
+import { t } from '../strings';
 
 /** Builds the backup file in advance, so the tap can share it synchronously (iOS needs the user gesture). */
 export async function prepareExportFile(): Promise<File> {

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'preact/hooks';
 import { PASSWORD_MIN } from '../data/backupCrypto';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { prepareEncryptedExportFile } from './exportFile';
 import { Sheet } from './Sheet';
 

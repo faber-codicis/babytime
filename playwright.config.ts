@@ -13,6 +13,8 @@ export default defineConfig({
   reporter: 'list',
   use: {
     baseURL: `http://localhost:${PORT}`,
+    // The app follows the browser language since 0.14.0; all tests run in German unless a file sets English.
+    locale: 'de-AT',
   },
   projects: [
     // Android stand-in: Chrome engine on a phone-sized viewport.

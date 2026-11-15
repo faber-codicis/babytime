@@ -7,7 +7,7 @@ import { nextSide } from '../logic/nextSide';
 import { dayStats } from '../logic/stats';
 import { dayRange, formatTimer, HOUR, MINUTE } from '../logic/time';
 import { navigate } from '../router';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { BackupReminder } from '../ui/BackupReminder';
 import { BottleSheet, type BottlePick } from '../ui/BottleSheet';
 import { Chips } from '../ui/Chips';

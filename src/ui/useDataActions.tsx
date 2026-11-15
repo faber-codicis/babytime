@@ -4,7 +4,7 @@ import { BackupError, deleteAllData, MAX_FILE_BYTES, parseBackup } from '../data
 import { readEnvelope } from '../data/backupCrypto';
 import type { Profile } from '../data/profile';
 import { navigate } from '../router';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { EncryptedExportSheet } from './EncryptedExportSheet';
 import { deliverExportFile, prepareExportFile } from './exportFile';
 import { useLive } from './hooks';

@@ -4,7 +4,7 @@ import { loadFeeding } from '../data/overview';
 import { sessionDuration } from '../logic/stats';
 import { formatClock, formatDuration, formatRelative, formatTimer } from '../logic/time';
 import { navigate } from '../router';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { haptic } from '../ui/haptics';
 import { Icon } from '../ui/icons';
 import { Sheet } from '../ui/Sheet';

@@ -1,5 +1,5 @@
 import { hasAmount, isAmount, isTimed, NOTE_MAX } from '../logic/validate';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { db, SCHEMA_VERSION, type Milestone, type BabyEvent, type DiaperKind, type EventType, type MilkKind, type PumpSide, type Side } from './db';
 import { isIsoDate, isPreset, MILESTONE_NOTE_MAX, MILESTONE_TITLE_MAX } from './milestones';
 import { sanitizeProfile, type Profile } from './profile';

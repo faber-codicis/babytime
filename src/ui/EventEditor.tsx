@@ -13,7 +13,7 @@ import {
 } from '../data/events';
 import { fromLocalInput, toLocalInput } from '../logic/time';
 import { hasAmount, hasErrors, isTimed, NOTE_MAX, validateDraft, type DraftErrors, type EventDraft } from '../logic/validate';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Sheet } from './Sheet';
 
 export type EditorTarget = { mode: 'edit'; event: BabyEvent } | { mode: 'add' };

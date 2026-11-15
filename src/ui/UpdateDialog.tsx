@@ -1,5 +1,6 @@
-import type { ChangelogEntry } from '../changelog';
-import { t } from '../strings.de';
+import type { ChangelogEntry, GuideTarget } from '../changelog';
+import { lang, t } from '../strings';
+import { GuideCard } from './Guide';
 import { NewsHero } from './NewsHero';
 import { Sheet } from './Sheet';
 
@@ -12,7 +13,7 @@ export function limitItems(entries: readonly ChangelogEntry[]): { version: strin
   let left = MAX_ITEMS;
   for (const entry of entries) {
     if (left <= 0) break;
-    const items = entry.items.slice(0, left);
+    const items = entry.items[lang].slice(0, left);
     left -= items.length;
     groups.push({ version: entry.version, items });
   }
@@ -25,11 +26,15 @@ interface UpdateDialogProps {
   onDismiss: () => void;
   /** "Alle Neuerungen ansehen". */
   onShowAll: () => void;
+  /** The guide's button: close and go to the feature. */
+  onGuide: (target: GuideTarget) => void;
 }
 
 /** Update popup (spec 6.9): bottom sheet over Today, once per version. */
-export function UpdateDialog({ entries, onDismiss, onShowAll }: UpdateDialogProps) {
+export function UpdateDialog({ entries, onDismiss, onShowAll, onGuide }: UpdateDialogProps) {
   const groups = entries ? limitItems(entries) : [];
+  // Only the newest guide keeps the popup short; every guide stays under its version in "Was ist neu".
+  const guide = entries?.find((entry) => entry.guide)?.guide;
   const withHeadings = groups.length > 1;
 
   return (
@@ -55,8 +60,11 @@ export function UpdateDialog({ entries, onDismiss, onShowAll }: UpdateDialogProp
         </div>
       ))}
 
+      {guide && <GuideCard guide={guide} onGo={() => onGuide(guide.target)} />}
+
       <div class="sheet-actions">
-        <button type="button" class="big-btn big-btn--rose" onClick={onDismiss}>
+        {/* Default focus stays on "Alles klar", even with a guide button above it (0.14.0). */}
+        <button type="button" class="big-btn big-btn--rose" data-autofocus onClick={onDismiss}>
           {t.whatsNew.ok}
         </button>
         <button type="button" class="text-btn" onClick={onShowAll}>

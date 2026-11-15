@@ -1,8 +1,11 @@
-/** All UI texts (German, Austria). Components never hard-code user-facing text. */
+/**
+ * All UI texts in German (Austria). Components never hard-code user-facing text; they import `t` from
+ * `./strings`, which picks this file or `strings.en.ts` (0.14.0). `strings.en.ts` must have the same keys.
+ */
 
 const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
 
-export const t = {
+export const de = {
   appName: 'Baby Time',
   defaultBabyName: 'Dein Baby',
   locale: 'de-AT',
@@ -303,6 +306,44 @@ export const t = {
     install: 'Als App installieren',
     installAndroidMenu: 'Im Chrome-Menü ⋮ auf „App installieren“ tippen.',
     privacy: 'Deine Einträge bleiben auf diesem Handy.',
+    privacyMore:
+      'Kein Konto, kein Upload, keine Analyse. Der Server (Cloudflare) liefert nur die App und ihre Updates aus und sieht dabei wie jede Webseite deine IP-Adresse, nie deine Einträge.',
+    beta: 'Testversion: Es kann noch Fehler geben. Sichere deine Daten ab und zu (Daten exportieren).',
+    medical: 'Baby Time ist ein Tagebuch und ersetzt keinen Rat von Hebamme, Ärztin oder Arzt.',
+  },
+
+  language: {
+    /** Both languages on purpose: whoever lands in the wrong one still finds the switch. */
+    label: 'Sprache · Language',
+    hint: 'Automatisch folgt der Sprache des Handys',
+    a11y: 'Sprache',
+    auto: 'Automatisch',
+  },
+
+  guide: {
+    title: 'So geht’s',
+    stepsA11y: 'Schritte',
+  },
+
+  feedback: {
+    label: 'Feedback senden',
+    hint: (email: string) => `Fehler oder Ideen? Öffnet eine E-Mail an ${email}. Gesendet wird erst, wenn du selbst auf Senden tippst.`,
+    subject: (version: string) => `Baby Time ${version}: Feedback`,
+    body: (version: string, builtAt: string, userAgent: string, installed: boolean) =>
+      [
+        'Was ist passiert (oder was wünschst du dir)?',
+        '',
+        '',
+        'Was hast du davor gemacht?',
+        '',
+        '',
+        '(Bitte keine Gesundheitsdaten deines Babys mitschicken. Ein Bildschirmfoto hilft oft.)',
+        '',
+        '---',
+        `Version: ${version} (${builtAt})`,
+        `Als App installiert: ${installed ? 'ja' : 'nein'}`,
+        `Gerät: ${userAgent}`,
+      ].join('\n'),
   },
 
   update: {

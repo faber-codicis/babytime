@@ -18,3 +18,17 @@ try {
 } catch {
   // Storage blocked: stay light and rosé.
 }
+
+// Language (0.14.0): saved choice, otherwise German for a de-* phone and English for everything else.
+// Same key and rule as src/data/language.ts – keep them in sync. Sets <html lang>, which also picks the splash text.
+(function () {
+  var choice = null;
+  try {
+    choice = localStorage.getItem('babytime-lang');
+  } catch {
+    // Storage blocked: follow the phone.
+  }
+  var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+  var lang = choice === 'de' || choice === 'en' ? choice : /^de(-|$)/i.test(first) ? 'de' : 'en';
+  document.documentElement.lang = lang;
+})();

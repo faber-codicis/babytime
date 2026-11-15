@@ -1,6 +1,6 @@
 # Baby Time
 
-PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, ohne Konto. Testversion 0.6.0.
+PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, ohne Konto. Testversion 0.14.0 (Beta, Deutsch und Englisch).
 
 **Datenschutz:** Alle Einträge bleiben auf dem Gerät. Es gibt keinen Upload, keine Weitergabe, keine Analyse.
 
@@ -8,8 +8,9 @@ PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, oh
 
 - **Heute:** zuletzt gestillt, nächste Seite, letzte Windel, Schlaf, Tageszähler. Stillen mit Timer und Seitenwechsel, Windel in 2 Taps, Schlaf in 1 Tap, Flasche und Abpumpen mit Menge, jeweils mit „Rückgängig“.
 - **Verlauf:** Liste nach Tagen, Einträge ändern, löschen und nachtragen.
+- **Meilensteine** (eigener Tab, abschaltbar) und **Wochenansicht** im Verlauf.
 - **Erststart** mit Babyname und Geburtsdatum (beides freiwillig).
-- **Einstellungen** (eigener Tab): Profil, **Was möchtest du festhalten?** (Stillen, Flasche, Abpumpen, Windel, Schlaf einzeln an/aus), **Zeitleiste** an/aus, **Dunkles Design** ein/aus oder **Nachts automatisch** (20–7 Uhr, mit Nachtansicht auf Heute; Standard: hell), **Akzentfarbe** (Rosé, Grün, Lila, Blau, Orange), Sicherung exportieren (mit „Letzte Sicherung: vor x Tagen“) und wiederherstellen, alle Daten löschen, Version mit **Nach Update suchen**, „Was ist neu“, Installationshinweis.
+- **Einstellungen** (eigener Tab): Profil, **Was möchtest du festhalten?** (Stillen, Flasche, Abpumpen, Windel, Schlaf einzeln an/aus), **Zeitleiste** an/aus, **Dunkles Design** ein/aus oder **Nachts automatisch** (20–7 Uhr, mit Nachtansicht auf Heute; Standard: hell), **Akzentfarbe** (Rosé, Grün, Lila, Blau, Orange), **Sprache · Language** (Automatisch, Deutsch, English), Sicherung exportieren (mit „Letzte Sicherung: vor x Tagen“) und wiederherstellen, alle Daten löschen, Version mit **Nach Update suchen**, „Was ist neu“, **Feedback senden** (E-Mail-Entwurf an `kontakt@mraz.app` mit Version und Gerät, keine Einträge), Installationshinweis, Hinweise zu Datenschutz, Testversion und „kein medizinischer Rat“.
 - **Sicherungs-Erinnerung** auf Heute, wenn die letzte Sicherung zwei Wochen her ist.
 - **Update-Hinweis:** Nach einer neuen Version erscheint einmal ein Popup mit den Neuerungen.
 
@@ -51,7 +52,7 @@ Service Worker und Installation brauchen einen sicheren Kontext (HTTPS oder `loc
 | Layout und Bedienung schnell prüfen | `npm run dev -- --host`, Handy im selben WLAN. Offline und Installation sind so nicht testbar. |
 | Offline und PWA auf Android | USB-Debugging mit Port-Forwarding (`chrome://inspect`), dann ist `localhost` auf dem Handy erreichbar. |
 | Offline und Installation auf dem iPhone | `npm run build && npm run preview -- --host` hinter einem HTTPS-Tunnel (z. B. Cloudflare Tunnel) oder die nicht beworbene `*.workers.dev`-Adresse (siehe unten). |
-| Test durch die Freundin | Cloudflare (siehe unten), URL nicht öffentlich verbreiten. |
+| Beta-Test | Cloudflare (siehe unten); Adresse nur an Testerinnen und Tester geben. |
 
 **iPhone (iOS 26):** Link in Safari öffnen – oben erscheint die Karte „Als App installieren“ mit denselben Schritten:
 
@@ -65,13 +66,22 @@ Danach die App vom Home-Bildschirm starten, Flugmodus an, App ganz schließen un
 
 Oben rechts auf **Heute** steht die Versions-Pille „vx.y.z“; antippen zeigt Datum und Uhrzeit des Builds. Nach einem Upload: Pille antippen → **Nach Update suchen**. Sobald die neue Version geladen ist, wird die Pille zu **Update bereit** – antippen startet sie. Ohne Antippen übernimmt die App sie beim nächsten Start.
 
-## Erster Start bei der Freundin (Checkliste)
+## Erster Start bei Testerinnen und Testern (Checkliste)
 
 1. Link in **Safari** öffnen, App wie oben installieren, dann **nur noch vom Home-Bildschirm** starten.
 2. Erststart: Name und Geburtsdatum eintragen oder „Ohne Namen fortfahren“.
 3. Einmal Flugmodus an, App neu starten – alles muss gehen.
 4. Testeinträge vom Ausprobieren entfernen: **Einstellungen** → **Alle Daten löschen**.
-5. Ab und zu sichern: **Einstellungen** → **Daten exportieren** → „In Dateien sichern“ (oder „Jetzt sichern“ auf der Erinnerungskarte). Die Datei ist unverschlüsselt; nach einem Wiederherstellen löschen.
+5. Ab und zu sichern: **Einstellungen** → **Daten exportieren** → „In Dateien sichern“ (oder „Jetzt sichern“ auf der Erinnerungskarte). Die Datei ist unverschlüsselt (oder „Mit Passwort exportieren“); nach einem Wiederherstellen löschen.
+6. Fehler und Ideen: **Einstellungen** → **Feedback senden**. Das öffnet einen E-Mail-Entwurf mit Version und Gerät; gesendet wird erst nach eigenem Tippen auf Senden. Bildschirmfotos helfen, Gesundheitsdaten bitte nicht mitschicken.
+
+## Beta-Test
+
+- Feedback kommt per E-Mail an `kontakt@mraz.app` (Adresse in `src/ui/feedback.ts`). Die Weiterleitung ist laut Cloudflare aktiv; vor dem ersten Tester einmal selbst eine Feedback-Mail schicken.
+- Tester brauchen nur die Adresse der App, kein GitHub-Zugang.
+- Sprache: Deutsch für Handys mit Sprache `de-*`, sonst Englisch; in den Einstellungen umschaltbar. Texte in `src/strings.de.ts` und `src/strings.en.ts` (gleiche Schlüssel, per Typprüfung und Unit-Test erzwungen), Neuerungen zweisprachig in `src/changelog.ts`.
+- Neue Funktionen bekommen in `src/changelog.ts` eine `guide` (nummerierte Schritte, Knopf direkt zur Funktion); sie erscheint im Update-Popup und bleibt unter „Was ist neu“.
+- Noch offen: Installation und Menünamen auf einem echten iPhone prüfen (siehe oben).
 
 ## Neue Version ausliefern
 
@@ -108,4 +118,4 @@ Weitere Hinweise:
 - `src/data/` – einziger Zugriff auf die Datenbank (Dexie/IndexedDB), inkl. Sicherung (`backup.ts`)
 - `src/logic/` – Zeit, Tageszähler, nächste Seite, Eingabeprüfung (ohne UI, mit Unit-Tests)
 - `src/version.ts`, `src/changelog.ts` – Versionsvergleich und Neuerungen
-- `src/views/`, `src/ui/` – Screens und Bausteine; alle Texte in `src/strings.de.ts`
+- `src/views/`, `src/ui/` – Screens und Bausteine; alle Texte in `src/strings.de.ts` und `src/strings.en.ts`, Auswahl in `src/strings.ts`

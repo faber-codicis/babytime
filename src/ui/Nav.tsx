@@ -1,5 +1,5 @@
 import { hashOf, type Route } from '../router';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Icon, type IconName } from './icons';
 
 const TABS: { route: Route; icon: IconName; label: string }[] = [

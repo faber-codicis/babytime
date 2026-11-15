@@ -3,7 +3,7 @@ import type { BabyEvent, Side } from '../data/events';
 import { nextSide } from '../logic/nextSide';
 import { sessionDuration } from '../logic/stats';
 import { formatClock, formatDurationLong, formatElapsed, formatTimer } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { EditButton } from './EditButton';
 import { Icon } from './icons';
 

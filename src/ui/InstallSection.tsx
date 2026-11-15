@@ -1,4 +1,4 @@
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { isIosBrowserTab } from './InstallHint';
 import { useInstallPrompt } from './installPrompt';
 

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { changelog, type ChangelogEntry } from '../changelog';
+import { changelog, type ChangelogEntry, type GuideTarget } from '../changelog';
 import { getLastSeenVersion, setLastSeenVersion } from '../data/appState';
 import { navigate, type Route } from '../router';
+import { openGuideTarget } from './Guide';
 import { decideUpdate } from '../version';
 
 /**
@@ -48,6 +49,10 @@ export function useUpdatePopup(onboarded: boolean, route: Route) {
     showAll: () => {
       void close();
       navigate('whatsnew');
+    },
+    openGuide: (target: GuideTarget) => {
+      void close();
+      openGuideTarget(target);
     },
   };
 }

@@ -10,7 +10,7 @@ import {
   type MilestonePreset,
 } from '../data/milestones';
 import { isoDate } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Sheet } from './Sheet';
 
 /** What the sheet edits: a suggestion to mark, an own new one, or an existing entry. */

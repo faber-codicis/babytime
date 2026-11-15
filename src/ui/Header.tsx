@@ -1,6 +1,6 @@
 import type { Profile } from '../data/profile';
 import { formatAge, formatClock, formatWeekday } from '../logic/time';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Avatar } from './Avatar';
 import { Icon } from './icons';
 import { VersionPill } from './VersionPill';

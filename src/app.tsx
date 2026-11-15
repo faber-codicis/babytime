@@ -55,7 +55,7 @@ export function App() {
     <>
       <main class={`app${withNav ? ' app--with-nav' : ''}`}>{view}</main>
       {withNav && <Nav route={page} milestones={trackers.milestones} />}
-      <UpdateDialog entries={update.entries} onDismiss={update.dismiss} onShowAll={update.showAll} />
+      <UpdateDialog entries={update.entries} onDismiss={update.dismiss} onShowAll={update.showAll} onGuide={update.openGuide} />
     </>
   );
 }

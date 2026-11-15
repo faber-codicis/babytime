@@ -1,7 +1,7 @@
 import type { BabyEvent } from '../data/events';
 import { formatClock, formatDuration } from '../logic/time';
 import { isTimed } from '../logic/validate';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Icon, type IconName } from './icons';
 
 const LOOK: Record<BabyEvent['type'], { icon: IconName; tone: string }> = {

@@ -27,6 +27,7 @@
         transition: opacity 180ms ease-out;
       }
       .splash.is-hidden { opacity: 0; pointer-events: none; }
+      html:lang(en) .splash-tagline:lang(de), html:not(:lang(en)) .splash-tagline:lang(en) { display: none; }
       @media (prefers-reduced-motion: reduce) { .splash { transition: none; } }
       .splash-blob { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.08); }
       .splash-blob--a { width: 300px; height: 300px; left: -90px; top: -110px; }
@@ -98,7 +99,9 @@
           </g>
         </svg>
         <h1 class="splash-title">Baby Time</h1>
-        <p class="splash-tagline">Alles im Blick, auch um 3&nbsp;Uhr nachts.</p>
+        <!-- Both languages; public/theme-init.js sets <html lang> before the first paint and CSS shows one (0.14.0). -->
+        <p class="splash-tagline" lang="de">Alles im Blick, auch um 3&nbsp;Uhr nachts.</p>
+        <p class="splash-tagline" lang="en">Everything in view, even at 3&nbsp;a.m.</p>
       </div>
       <div class="splash-foot">
         <div class="splash-loader" aria-hidden="true"><span></span><span></span><span></span></div>

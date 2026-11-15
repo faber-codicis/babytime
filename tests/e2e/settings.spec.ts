@@ -39,6 +39,21 @@ test.describe('settings tab', () => {
     await expect(page.getByRole('button', { name: 'Daten und Info' })).toHaveCount(0);
   });
 
+  test('feedback link, test-version and privacy notes (0.13.0)', async ({ page }) => {
+    await page.getByRole('link', { name: 'Einstellungen' }).click();
+    const main = page.getByRole('main');
+    const feedback = main.getByRole('link', { name: /^Feedback senden/ });
+    await expect(feedback).toBeVisible();
+    const href = (await feedback.getAttribute('href'))!;
+    expect(href).toMatch(/^mailto:kontakt@mraz.app\?subject=/);
+    const body = new URLSearchParams(href.slice(href.indexOf('?') + 1)).get('body')!;
+    expect(body).toContain(`Version: ${pkg.version}`);
+    expect(body).toContain('Als App installiert: nein');
+    await expect(main.getByText(/^Testversion:/)).toBeVisible();
+    await expect(main.getByText(/ersetzt keinen Rat/)).toBeVisible();
+    await expect(main.getByText(/^Kein Konto, kein Upload, keine Analyse\./)).toBeVisible();
+  });
+
   test('screenshot and touch targets', async ({ page }) => {
     await page.getByRole('link', { name: 'Einstellungen' }).click();
     await page.screenshot({ path: 'test-results/settings.png', animations: 'disabled', fullPage: true });

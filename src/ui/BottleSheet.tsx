@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { BabyEvent, MilkKind, PumpSide } from '../data/events';
 import { AMOUNT_MAX, AMOUNT_MIN } from '../logic/validate';
-import { t } from '../strings.de';
+import { t } from '../strings';
 import { Icon } from './icons';
 import { Sheet } from './Sheet';
 

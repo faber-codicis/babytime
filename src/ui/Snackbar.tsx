@@ -1,5 +1,5 @@
 import { useEffect } from 'preact/hooks';
-import { t } from '../strings.de';
+import { t } from '../strings';
 
 export interface SnackMessage {
   id: number;

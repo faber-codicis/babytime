@@ -192,3 +192,37 @@
 :root[data-theme='dark'] .laughing-baby {
   filter: brightness(0.8) saturate(0.85);
 }
+
+/* ---------------------------------------------------------------- guide for a new feature (0.14.0) */
+
+.guide-card {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: var(--rose-tint);
+}
+
+.guide-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--rose-ink);
+}
+
+.guide-steps {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 6px;
+  font-size: 15px;
+}
+
+.guide-btn {
+  margin-top: 12px;
+}
+
+/* The settings row a guide leads to, marked for a moment. */
+.is-guided {
+  outline: 3px solid var(--rose);
+  outline-offset: -3px;
+}
