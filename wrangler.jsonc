@@ -4,5 +4,10 @@
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"
-  }
+  },
+  // Eigene Adresse; workers.dev und Vorschau-Adressen bleiben bei jedem Deploy aus.
+  // Daten hängen an der Adresse: Tester bekommen nur babytime.mraz.app.
+  "routes": [{ "pattern": "babytime.mraz.app", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": false
 }

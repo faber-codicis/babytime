@@ -106,7 +106,7 @@ Alternativ geht es per Kommandozeile: einmalig `npx wrangler login`, danach `npm
 
 Weitere Hinweise:
 
-- Zugang ist eine nicht verlinkte `*.workers.dev`-Adresse; ein Zugangsschutz ist nicht Teil dieses Auftrags.
+- Adresse: **https://babytime.mraz.app** (eigene Domain, in `wrangler.jsonc` als `custom_domain`). `workers_dev` und `preview_urls` sind aus, damit `npm run deploy` keine weiteren Adressen einschaltet. Wer im Dashboard hochlädt, behält die Einstellungen des Dashboards. Daten hängen an der Adresse, darum nur diese Adresse herausgeben. Ein Zugangsschutz ist nicht Teil dieses Auftrags.
 - Cloudflare Web Analytics bleibt **aus**.
 - Rollback: Im Dashboard (Workers & Pages → Worker → Deployments) bzw. per `wrangler rollback`. Ob das für statische Dateien uneingeschränkt gilt, ist **zu prüfen**. Verlässlich ist: Sicherung aus `../babytime-snapshots/` zurückkopieren, bauen, erneut hochladen.
 - **Notfall** (fehlerhafte Version ausgeliefert): sofort eine korrigierte Version hochladen; der Service Worker holt sie beim nächsten Start. Hilft das nicht, einen Build ausliefern, dessen `sw.js` sich selbst abmeldet (`self.registration.unregister()`) und die Caches leert.
