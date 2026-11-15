@@ -37,7 +37,16 @@ describe('languages (0.14.0)', () => {
     expect(en.today.statDiapers(1)).toEqual(['1', 'diaper']);
     expect(en.time.since('14:12')).toBe('since 14:12');
     expect(en.time.since('25\u00A0min')).toBe('for 25\u00A0min');
-    expect(en.editor.errors.alreadyRunning(en.editor.errors.runningFeed)).toBe('A feed is already running. Please enter an end.');
+    expect(en.editor.errors.alreadyRunning(en.editor.errors.runningFeed)).toBe('A breastfeed is already running. Please enter an end.');
+  });
+
+  it('0.15.0: unambiguous English (audit)', () => {
+    expect(en.today.actionFeed).toBe('Breastfeed');
+    expect(en.diaperSheet.minutesAgo(5)).toBe('5\u00A0min ago');
+    expect(en.history.rowDiaper(en.diaper.both)).toBe('Diaper · wet + dirty');
+    expect(en.week.average('3')).toBe('Average 3 per day');
+    // No bare "Feed" left anywhere next to "Bottle".
+    expect(JSON.stringify(en)).not.toMatch(/\bFeed\b/);
   });
 
   it('picks German for any de-* phone, English otherwise, and a saved choice always wins', () => {

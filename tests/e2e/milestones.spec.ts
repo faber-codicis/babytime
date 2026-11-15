@@ -70,9 +70,12 @@ test('switching Meilensteine off in the settings leaves three tabs; the address 
   await expect(nav(page).getByRole('link')).toHaveCount(4);
 });
 
-test('four tab labels fit on a 360 px phone', async ({ page }) => {
-  await page.setViewportSize({ width: 360, height: 760 });
-  for (const label of await page.locator('.tab-label').all()) {
-    expect(await label.evaluate((el) => el.scrollWidth <= el.clientWidth), await label.innerText()).toBe(true);
+test('four tab labels fit on a 360 px phone (11 px) and a 375 px phone (12 px, 0.15.0)', async ({ page }) => {
+  for (const [width, size] of [[360, '11px'], [375, '12px']] as const) {
+    await page.setViewportSize({ width, height: 760 });
+    for (const label of await page.locator('.tab-label').all()) {
+      expect(await label.evaluate((el) => getComputedStyle(el).fontSize)).toBe(size);
+      expect(await label.evaluate((el) => el.scrollWidth <= el.clientWidth), `${width}px: ${await label.innerText()}`).toBe(true);
+    }
   }
 });

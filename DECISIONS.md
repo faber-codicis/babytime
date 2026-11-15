@@ -210,6 +210,18 @@ Grundlage: Audit vom 2026-11-15 (17 Screens × DE/EN × hell/dunkel × 360/375/4
 - **„Automatisch“ im Sprachfeld** bei 360 px etwas kleiner, damit es in sein Drittel passt.
 - Offen aus dem Audit (nicht in 0.14.1): englisch „Feed“ vs. „Breastfeed“, Begriffe rund um die Sicherung, alte Wege in „Was ist neu“, neutraler Nachtring, 11 px Tab-Beschriftung.
 
+## 0.15.0 (Audit-Kleinigkeiten: Englisch und Sicherung)
+
+- **„Breastfeed“ statt „Feed“** überall im englischen Modus (Knopf, Legende, Verlauf, Woche, Editor), weil „Feed“ neben „Bottle“ doppeldeutig ist. Tageszähler „4× breastfed“ wie „4× gestillt“. Damit das längere Wort bei 360 px passt, bekommt der Stillen-Knopf auf Englisch etwas mehr Breite (`:lang(en)`). Ein Unit-Test verbietet ein alleinstehendes „Feed“ in `strings.en.ts`.
+- **„5 min ago“ statt „5 ago“** in den Zeit-Pillen; die Pillen dürfen dafür auf kleinen Handys zweizeilig werden. Deutsch bleibt „vor 5“.
+- **„Diaper · wet + dirty“ statt „Diaper both“**, **„Average … per day“ statt „Ø“** (im Englischen unüblich; Deutsch behält „Ø“).
+- **Ein Begriff für die Sicherung:** „Sicherung speichern“, „Sicherung mit Passwort“, „Sicherung wiederherstellen“, „Zuerst sichern“ (EN: Save backup, Backup with password, Restore backup, Back up first). „Exportieren“ kommt in der Oberfläche nicht mehr vor; der alte Was-ist-neu-Eintrag 0.13.0 nennt den neuen Namen.
+- **„Lösche alte Sicherungen nach dem Wiederherstellen“ entfernt:** Wer danach das Handy verliert, hätte nichts mehr. Stattdessen: „Bewahre deine Sicherungen an einem sicheren Ort auf.“
+- **Ersetzen, Zusammenführen und Alles löschen sagen, was betroffen ist:** Ersetzen tauscht Einträge, Meilensteine und Profil; Zusammenführen ergänzt Einträge und Meilensteine, das Profil bleibt; Alles löschen entfernt auch Meilensteine und Einstellungen (so arbeitet `backup.ts` schon seit 0.11.0).
+- **Nachtring ohne Countdown** (Christophs Wahl): Er füllt sich nur beim laufenden Stillen, in denselben 15-Minuten-Runden wie der Timer; in Ruhe bleibt er leer. Bisher war er nach 3 Stunden voll, das wirkte wie ein Fütterplan, obwohl nach Bedarf gestillt wird.
+- **Tab-Beschriftung 12 px ab 375 px Breite**, bei 360 px weiter 11 px, damit „Einstellungen“ ganz sichtbar bleibt (E2E prüft beide Breiten).
+- Weiter offen: weitere alte Wege in „Was ist neu“, HSTS-Header.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

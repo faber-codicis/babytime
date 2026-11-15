@@ -29,6 +29,26 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.15.0',
+    date: '2026-11-15',
+    items: {
+      de: [
+        'Die Sicherung heißt überall gleich: „Sicherung speichern“, „Sicherung mit Passwort“, „Sicherung wiederherstellen“',
+        'Beim Wiederherstellen und Löschen steht jetzt dabei, dass auch Meilensteine und Profil betroffen sind',
+        'Der Hinweis, alte Sicherungen zu löschen, ist weg: Bewahre sie lieber gut auf',
+        'Klarere Begriffe im englischen Modus, zum Beispiel „Breastfeed“ statt „Feed“',
+        'Der Ring in der Nachtansicht füllt sich nur noch beim Stillen, nicht mehr als Countdown; die Tab-Beschriftung ist etwas größer',
+      ],
+      en: [
+        'Breastfeeding is now called “Breastfeed”, so it can’t be confused with the bottle',
+        'Backups have one name everywhere: “Save backup”, “Backup with password”, “Restore backup”',
+        'Restoring and deleting now say that milestones and the profile are included too',
+        'Clearer English: “5 min ago”, “Diaper · wet + dirty” and “Average … per day”',
+        'The ring in the night view only fills while breastfeeding, no more countdown; the tab labels are a little bigger',
+      ],
+    },
+  },
+  {
     version: '0.14.1',
     date: '2026-11-15',
     items: {
@@ -82,12 +102,12 @@ export const changelog: ChangelogEntry[] = [
       de: [
         'Neu in den Einstellungen: „Feedback senden“ öffnet eine E-Mail mit Version und Gerät, du schickst sie selbst ab',
         'Unter „Über die App“ steht jetzt genauer, was mit deinen Daten passiert: Sie bleiben auf dem Handy',
-        'Baby Time ist eine Testversion: Sichere deine Daten ab und zu über „Daten exportieren“',
+        'Baby Time ist eine Testversion: Sichere deine Daten ab und zu über „Sicherung speichern“',
       ],
       en: [
         'New in the settings: “Send feedback” opens an email with version and device, you send it yourself',
         '“About the app” now explains in more detail what happens to your data: it stays on your phone',
-        'Baby Time is a test version: back up your data now and then with “Export data”',
+        'Baby Time is a test version: back up your data now and then with “Save backup”',
       ],
     },
     guide: {

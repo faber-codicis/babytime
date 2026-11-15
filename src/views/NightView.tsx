@@ -2,12 +2,16 @@ import type { TodayData } from '../data/overview';
 import type { Side } from '../data/events';
 import type { Trackers } from '../data/trackers';
 import { nextSide } from '../logic/nextSide';
-import { HOUR, formatClock, formatHoursMinutes, formatTimer } from '../logic/time';
+import { formatClock, formatHoursMinutes, formatTimer } from '../logic/time';
 import { t } from '../strings';
 import { Icon } from '../ui/icons';
+import { LAP_MS } from '../ui/TimerRing';
 
-/** One ring lap = 3 hours since the last feed: a full ring means "about time again". */
-const RING_MS = 3 * HOUR;
+/*
+ * The ring fills only while a feed runs, in the same 15-minute laps as the timer (0.15.0). At rest it is an
+ * empty, quiet circle: until 0.14 it was full after 3 hours, which read like a feeding schedule – but babies
+ * are fed on demand, so the app shows no countdown.
+ */
 const SIZE = 260;
 const STROKE = 14;
 const R = SIZE / 2 - STROKE / 2;
@@ -45,12 +49,11 @@ export function NightView({ data, now, show, onFeed, onDiaper, onBottle, onSleep
     label = t.today.feedingNow;
     big = formatTimer(now - running.start);
     sub = sideName(running.side);
-    progress = 1;
+    progress = (Math.max(0, now - running.start) % LAP_MS) / LAP_MS;
   } else if (session?.end !== undefined) {
     label = t.night.lastFed;
     big = formatHoursMinutes(now - session.end);
     sub = t.night.hoursSide(sideName(session.lastSide));
-    progress = Math.min(1, (now - session.end) / RING_MS);
   }
 
   const diaper = data?.lastDiaper;

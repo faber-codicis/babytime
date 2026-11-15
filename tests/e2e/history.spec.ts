@@ -125,7 +125,7 @@ test('backfill: "+" with type choice, start prefilled with now', async ({ page }
 test('touch targets in history and edit sheet are at least 44 px', async ({ page }) => {
   await seed(page, [{ type: 'feed', side: 'left', start: at(21, 12, 22), end: at(21, 12, 40) }]);
   const check = async () => {
-    // The hidden file input (aria-hidden, opened via "Daten wiederherstellen") is no touch target.
+    // The hidden file input (aria-hidden, opened via "Sicherung wiederherstellen") is no touch target.
     for (const target of await page.locator(':is(button, a, input):visible:not([aria-hidden="true"])').all()) {
       const box = await target.boundingBox();
       const name = await target.evaluate((el) => `${el.tagName} ${el.getAttribute('aria-label') ?? el.textContent ?? ''} ${el.getAttribute('type') ?? ''}`);

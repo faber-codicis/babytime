@@ -30,7 +30,7 @@ test.describe('settings tab', () => {
     const main = page.getByRole('main');
     await expect(main.getByRole('heading', { level: 2 })).toHaveText(['Was möchtest du festhalten?', 'Darstellung', 'Daten', 'Über die App']);
     await expect(main.getByText('Dein Baby', { exact: true })).toBeVisible();
-    await expect(main.getByRole('button', { name: /Daten exportieren Noch keine Sicherung/ })).toBeVisible();
+    await expect(main.getByRole('button', { name: /Sicherung speichern Noch keine Sicherung/ })).toBeVisible();
     await expect(main.getByText(`Baby Time ${pkg.version}`)).toBeVisible();
     await expect(main.getByText(/^Erstellt am \d{2}\.\d{2}\., \d{2}:\d{2}$/)).toBeVisible();
     await expect(main.getByText('Deine Einträge bleiben auf diesem Handy.')).toBeVisible();

@@ -420,6 +420,13 @@
   padding: 0 2px;
 }
 
+/* English "Breastfeed" (0.15.0) is longer than "Stillen": the feed button takes a bit more of the row. */
+:lang(en) .dock-btn--feed {
+  flex-grow: 1.6;
+  font-size: 14px;
+  padding: 0 2px;
+}
+
 /* ---------------------------------------------------------------- day timeline (0.7.0) */
 
 .timeline {

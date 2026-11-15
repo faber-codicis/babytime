@@ -28,6 +28,9 @@ test('at night: "Nachts automatisch" turns dark at once, Today shows the night v
   await expect(page.getByText('2:05', { exact: true })).toBeVisible();
   await expect(page.getByText('Std · rechts')).toBeVisible();
   await page.screenshot({ path: 'test-results/night-view.png', animations: 'disabled' });
+  // 0.15.0: no countdown at rest – the ring stays empty however long ago the feed was.
+  const ring = page.locator('.night-ring-progress');
+  expect(Number(await ring.getAttribute('stroke-dashoffset'))).toBeCloseTo(Number(await ring.getAttribute('stroke-dasharray')), 3);
 
   await page.getByRole('button', { name: 'Tagesansicht zeigen' }).click();
   await expect(page.getByRole('heading', { name: 'Dein Baby' })).toBeVisible();

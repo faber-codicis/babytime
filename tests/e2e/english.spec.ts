@@ -36,8 +36,8 @@ test('splash and first start are English, <html lang> is en', async ({ page }) =
 test('Today, History, Settings and backup in English', async ({ page }) => {
   await openAppEnglish(page);
 
-  // Feed with a side switch, diaper, sleep.
-  await page.getByRole('button', { name: 'Feed', exact: true }).click();
+  // Breastfeed with a side switch, diaper, sleep.
+  await page.getByRole('button', { name: 'Breastfeed', exact: true }).click();
   await expect(page.getByText('Left side')).toBeVisible();
   await page.getByRole('button', { name: 'Right' }).click();
   await expect(page.getByText('Right side')).toBeVisible();
@@ -55,8 +55,8 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
 
   await page.getByRole('link', { name: 'History' }).click();
   await expect(page.getByRole('heading', { name: 'History', level: 1 })).toBeVisible();
-  await expect(page.getByRole('button', { name: /Diaper wet/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: /^Feed right/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Diaper · wet/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Breastfeed right/ })).toBeVisible();
   await page.screenshot({ path: 'test-results/en-history.png', animations: 'disabled' });
 
   // Backup: export, delete everything, restore.
@@ -64,11 +64,11 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
   await expect(main.getByRole('heading', { level: 2 })).toHaveText(['What do you want to track?', 'Appearance', 'Data', 'About the app']);
   await page.screenshot({ path: 'test-results/en-settings.png', animations: 'disabled', fullPage: true });
   const download = page.waitForEvent('download');
-  await main.getByRole('button', { name: /Export data/ }).click();
+  await main.getByRole('button', { name: /Save backup/ }).click();
   const file = await download;
   const text = readFileSync((await file.path())!, 'utf8');
   await expect(page.getByText('Backup created')).toBeVisible();
-  await expect(main.getByRole('button', { name: /Export data Last backup: today/ })).toBeVisible();
+  await expect(main.getByRole('button', { name: /Save backup Last backup: today/ })).toBeVisible();
 
   await main.getByRole('button', { name: /Delete all data/ }).click();
   await page.getByRole('dialog', { name: 'Delete everything?' }).getByRole('button', { name: 'Delete everything' }).click();
@@ -77,9 +77,9 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
 
   main = await settings(page);
   const chooser = page.waitForEvent('filechooser');
-  await main.getByRole('button', { name: 'Restore data' }).click();
+  await main.getByRole('button', { name: 'Restore backup' }).click();
   await (await chooser).setFiles({ name: file.suggestedFilename(), mimeType: 'application/json', buffer: Buffer.from(text) });
-  const restore = page.getByRole('dialog', { name: 'Restore data' });
+  const restore = page.getByRole('dialog', { name: 'Restore backup' });
   await expect(restore.getByText(/^In the file: \d+\sentries\./)).toBeVisible();
   await restore.getByRole('button', { name: /Replace/ }).click();
   await restore.getByRole('button', { name: 'Yes, replace' }).click();
@@ -111,7 +111,7 @@ test('after the update: English popup with the guide, its button goes straight t
   await setKvAndRestart(page, 'lastSeenVersion', '0.13.0');
   const popup = page.getByRole('dialog', { name: `New in version ${pkg.version}` });
   await expect(popup).toBeVisible();
-  await expect(popup.getByText('Baby Time now speaks English')).toBeVisible();
+  await expect(popup.getByText(/^Backups have one name everywhere/)).toBeVisible();
   await expect(popup.getByText('How it works')).toBeVisible();
   await expect(popup.getByRole('list', { name: 'Steps' }).getByRole('listitem')).toHaveCount(3);
   // The tall popup starts at its title, although "Got it" further down has the focus.

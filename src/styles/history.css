@@ -574,3 +574,10 @@
 .tabbar--four .tab-label {
   font-size: 11px;
 }
+
+/* 0.15.0: from 375 px (most phones) there is room for 12 px; only 360 px phones keep 11 px. */
+@media (min-width: 375px) {
+  .tabbar--four .tab-label {
+    font-size: 12px;
+  }
+}

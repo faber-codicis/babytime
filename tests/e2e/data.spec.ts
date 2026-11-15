@@ -11,11 +11,11 @@ const openData = async (page: Page) => {
   return page.getByRole('main');
 };
 
-/** Clicks "Daten exportieren" and returns the downloaded file's text. */
+/** Clicks "Sicherung speichern" and returns the downloaded file's text. */
 async function exportBackup(page: Page): Promise<{ name: string; text: string }> {
   const sheet = await openData(page);
   const download = page.waitForEvent('download');
-  await sheet.getByRole('button', { name: /Daten exportieren/ }).click();
+  await sheet.getByRole('button', { name: /Sicherung speichern/ }).click();
   const file = await download;
   return { name: file.suggestedFilename(), text: readFileSync((await file.path())!, 'utf8') };
 }
@@ -23,9 +23,9 @@ async function exportBackup(page: Page): Promise<{ name: string; text: string }>
 async function chooseRestoreFile(page: Page, file: { name: string; mimeType: string; buffer: Buffer }) {
   const sheet = await openData(page);
   const chooser = page.waitForEvent('filechooser');
-  await sheet.getByRole('button', { name: 'Daten wiederherstellen' }).click();
+  await sheet.getByRole('button', { name: 'Sicherung wiederherstellen' }).click();
   await (await chooser).setFiles(file);
-  const restore = page.getByRole('dialog', { name: 'Daten wiederherstellen' });
+  const restore = page.getByRole('dialog', { name: 'Sicherung wiederherstellen' });
   await expect(restore).toBeVisible();
   return restore;
 }
@@ -44,7 +44,7 @@ test('export, delete everything, restore in the fresh app: all entries are back'
   expect(backup.name).toMatch(/^babytime-\d{4}-\d{2}-\d{2}\.json$/);
   expect(JSON.parse(backup.text)).toMatchObject({ app: 'babytime', schemaVersion: 3 });
   await expect(page.getByText('Sicherung erstellt')).toBeVisible();
-  await expect(page.getByRole('button', { name: /Daten exportieren Letzte Sicherung: heute/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Sicherung speichern Letzte Sicherung: heute/ })).toBeVisible();
 
   // Delete all: asks first, Abbrechen is the default.
   const sheet = await openData(page);
@@ -118,8 +118,8 @@ test('export with password: file is encrypted, restore needs the right password'
   await page.getByRole('dialog', { name: 'Windel' }).getByRole('button', { name: 'Nass' }).click();
 
   const main = await openData(page);
-  await main.getByRole('button', { name: /Mit Passwort exportieren/ }).click();
-  const sheet = page.getByRole('dialog', { name: 'Mit Passwort sichern' });
+  await main.getByRole('button', { name: /Sicherung mit Passwort/ }).click();
+  const sheet = page.getByRole('dialog', { name: 'Sicherung mit Passwort' });
   await sheet.getByLabel('Passwort', { exact: true }).fill('kurz');
   await sheet.getByLabel('Passwort wiederholen').fill('kurz');
   await sheet.getByRole('button', { name: 'Datei erstellen' }).click();
@@ -128,7 +128,7 @@ test('export with password: file is encrypted, restore needs the right password'
   await sheet.getByLabel('Passwort wiederholen').fill('geheim123');
   await sheet.getByRole('button', { name: 'Datei erstellen' }).click();
   const download = page.waitForEvent('download');
-  await sheet.getByRole('button', { name: 'Datei sichern' }).click();
+  await sheet.getByRole('button', { name: 'Datei speichern' }).click();
   const file = await download;
   const name = file.suggestedFilename();
   const text = readFileSync((await file.path())!, 'utf8');
