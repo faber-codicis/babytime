@@ -39,8 +39,9 @@ test('shows the mockup situation', async ({ page }) => {
   ]);
 
   await expect(page.getByText('Mittwoch, 14:20')).toBeVisible();
+  await expect(page.getByText('Zuletzt gestillt vor', { exact: true })).toBeVisible();
   await expect(page.getByText('1 Std 40 Min', { exact: true })).toBeVisible();
-  await expect(page.getByText('rechts · 18 Minuten · um 12:40')).toBeVisible();
+  await expect(page.getByText('rechts · 18 Minuten lang · bis 12:40')).toBeVisible();
   await expect(page.getByText('Nächste Seite: links')).toBeAttached();
   await expect(page.getByText('vor 35 Min')).toBeVisible();
   await expect(page.getByText('nass', { exact: true })).toBeVisible();

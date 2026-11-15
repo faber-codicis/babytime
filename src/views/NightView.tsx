@@ -37,7 +37,7 @@ export function NightView({ data, now, show, onFeed, onDiaper, onBottle, onSleep
   const session = data?.lastFeedSession;
   const next = nextSide(data?.lastFinishedFeed);
 
-  let label: string = t.night.lastFed;
+  let label: string = t.today.lastFed;
   let big = '–';
   let sub = '';
   let progress = 0;
@@ -47,6 +47,7 @@ export function NightView({ data, now, show, onFeed, onDiaper, onBottle, onSleep
     sub = sideName(running.side);
     progress = 1;
   } else if (session?.end !== undefined) {
+    label = t.night.lastFed;
     big = formatHoursMinutes(now - session.end);
     sub = t.night.hoursSide(sideName(session.lastSide));
     progress = Math.min(1, (now - session.end) / RING_MS);
@@ -104,7 +105,7 @@ export function NightView({ data, now, show, onFeed, onDiaper, onBottle, onSleep
       <div class="night-cards">
         {show.diaper && (
           <section class="night-card" aria-label={t.today.diaper}>
-            <p class="night-card-label">{t.today.diaper}</p>
+            <p class="night-card-label">{t.night.diaperAgo}</p>
             <p class="night-card-big">{diaper ? t.night.hours(formatHoursMinutes(now - diaper.start)) : '–'}</p>
           </section>
         )}

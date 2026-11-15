@@ -12,30 +12,30 @@ export const de = {
 
   time: {
     justNow: 'gerade eben',
-    minutesShort: (m: number) => `${m} Min`,
-    minutesLong: (m: number) => `${m} ${plural(m, 'Minute', 'Minuten')}`,
-    hours: (h: number) => `${h} Std`,
-    hoursMinutes: (h: number, m: number) => `${h} Std ${m} Min`,
+    minutesShort: (m: number) => `${m}\u00A0Min`,
+    minutesLong: (m: number) => `${m}\u00A0${plural(m, 'Minute', 'Minuten')}`,
+    hours: (h: number) => `${h}\u00A0Std`,
+    hoursMinutes: (h: number, m: number) => `${h}\u00A0Std ${m}\u00A0Min`,
     ago: (duration: string) => `vor ${duration}`,
-    daysAgo: (d: number) => `vor ${d} ${plural(d, 'Tag', 'Tagen')}`,
+    daysAgo: (d: number) => `vor ${d}\u00A0${plural(d, 'Tag', 'Tagen')}`,
     today: 'heute',
     yesterday: 'gestern',
     since: (duration: string) => `seit ${duration}`,
     at: (clock: string) => `um ${clock}`,
-    ageDays: (d: number) => (d === 0 ? 'heute geboren' : `${d} ${plural(d, 'Tag', 'Tage')} alt`),
-    ageWeeks: (w: number) => `${w} ${plural(w, 'Woche', 'Wochen')} alt`,
-    ageMonths: (m: number) => `${m} ${plural(m, 'Monat', 'Monate')} alt`,
-    ageYears: (y: number) => `${y} ${plural(y, 'Jahr', 'Jahre')} alt`,
+    ageDays: (d: number) => (d === 0 ? 'heute geboren' : `${d}\u00A0${plural(d, 'Tag', 'Tage')} alt`),
+    ageWeeks: (w: number) => `${w}\u00A0${plural(w, 'Woche', 'Wochen')} alt`,
+    ageMonths: (m: number) => `${m}\u00A0${plural(m, 'Monat', 'Monate')} alt`,
+    ageYears: (y: number) => `${y}\u00A0${plural(y, 'Jahr', 'Jahre')} alt`,
     ageOn: (unit: 'days' | 'weeks' | 'months' | 'years', n: number) =>
       unit === 'days'
         ? n === 0
           ? 'am Tag der Geburt'
-          : `mit ${n} ${plural(n, 'Tag', 'Tagen')}`
+          : `mit ${n}\u00A0${plural(n, 'Tag', 'Tagen')}`
         : unit === 'weeks'
-          ? `mit ${n} ${plural(n, 'Woche', 'Wochen')}`
+          ? `mit ${n}\u00A0${plural(n, 'Woche', 'Wochen')}`
           : unit === 'months'
-            ? `mit ${n} ${plural(n, 'Monat', 'Monaten')}`
-            : `mit ${n} ${plural(n, 'Jahr', 'Jahren')}`,
+            ? `mit ${n}\u00A0${plural(n, 'Monat', 'Monaten')}`
+            : `mit ${n}\u00A0${plural(n, 'Jahr', 'Jahren')}`,
   },
 
   side: {
@@ -56,7 +56,7 @@ export const de = {
     both: 'beide',
   },
 
-  ml: (n: number) => `${n} ml`,
+  ml: (n: number) => `${n}\u00A0ml`,
 
   diaper: {
     wet: 'nass',
@@ -67,6 +67,10 @@ export const de = {
   today: {
     title: 'Heute',
     lastFed: 'Zuletzt gestillt',
+    /** Above the time since the last feed, so "42 Min" cannot be read as the feed's length (0.14.1). */
+    lastFedAgo: 'Zuletzt gestillt vor',
+    feedLasted: (duration: string) => `${duration} lang`,
+    feedEnded: (clock: string) => `bis ${clock}`,
     feedingNow: 'Stillt gerade',
     nothingYet: 'Noch nichts eingetragen',
     nextSide: 'Nächste Seite',
@@ -91,7 +95,7 @@ export const de = {
     countersA11y: 'Heute seit Mitternacht',
     actionsA11y: 'Eintragen',
     actionFeed: 'Stillen',
-    actionFeedRunning: 'Stillen läuft',
+    actionFeedRunning: 'Läuft',
     actionFeedRunningA11y: (timer: string) => `Stillen läuft, ${timer}, zum Timer`,
     actionDiaper: 'Windel',
     timelineA11y: 'Der heutige Tag von 0 bis 24 Uhr',
@@ -109,9 +113,11 @@ export const de = {
 
   night: {
     title: 'Nachtansicht',
-    lastFed: 'Zuletzt gestillt',
+    /** "Zuletzt gestillt vor 2:05 Std": without "vor" the 2:05 looks like a clock time (0.14.1). */
+    lastFed: 'Zuletzt gestillt vor',
+    diaperAgo: 'Letzte Windel vor',
     hoursSide: (side: string) => `Std · ${side}`,
-    hours: (hm: string) => `${hm} h`,
+    hours: (hm: string) => `${hm}\u00A0Std`,
     asleepSince: 'Schläft seit',
     awakeSince: 'Wach seit',
     feedStart: (side: string) => `Stillen ${side} starten`,
@@ -206,7 +212,7 @@ export const de = {
     unlock: 'Entschlüsseln',
     unlocking: 'Wird entschlüsselt …',
     wrongPassword: 'Das Passwort stimmt nicht, oder die Datei ist beschädigt.',
-    count: (n: number) => `${n} ${plural(n, 'Eintrag', 'Einträge')}`,
+    count: (n: number) => `${n}\u00A0${plural(n, 'Eintrag', 'Einträge')}`,
     found: (count: string) => `In der Datei: ${count}.`,
     exportedAt: (date: string) => `Gesichert am ${date}.`,
     replace: 'Ersetzen',
@@ -287,7 +293,7 @@ export const de = {
     pump: 'Abpumpen',
     count: (n: number) => n.toLocaleString('de-AT', { maximumFractionDigits: 1 }),
     feedsBar: (day: string, n: number) => `${day}: ${n}× gestillt`,
-    diapersBar: (day: string, n: number) => `${day}: ${n} ${plural(n, 'Windel', 'Windeln')}`,
+    diapersBar: (day: string, n: number) => `${day}: ${n}\u00A0${plural(n, 'Windel', 'Windeln')}`,
     sleepBar: (day: string, duration: string) => `${day}: ${duration} Schlaf`,
     bottleBar: (day: string, ml: number) => `${day}: ${ml} ml Flasche`,
     pumpBar: (day: string, ml: number) => `${day}: ${ml} ml abgepumpt`,
@@ -431,9 +437,9 @@ export const de = {
     add: 'Eintrag nachtragen',
     running: 'läuft',
     daySummary: (feeds: number, diapers: number, sleep: string) =>
-      `${feeds}× gestillt · ${diapers} ${plural(diapers, 'Windel', 'Windeln')} · ${sleep} Schlaf`,
-    daySummaryBottle: (ml: number) => ` · ${ml} ml Flasche`,
-    daySummaryPump: (ml: number) => ` · ${ml} ml abgepumpt`,
+      `${feeds}× gestillt · ${diapers}\u00A0${plural(diapers, 'Windel', 'Windeln')} · ${sleep} Schlaf`,
+    daySummaryBottle: (ml: number) => ` · ${ml}\u00A0ml Flasche`,
+    daySummaryPump: (ml: number) => ` · ${ml}\u00A0ml abgepumpt`,
     gap: (duration: string) => `Abstand ${duration}`,
     showOlder: 'Ältere Einträge anzeigen',
     rowFeed: (side: string, duration?: string) => (duration ? `Stillen ${side} · ${duration}` : `Stillen ${side}`),
@@ -531,10 +537,10 @@ export const de = {
   },
 
   snackbar: {
-    bottleSaved: (ml: number) => `Flasche gespeichert · ${ml} ml`,
-    pumpSaved: (ml: number) => `Abpumpen gespeichert · ${ml} ml`,
+    bottleSaved: (ml: number) => `Flasche gespeichert · ${ml}\u00A0ml`,
+    pumpSaved: (ml: number) => `Abpumpen gespeichert · ${ml}\u00A0ml`,
     diaperSaved: 'Windel gespeichert',
-    diaperSavedAgo: (m: number) => `Windel gespeichert · vor ${m} Min`,
+    diaperSavedAgo: (m: number) => `Windel gespeichert · vor ${m}\u00A0Min`,
     sleepStarted: 'Schlaf gestartet',
     sleepEnded: 'Schlaf beendet',
     undo: 'Rückgängig',

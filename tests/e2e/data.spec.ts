@@ -60,7 +60,7 @@ test('export, delete everything, restore in the fresh app: all entries are back'
   await expect(page.getByText('Noch nichts eingetragen')).toBeVisible();
 
   const restore = await chooseRestoreFile(page, { name: backup.name, mimeType: 'application/json', buffer: Buffer.from(backup.text) });
-  await expect(restore.getByText(/In der Datei: 2 Einträge\./)).toBeVisible();
+  await expect(restore.getByText(/In der Datei: 2\sEinträge\./)).toBeVisible();
   await expect(restore.getByRole('button', { name: 'Ja, ersetzen' })).toBeDisabled();
   await restore.getByRole('button', { name: /Ersetzen/ }).click();
   await restore.getByRole('button', { name: 'Ja, ersetzen' }).click();
@@ -143,7 +143,7 @@ test('export with password: file is encrypted, restore needs the right password'
   await expect(restore.getByText('Das Passwort stimmt nicht, oder die Datei ist beschädigt.')).toBeVisible();
   await restore.getByLabel('Passwort').fill('geheim123');
   await restore.getByRole('button', { name: 'Entschlüsseln' }).click();
-  await expect(restore.getByText(/In der Datei: 1 Eintrag\./)).toBeVisible();
+  await expect(restore.getByText(/In der Datei: 1\sEintrag\./)).toBeVisible();
   await restore.getByRole('button', { name: /Ersetzen/ }).click();
   await restore.getByRole('button', { name: 'Ja, ersetzen' }).click();
   await expect(page.getByText('Wiederhergestellt: 1 Eintrag')).toBeVisible();

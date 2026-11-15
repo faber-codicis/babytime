@@ -444,3 +444,9 @@
 .choice-row .segment {
   transition: none;
 }
+
+/* "Automatisch" must fit its third of the row on a 360 px phone (0.14.1). */
+.choice-row .segmented--small .segment {
+  font-size: 15px;
+  padding-inline: 4px;
+}

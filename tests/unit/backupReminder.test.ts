@@ -42,9 +42,9 @@ describe('formatDaysAgo', () => {
   it('uses calendar days', () => {
     expect(formatDaysAgo(at(30, 8), NOW)).toBe('heute');
     expect(formatDaysAgo(at(29, 23), at(30, 1))).toBe('gestern');
-    expect(formatDaysAgo(at(18), NOW)).toBe('vor 12 Tagen');
+    expect(formatDaysAgo(at(18), NOW)).toBe('vor 12\u00A0Tagen');
     // Across the DST switch on 25 October.
-    expect(formatDaysAgo(at(24), at(26))).toBe('vor 2 Tagen');
+    expect(formatDaysAgo(at(24), at(26))).toBe('vor 2\u00A0Tagen');
   });
 });
 

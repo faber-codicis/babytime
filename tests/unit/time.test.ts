@@ -26,12 +26,12 @@ const NOW = at(2026, 10, 21, 14, 20); // Wednesday
 describe('relative time', () => {
   it('follows the spec wording', () => {
     expect(formatRelative(NOW - 20_000, NOW)).toBe('gerade eben');
-    expect(formatRelative(NOW - 35 * MINUTE, NOW)).toBe('vor 35 Min');
-    expect(formatRelative(NOW - 59 * MINUTE - 59_000, NOW)).toBe('vor 59 Min');
-    expect(formatRelative(NOW - 60 * MINUTE, NOW)).toBe('vor 1 Std');
-    expect(formatRelative(NOW - 100 * MINUTE, NOW)).toBe('vor 1 Std 40 Min');
-    expect(formatRelative(NOW - DAY, NOW)).toBe('vor 1 Tag');
-    expect(formatRelative(NOW - 2 * DAY - HOUR, NOW)).toBe('vor 2 Tagen');
+    expect(formatRelative(NOW - 35 * MINUTE, NOW)).toBe('vor 35\u00A0Min');
+    expect(formatRelative(NOW - 59 * MINUTE - 59_000, NOW)).toBe('vor 59\u00A0Min');
+    expect(formatRelative(NOW - 60 * MINUTE, NOW)).toBe('vor 1\u00A0Std');
+    expect(formatRelative(NOW - 100 * MINUTE, NOW)).toBe('vor 1\u00A0Std 40\u00A0Min');
+    expect(formatRelative(NOW - DAY, NOW)).toBe('vor 1\u00A0Tag');
+    expect(formatRelative(NOW - 2 * DAY - HOUR, NOW)).toBe('vor 2\u00A0Tagen');
   });
 
   it('treats future timestamps (clock skew) as just now', () => {
@@ -41,20 +41,20 @@ describe('relative time', () => {
 
 describe('durations', () => {
   it('formats short and long variants', () => {
-    expect(formatDuration(0)).toBe('0 Min');
-    expect(formatDuration(18 * MINUTE + 59_000)).toBe('18 Min');
-    expect(formatDuration(2 * HOUR)).toBe('2 Std');
-    expect(formatDuration(HOUR + 40 * MINUTE)).toBe('1 Std 40 Min');
-    expect(formatDurationLong(MINUTE)).toBe('1 Minute');
-    expect(formatDurationLong(18 * MINUTE)).toBe('18 Minuten');
-    expect(formatDurationLong(2 * HOUR + 10 * MINUTE)).toBe('2 Std 10 Min');
+    expect(formatDuration(0)).toBe('0\u00A0Min');
+    expect(formatDuration(18 * MINUTE + 59_000)).toBe('18\u00A0Min');
+    expect(formatDuration(2 * HOUR)).toBe('2\u00A0Std');
+    expect(formatDuration(HOUR + 40 * MINUTE)).toBe('1\u00A0Std 40\u00A0Min');
+    expect(formatDurationLong(MINUTE)).toBe('1\u00A0Minute');
+    expect(formatDurationLong(18 * MINUTE)).toBe('18\u00A0Minuten');
+    expect(formatDurationLong(2 * HOUR + 10 * MINUTE)).toBe('2\u00A0Std 10\u00A0Min');
   });
 
   it('says "gerade eben" instead of 0 minutes', () => {
     expect(formatElapsed(30_000)).toBe('gerade eben');
-    expect(formatElapsed(HOUR + 40 * MINUTE)).toBe('1 Std 40 Min');
+    expect(formatElapsed(HOUR + 40 * MINUTE)).toBe('1\u00A0Std 40\u00A0Min');
     expect(formatSince(59_000)).toBe('gerade eben');
-    expect(formatSince(25 * MINUTE)).toBe('seit 25 Min');
+    expect(formatSince(25 * MINUTE)).toBe('seit 25\u00A0Min');
   });
 
   it('formats the timer as mm:ss', () => {
@@ -90,17 +90,17 @@ describe('birth date range and age display', () => {
 
   it('shows days, then weeks, then months, then years', () => {
     expect(formatAge('2026-10-21', NOW)).toBe('heute geboren');
-    expect(formatAge('2026-10-20', NOW)).toBe('1 Tag alt');
-    expect(formatAge('2026-10-09', NOW)).toBe('12 Tage alt');
-    expect(formatAge('2026-10-07', NOW)).toBe('2 Wochen alt'); // 14 days
-    expect(formatAge('2026-09-02', NOW)).toBe('7 Wochen alt'); // 49 days
-    expect(formatAge('2026-08-21', NOW)).toBe('8 Wochen alt'); // exactly 2 months = 61 days
-    expect(formatAge('2026-07-22', NOW)).toBe('13 Wochen alt'); // 91 days, 2 completed months
-    expect(formatAge('2026-07-21', NOW)).toBe('3 Monate alt'); // from 3 completed months on: months
-    expect(formatAge('2025-10-22', NOW)).toBe('11 Monate alt');
-    expect(formatAge('2025-10-21', NOW)).toBe('12 Monate alt');
-    expect(formatAge('2025-01-15', NOW)).toBe('21 Monate alt');
-    expect(formatAge('2024-10-21', NOW)).toBe('2 Jahre alt');
+    expect(formatAge('2026-10-20', NOW)).toBe('1\u00A0Tag alt');
+    expect(formatAge('2026-10-09', NOW)).toBe('12\u00A0Tage alt');
+    expect(formatAge('2026-10-07', NOW)).toBe('2\u00A0Wochen alt'); // 14 days
+    expect(formatAge('2026-09-02', NOW)).toBe('7\u00A0Wochen alt'); // 49 days
+    expect(formatAge('2026-08-21', NOW)).toBe('8\u00A0Wochen alt'); // exactly 2 months = 61 days
+    expect(formatAge('2026-07-22', NOW)).toBe('13\u00A0Wochen alt'); // 91 days, 2 completed months
+    expect(formatAge('2026-07-21', NOW)).toBe('3\u00A0Monate alt'); // from 3 completed months on: months
+    expect(formatAge('2025-10-22', NOW)).toBe('11\u00A0Monate alt');
+    expect(formatAge('2025-10-21', NOW)).toBe('12\u00A0Monate alt');
+    expect(formatAge('2025-01-15', NOW)).toBe('21\u00A0Monate alt');
+    expect(formatAge('2024-10-21', NOW)).toBe('2\u00A0Jahre alt');
     expect(formatAge('2026-11-01', NOW)).toBeUndefined();
     expect(formatAge('kaputt', NOW)).toBeUndefined();
   });

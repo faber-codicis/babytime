@@ -32,11 +32,11 @@ describe('languages (0.14.0)', () => {
   });
 
   it('functions give English with plurals', () => {
-    expect(en.time.daysAgo(1)).toBe('1 day ago');
-    expect(en.time.daysAgo(3)).toBe('3 days ago');
+    expect(en.time.daysAgo(1)).toBe('1\u00A0day ago');
+    expect(en.time.daysAgo(3)).toBe('3\u00A0days ago');
     expect(en.today.statDiapers(1)).toEqual(['1', 'diaper']);
     expect(en.time.since('14:12')).toBe('since 14:12');
-    expect(en.time.since('25 min')).toBe('for 25 min');
+    expect(en.time.since('25\u00A0min')).toBe('for 25\u00A0min');
     expect(en.editor.errors.alreadyRunning(en.editor.errors.runningFeed)).toBe('A feed is already running. Please enter an end.');
   });
 

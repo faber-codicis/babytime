@@ -81,7 +81,7 @@ test('diaper a little earlier: "vor 15" saves 15 minutes back, the next opening 
   await sheet.getByRole('button', { name: 'vor 15 Minuten' }).click();
   await sheet.getByRole('button', { name: 'Voll' }).click();
   await expect(page.getByText('Windel gespeichert · vor 15 Min')).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Windel' })).toContainText(/vor 1[45] Min/); // the card refreshes every 30 s
+  await expect(page.getByRole('region', { name: 'Windel' })).toContainText(/vor 1[45]\sMin/); // the card refreshes every 30 s
 
   await page.getByRole('button', { name: 'Windel', exact: true }).click();
   await expect(sheet.getByRole('button', { name: 'jetzt' })).toHaveAttribute('aria-pressed', 'true');

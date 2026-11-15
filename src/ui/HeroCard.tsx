@@ -2,7 +2,7 @@ import type { TodayData } from '../data/overview';
 import type { BabyEvent, Side } from '../data/events';
 import { nextSide } from '../logic/nextSide';
 import { sessionDuration } from '../logic/stats';
-import { formatClock, formatDurationLong, formatElapsed, formatTimer } from '../logic/time';
+import { formatClock, formatDurationLong, formatElapsed, formatTimer, MINUTE } from '../logic/time';
 import { t } from '../strings';
 import { EditButton } from './EditButton';
 import { Icon } from './icons';
@@ -38,7 +38,11 @@ export function HeroCard({ data, now, onEdit }: { data: TodayData | undefined; n
     line = [sideName(running.side), t.time.since(formatClock(running.start))].join(' · ');
   } else if (session && session.end !== undefined) {
     big = formatElapsed(now - session.end);
-    line = [sideName(session.lastSide), formatDurationLong(sessionDuration(session, now)), t.time.at(formatClock(session.end))].join(' · ');
+    line = [
+      sideName(session.lastSide),
+      t.today.feedLasted(formatDurationLong(sessionDuration(session, now))),
+      t.today.feedEnded(formatClock(session.end)),
+    ].join(' · ');
   } else {
     big = t.today.nothingYet;
   }
@@ -49,7 +53,8 @@ export function HeroCard({ data, now, onEdit }: { data: TodayData | undefined; n
         <span class="icon-bubble">
           <Icon name="drop" size={18} />
         </span>
-        <span>{running ? t.today.feedingNow : t.today.lastFed}</span>
+        {/* "Zuletzt gestillt vor" over a time, plain "Zuletzt gestillt" over "gerade eben" or nothing (0.14.1). */}
+        <span>{running ? t.today.feedingNow : session?.end !== undefined && now - session.end >= MINUTE ? t.today.lastFedAgo : t.today.lastFed}</span>
         {running && <span class="live-dot" aria-hidden="true" />}
         {!running && data?.lastFinishedFeed && onEdit && (
           <EditButton label={t.today.editFeed} event={data.lastFinishedFeed} onEdit={onEdit} />

@@ -198,6 +198,18 @@ Auftrag des Besitzers über die Portfolio-Sitzung („Cant we implement an engli
 - **Anleitung für neue Funktionen** (feste Regel des Besitzers): `ChangelogEntry.guide` mit Schritten und Knopf zum Ziel (Zeile in den Einstellungen wird angesprungen, fokussiert und kurz markiert). Im Popup nur die neueste Anleitung, damit es kurz bleibt; alle stehen dauerhaft unter „Was ist neu“. Rückwirkend auch für „Feedback senden“ (0.13.0).
 - **Nicht übersetzt:** Manifest (`lang: de`, Name ist sprachneutral), `<meta name="description">`, Hash-Routen (`#/einstellungen`) und Dateinamen der Sicherung – nicht sichtbar oder sprachneutral.
 
+## 0.14.1 (Audit: Lesbarkeit und Layout)
+
+Grundlage: Audit vom 2026-11-15 (17 Screens × DE/EN × hell/dunkel × 360/375/412 px, automatische Prüfung auf Kontrast, Überlauf und Überlappung plus Textprüfung). Behoben wurden die Punkte, an denen etwas sichtbar bricht oder falsch gelesen werden kann.
+
+- **Tageszähler in Dreierreihen:** Mit Flasche und Abpumpen standen fünf Felder in einer Zeile und überlappten sich bei 360 px. Jetzt drei pro Zeile, Flasche und Abpumpen rutschen in eine zweite Zeile (wie der Kommentar in `Chips.tsx` es schon vorsah). An solchen Tagen braucht Heute auf kleinen Handys etwas Scrollen.
+- **Knopf beim laufenden Stillen „Läuft“ statt „Stillen läuft“:** passte bei 360 px nicht. Der rosa Stillen-Knopf und der Timer darunter geben den Zusammenhang; für Screenreader bleibt „Stillen läuft, …, zum Timer“.
+- **„Zuletzt gestillt vor“ / „Since last feed“** über der großen Zahl, damit „42 Min“ nicht als Stilldauer gelesen wird; in der ersten Minute weiter „Zuletzt gestillt / gerade eben“. Die Zeile darunter nennt Dauer und Ende ausdrücklich („18 Minuten lang · bis 12:38“).
+- **Nachtansicht mit „vor“:** „Zuletzt gestillt vor 2:05 Std“, „Letzte Windel vor 1:35 Std“. Ohne „vor“ sah 2:05 neben der Uhrzeit oben wie eine Uhrzeit aus. Deutsch einheitlich „Std“ statt gemischt „Std“/„h“.
+- **Zahl und Einheit untrennbar:** geschütztes Leerzeichen (` `) in allen Zeit-, Alters- und Mengen-Texten beider Sprachen („vor 55 Min“, „11 Wochen alt“, „120 ml“). Tests suchen deshalb mit `\s` statt Leerzeichen.
+- **„Automatisch“ im Sprachfeld** bei 360 px etwas kleiner, damit es in sein Drittel passt.
+- Offen aus dem Audit (nicht in 0.14.1): englisch „Feed“ vs. „Breastfeed“, Begriffe rund um die Sicherung, alte Wege in „Was ist neu“, neutraler Nachtring, 11 px Tab-Beschriftung.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

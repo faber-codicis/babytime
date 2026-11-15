@@ -16,30 +16,30 @@ export const en: Strings = {
 
   time: {
     justNow: 'just now',
-    minutesShort: (m: number) => `${m} min`,
-    minutesLong: (m: number) => `${m} ${plural(m, 'minute', 'minutes')}`,
-    hours: (h: number) => `${h} h`,
-    hoursMinutes: (h: number, m: number) => `${h} h ${m} min`,
+    minutesShort: (m: number) => `${m}\u00A0min`,
+    minutesLong: (m: number) => `${m}\u00A0${plural(m, 'minute', 'minutes')}`,
+    hours: (h: number) => `${h}\u00A0h`,
+    hoursMinutes: (h: number, m: number) => `${h}\u00A0h ${m}\u00A0min`,
     ago: (duration: string) => `${duration} ago`,
-    daysAgo: (d: number) => `${d} ${plural(d, 'day', 'days')} ago`,
+    daysAgo: (d: number) => `${d}\u00A0${plural(d, 'day', 'days')} ago`,
     today: 'today',
     yesterday: 'yesterday',
     since,
     at: (clock: string) => `at ${clock}`,
-    ageDays: (d: number) => (d === 0 ? 'born today' : `${d} ${plural(d, 'day', 'days')} old`),
-    ageWeeks: (w: number) => `${w} ${plural(w, 'week', 'weeks')} old`,
-    ageMonths: (m: number) => `${m} ${plural(m, 'month', 'months')} old`,
-    ageYears: (y: number) => `${y} ${plural(y, 'year', 'years')} old`,
+    ageDays: (d: number) => (d === 0 ? 'born today' : `${d}\u00A0${plural(d, 'day', 'days')} old`),
+    ageWeeks: (w: number) => `${w}\u00A0${plural(w, 'week', 'weeks')} old`,
+    ageMonths: (m: number) => `${m}\u00A0${plural(m, 'month', 'months')} old`,
+    ageYears: (y: number) => `${y}\u00A0${plural(y, 'year', 'years')} old`,
     ageOn: (unit: 'days' | 'weeks' | 'months' | 'years', n: number) =>
       unit === 'days'
         ? n === 0
           ? 'on the day of birth'
-          : `at ${n} ${plural(n, 'day', 'days')}`
+          : `at ${n}\u00A0${plural(n, 'day', 'days')}`
         : unit === 'weeks'
-          ? `at ${n} ${plural(n, 'week', 'weeks')}`
+          ? `at ${n}\u00A0${plural(n, 'week', 'weeks')}`
           : unit === 'months'
-            ? `at ${n} ${plural(n, 'month', 'months')}`
-            : `at ${n} ${plural(n, 'year', 'years')}`,
+            ? `at ${n}\u00A0${plural(n, 'month', 'months')}`
+            : `at ${n}\u00A0${plural(n, 'year', 'years')}`,
   },
 
   side: {
@@ -60,7 +60,7 @@ export const en: Strings = {
     both: 'both',
   },
 
-  ml: (n: number) => `${n} ml`,
+  ml: (n: number) => `${n}\u00A0ml`,
 
   diaper: {
     wet: 'wet',
@@ -71,6 +71,9 @@ export const en: Strings = {
   today: {
     title: 'Today',
     lastFed: 'Last feed',
+    lastFedAgo: 'Since last feed',
+    feedLasted: (duration: string) => `for ${duration}`,
+    feedEnded: (clock: string) => `until ${clock}`,
     feedingNow: 'Feeding now',
     nothingYet: 'Nothing logged yet',
     nextSide: 'Next side',
@@ -112,9 +115,10 @@ export const en: Strings = {
 
   night: {
     title: 'Night view',
-    lastFed: 'Last feed',
+    lastFed: 'Since last feed',
+    diaperAgo: 'Since last diaper',
     hoursSide: (side: string) => `h · ${side}`,
-    hours: (hm: string) => `${hm} h`,
+    hours: (hm: string) => `${hm}\u00A0h`,
     asleepSince: 'Asleep for',
     awakeSince: 'Awake for',
     feedStart: (side: string) => `Start feed on the ${side}`,
@@ -209,7 +213,7 @@ export const en: Strings = {
     unlock: 'Decrypt',
     unlocking: 'Decrypting …',
     wrongPassword: 'The password is wrong, or the file is damaged.',
-    count: (n: number) => `${n} ${plural(n, 'entry', 'entries')}`,
+    count: (n: number) => `${n}\u00A0${plural(n, 'entry', 'entries')}`,
     found: (count: string) => `In the file: ${count}.`,
     exportedAt: (date: string) => `Backed up on ${date}.`,
     replace: 'Replace',
@@ -289,8 +293,8 @@ export const en: Strings = {
     bottle: 'Bottle',
     pump: 'Pumping',
     count: (n: number) => n.toLocaleString('en-GB', { maximumFractionDigits: 1 }),
-    feedsBar: (day: string, n: number) => `${day}: ${n} ${plural(n, 'feed', 'feeds')}`,
-    diapersBar: (day: string, n: number) => `${day}: ${n} ${plural(n, 'diaper', 'diapers')}`,
+    feedsBar: (day: string, n: number) => `${day}: ${n}\u00A0${plural(n, 'feed', 'feeds')}`,
+    diapersBar: (day: string, n: number) => `${day}: ${n}\u00A0${plural(n, 'diaper', 'diapers')}`,
     sleepBar: (day: string, duration: string) => `${day}: ${duration} sleep`,
     bottleBar: (day: string, ml: number) => `${day}: ${ml} ml bottle`,
     pumpBar: (day: string, ml: number) => `${day}: ${ml} ml pumped`,
@@ -433,9 +437,9 @@ export const en: Strings = {
     add: 'Add an entry',
     running: 'running',
     daySummary: (feeds: number, diapers: number, sleep: string) =>
-      `${feeds} ${plural(feeds, 'feed', 'feeds')} · ${diapers} ${plural(diapers, 'diaper', 'diapers')} · ${sleep} sleep`,
-    daySummaryBottle: (ml: number) => ` · ${ml} ml bottle`,
-    daySummaryPump: (ml: number) => ` · ${ml} ml pumped`,
+      `${feeds}\u00A0${plural(feeds, 'feed', 'feeds')} · ${diapers}\u00A0${plural(diapers, 'diaper', 'diapers')} · ${sleep} sleep`,
+    daySummaryBottle: (ml: number) => ` · ${ml}\u00A0ml bottle`,
+    daySummaryPump: (ml: number) => ` · ${ml}\u00A0ml pumped`,
     gap: (duration: string) => `${duration} apart`,
     showOlder: 'Show older entries',
     rowFeed: (side: string, duration?: string) => (duration ? `Feed ${side} · ${duration}` : `Feed ${side}`),
@@ -533,10 +537,10 @@ export const en: Strings = {
   },
 
   snackbar: {
-    bottleSaved: (ml: number) => `Bottle saved · ${ml} ml`,
-    pumpSaved: (ml: number) => `Pumping saved · ${ml} ml`,
+    bottleSaved: (ml: number) => `Bottle saved · ${ml}\u00A0ml`,
+    pumpSaved: (ml: number) => `Pumping saved · ${ml}\u00A0ml`,
     diaperSaved: 'Diaper saved',
-    diaperSavedAgo: (m: number) => `Diaper saved · ${m} min ago`,
+    diaperSavedAgo: (m: number) => `Diaper saved · ${m}\u00A0min ago`,
     sleepStarted: 'Sleep started',
     sleepEnded: 'Sleep ended',
     undo: 'Undo',

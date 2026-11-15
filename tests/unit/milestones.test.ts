@@ -56,9 +56,9 @@ describe('saveMilestone', () => {
 describe('age on a date', () => {
   it('says "mit …" in the same steps as the header', () => {
     expect(formatAgeOn('2026-10-09', '2026-10-09')).toBe('am Tag der Geburt');
-    expect(formatAgeOn('2026-10-09', '2026-10-14')).toBe('mit 5 Tagen');
-    expect(formatAgeOn('2026-09-01', '2026-10-20')).toBe('mit 7 Wochen');
-    expect(formatAgeOn('2026-01-15', '2026-10-20')).toBe('mit 9 Monaten');
+    expect(formatAgeOn('2026-10-09', '2026-10-14')).toBe('mit 5\u00A0Tagen');
+    expect(formatAgeOn('2026-09-01', '2026-10-20')).toBe('mit 7\u00A0Wochen');
+    expect(formatAgeOn('2026-01-15', '2026-10-20')).toBe('mit 9\u00A0Monaten');
     expect(formatAgeOn('2026-10-09', '2026-10-01')).toBeUndefined();
     expect(formatIsoDate('2026-11-05')).toBe('5. November 2026');
   });

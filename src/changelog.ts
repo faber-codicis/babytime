@@ -29,6 +29,24 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.14.1',
+    date: '2026-11-15',
+    items: {
+      de: [
+        'Die Tageszähler auf Heute stehen in Dreierreihen, auch mit Flasche und Abpumpen bleibt alles lesbar',
+        '„Zuletzt gestillt vor“ macht klar, dass die große Zahl die Zeit seit dem Stillen ist',
+        'In der Nachtansicht steht „vor“ bei den Zeiten, damit 2:05 nicht wie eine Uhrzeit aussieht',
+        'Zahl und Einheit bleiben in einer Zeile zusammen',
+      ],
+      en: [
+        'The daily counters on Today sit in rows of three, so they stay readable with bottle and pumping',
+        '“Since last feed” makes clear that the big number is the time since feeding',
+        'The night view says “since” with its times, so 2:05 no longer looks like a clock time',
+        'Numbers and their units stay on one line',
+      ],
+    },
+  },
+  {
     version: '0.14.0',
     date: '2026-11-15',
     items: {

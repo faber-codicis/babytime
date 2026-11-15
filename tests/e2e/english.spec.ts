@@ -80,10 +80,10 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
   await main.getByRole('button', { name: 'Restore data' }).click();
   await (await chooser).setFiles({ name: file.suggestedFilename(), mimeType: 'application/json', buffer: Buffer.from(text) });
   const restore = page.getByRole('dialog', { name: 'Restore data' });
-  await expect(restore.getByText(/^In the file: \d+ entries\./)).toBeVisible();
+  await expect(restore.getByText(/^In the file: \d+\sentries\./)).toBeVisible();
   await restore.getByRole('button', { name: /Replace/ }).click();
   await restore.getByRole('button', { name: 'Yes, replace' }).click();
-  await expect(page.getByText(/^Restored: \d+ entries$/)).toBeVisible();
+  await expect(page.getByText(/^Restored: \d+\sentries$/)).toBeVisible();
 });
 
 test('the language switch: German sticks after a restart, Automatic follows the phone again', async ({ page }) => {

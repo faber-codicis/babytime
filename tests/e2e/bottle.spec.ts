@@ -116,3 +116,34 @@ test('touch targets ≥ 44 px and nothing overflows the dock on a 360 px phone',
     expect(box!.height).toBeGreaterThanOrEqual(44);
   }
 });
+
+test('360 px phone: five counters in two rows without overlap, the running-feed button fits (0.14.1)', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 });
+  await bottleButton(page).click();
+  await page.getByRole('dialog', { name: 'Flasche' }).getByRole('button', { name: 'Speichern' }).click();
+  await bottleButton(page).click();
+  await page.getByRole('dialog', { name: 'Flasche' }).getByRole('button', { name: 'Abpumpen' }).click();
+  await page.getByRole('dialog', { name: 'Abpumpen' }).getByRole('button', { name: 'Speichern' }).click();
+  await expect(page.locator('.stat')).toHaveCount(5);
+
+  const boxes = await page.locator('.stat-label').evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { text: el.textContent, left: r.left, right: r.right, top: r.top, bottom: r.bottom, fits: el.scrollWidth <= el.clientWidth };
+    }),
+  );
+  for (const box of boxes) expect(box.fits, box.text ?? '').toBe(true);
+  for (let i = 0; i < boxes.length; i++)
+    for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i]!;
+      const b = boxes[j]!;
+      const overlap = Math.min(a.right, b.right) > Math.max(a.left, b.left) && Math.min(a.bottom, b.bottom) > Math.max(a.top, b.top);
+      expect(overlap, `${a.text} / ${b.text}`).toBe(false);
+    }
+
+  await page.getByRole('button', { name: 'Stillen', exact: true }).click();
+  await page.getByRole('button', { name: 'Zurück zu Heute' }).click();
+  const running = page.locator('.dock-run-label');
+  await expect(running).toHaveText('Läuft');
+  expect(await running.evaluate((el) => el.closest('button')!.scrollWidth <= el.closest('button')!.clientWidth)).toBe(true);
+});
