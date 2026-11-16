@@ -37,3 +37,18 @@ export function getBackupReminderDismissedAt(): Promise<number | undefined> {
 export async function dismissBackupReminder(at = Date.now()): Promise<void> {
   await db.kv.put({ key: BACKUP_REMINDER_DISMISSED_AT, value: at });
 }
+
+const TUTORIAL_PENDING = 'tutorialPending';
+
+/**
+ * The short introduction (0.16.0) shows while this is set: after the first start, or when opened again from the
+ * settings. Kept in kv, so it survives a restart until it is closed.
+ */
+export async function isTutorialPending(): Promise<boolean> {
+  return (await db.kv.get(TUTORIAL_PENDING))?.value === true;
+}
+
+export async function setTutorialPending(pending: boolean): Promise<void> {
+  if (pending) await db.kv.put({ key: TUTORIAL_PENDING, value: true });
+  else await db.kv.delete(TUTORIAL_PENDING);
+}

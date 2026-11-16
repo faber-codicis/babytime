@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import pkg from '../../package.json' with { type: 'json' };
-import { setKvAndRestart, waitForApp } from './helpers';
+import { setKvAndRestart, skipTutorial, waitForApp } from './helpers';
 
 // English phone (0.14.0): the app follows the browser language. Only invented data.
 test.use({ timezoneId: 'Europe/Vienna', locale: 'en-US' });
@@ -10,6 +10,7 @@ async function openAppEnglish(page: Page): Promise<void> {
   await page.goto('/');
   await waitForApp(page);
   await page.getByRole('button', { name: 'Continue without a name' }).click();
+  await skipTutorial(page, 'Skip');
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
 }
 
@@ -29,6 +30,7 @@ test('splash and first start are English, <html lang> is en', async ({ page }) =
   await expect(page.getByText('Your entries stay on this phone.')).toBeVisible();
   await page.screenshot({ path: 'test-results/en-onboarding.png', animations: 'disabled' });
   await page.getByRole('button', { name: 'Continue without a name' }).click();
+  await skipTutorial(page, 'Skip');
   await expect(page.getByRole('heading', { name: 'Your baby' })).toBeVisible();
   await expect(page.getByText('Nothing logged yet')).toBeVisible();
 });
@@ -74,6 +76,7 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
   await page.getByRole('dialog', { name: 'Delete everything?' }).getByRole('button', { name: 'Delete everything' }).click();
   await expect(page.getByRole('heading', { name: 'Congratulations!' })).toBeVisible();
   await page.getByRole('button', { name: 'Continue without a name' }).click();
+  await skipTutorial(page, 'Skip');
 
   main = await settings(page);
   const chooser = page.waitForEvent('filechooser');
@@ -119,7 +122,7 @@ test('System follows the phone even when the browser still lists German first fo
   await expect(main.getByText('System follows your phone’s language, now English')).toBeVisible();
 });
 
-test('after the update: English popup with the guide, its button goes straight to the language row', async ({ page }) => {
+test('after the update: English popup with the newest guide, its button goes straight to the settings row', async ({ page }) => {
   await openAppEnglish(page);
   await setKvAndRestart(page, 'lastSeenVersion', '0.13.0');
   const popup = page.getByRole('dialog', { name: `New in version ${pkg.version}` });
@@ -132,10 +135,11 @@ test('after the update: English popup with the guide, its button goes straight t
   expect(await popup.evaluate((el) => el.scrollTop)).toBe(0);
   await page.screenshot({ path: 'test-results/en-update-popup.png', animations: 'disabled' });
 
-  await popup.getByRole('button', { name: 'Go to language' }).click();
+  // Only the newest guide (0.16.0: the introduction) sits in the popup; older ones stay in "What's new".
+  await popup.getByRole('button', { name: 'Go to introduction' }).click();
   await expect(popup).toBeHidden();
   await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
-  await expect(page.locator('#settings-language')).toBeFocused();
+  await expect(page.locator('#settings-tutorial')).toBeFocused();
 
   // Seen: no popup after a restart; the guides stay in "What's new".
   await page.reload();
@@ -155,6 +159,7 @@ test.describe('German phone', () => {
     await waitForApp(page);
     await expect(page.locator('html')).toHaveAttribute('lang', 'de');
     await page.getByRole('button', { name: 'Ohne Namen fortfahren' }).click();
+    await skipTutorial(page);
     await page.getByRole('link', { name: 'Einstellungen' }).click();
     const group = page.getByRole('main').getByRole('group', { name: 'Sprache' });
     await Promise.all([page.waitForEvent('load'), group.getByRole('button', { name: 'English' }).click()]);

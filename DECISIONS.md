@@ -232,6 +232,14 @@ Meldung des Besitzers, 2026-11-16: „Automatisch“ blieb auf Deutsch, obwohl d
 - Die Anleitung von 0.14.0 in „Was ist neu“ nennt jetzt „System“; der Eintrag 0.15.1 bleibt wörtlich (beschreibt den damaligen Stand).
 - E2E-Test bildet den Fehler nach: Locale Englisch, `navigator.languages` Deutsch → App auf Englisch.
 
+## 0.16.0 (Kurze Einführung und Layout bei großer Schrift)
+
+- **Fünf Karten statt Tour mit Pfeilen.** Je ein Bild, ein Titel, zwei Zeilen: Stillen, Windel/Flasche/Schlaf, Korrigieren mit „Rückgängig“ und Stift, Nachtansicht, Daten bleiben am Handy. Die Bilder sind aus den eigenen Icons und Farben gebaut (folgen Dunkel und Akzentfarbe), keine Grafikdateien.
+- **Nur nach dem ersten Start.** `completeOnboarding` setzt `tutorialPending` im kv; „Überspringen“, „Los geht’s“, Escape oder Tippen daneben löschen es. Bestehende Nutzerinnen sehen sie nicht ungefragt, sondern über „Was ist neu“ (Anleitung „Zur Einführung“) und Einstellungen → Über die App → „So funktioniert Baby Time“.
+- Die Einführung wartet, solange das Update-Popup oder der Stillbildschirm offen ist.
+- **Große Schrift / 150 % Zoom in Chrome (Android):** Der Zoom verkleinert das CSS-Viewport auf etwa 256 px. Die Leiste unten bricht in zwei Reihen um statt Knöpfe zu überlappen; Statuskarten stellen unter 330 px die Beschriftung unter das Icon; in den Einstellungen fallen die kleinen Icons der Datenzeilen weg und die Profilkarte bricht um, damit Text nicht Buchstabe für Buchstabe umbricht. Geprüft per Screenshot bei 256 px Breite.
+- E2E: ein Test für die Einführung (erscheint einmal, Weiter/Zurück, nicht nach Neustart, wieder aus den Einstellungen); Tests, die den ersten Start durchlaufen, überspringen sie mit `skipTutorial`.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

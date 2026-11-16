@@ -456,3 +456,37 @@
   font-size: 15px;
   padding-inline: 12px;
 }
+
+/*
+ * Very narrow screens (0.16.0): Chrome on Android zooms whole pages ("Page zoom"/text scaling 150 % turns a
+ * 384 px phone into 256 px). Rows give their text more room: no decorative icon, tighter padding, and the
+ * profile name moves under the avatar instead of breaking letter by letter.
+ */
+@media (max-width: 330px) {
+  .data-action {
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .data-action > .data-action-icon {
+    display: none;
+  }
+
+  .profile-card {
+    flex-wrap: wrap;
+  }
+
+  .profile-card-text {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .profile-card .round-btn {
+    margin-left: auto;
+  }
+}
+
+.data-action-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}

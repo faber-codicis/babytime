@@ -4,7 +4,7 @@ import type { Lang } from './data/language';
 export type Localized<T> = Record<Lang, T>;
 
 /** Where a guide's button leads: a row in the settings, scrolled into view and focused. */
-export type GuideTarget = 'language' | 'feedback';
+export type GuideTarget = 'language' | 'feedback' | 'tutorial';
 
 /**
  * Short how-to for a new feature (owner's rule since 0.14.0): numbered steps and a button straight to it.
@@ -28,6 +28,35 @@ export interface ChangelogEntry {
 }
 
 export const changelog: ChangelogEntry[] = [
+  {
+    version: '0.16.0',
+    date: '2026-11-16',
+    items: {
+      de: [
+        'Neu: eine kurze Einführung in fünf Bildern – Stillen, Windel und Schlaf, Korrigieren, Nachtansicht und Sicherung',
+        'Sie erscheint nach dem ersten Start und lässt sich überspringen',
+        'Du kannst sie jederzeit unter Einstellungen → „So funktioniert Baby Time“ wieder ansehen',
+      ],
+      en: [
+        'New: a short introduction in five pictures – breastfeeding, diaper and sleep, fixing mistakes, night view and backup',
+        'It appears after the first start and can be skipped',
+        'You can see it again any time under Settings → “How Baby Time works”',
+      ],
+    },
+    guide: {
+      target: 'tutorial',
+      text: {
+        de: {
+          steps: ['Öffne Einstellungen', 'Scrolle zu „Über die App“', 'Tippe auf „So funktioniert Baby Time“'],
+          button: 'Zur Einführung',
+        },
+        en: {
+          steps: ['Open Settings', 'Scroll to “About the app”', 'Tap “How Baby Time works”'],
+          button: 'Go to introduction',
+        },
+      },
+    },
+  },
   {
     version: '0.15.2',
     date: '2026-11-16',

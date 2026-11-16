@@ -154,6 +154,39 @@ export const de = {
     skip: 'Ohne Namen fortfahren',
   },
 
+  tutorial: {
+    title: 'So funktioniert Baby Time',
+    stepOf: (n: number, total: number) => `Schritt ${n} von ${total}`,
+    next: 'Weiter',
+    back: 'Zurück',
+    skip: 'Überspringen',
+    done: 'Los geht’s',
+    open: 'So funktioniert Baby Time',
+    openHint: 'Die kurze Einführung noch einmal ansehen',
+    steps: [
+      {
+        title: 'Stillen mit einem Tipp',
+        text: 'Tippe unten auf „Stillen“. Der Timer läuft, und Baby Time merkt sich, welche Seite als Nächstes dran ist.',
+      },
+      {
+        title: 'Windel, Flasche, Schlaf',
+        text: 'Windel und Flasche sind mit zwei Tipps gespeichert. „Schlaf“ startet den Schlaf, „Wach“ beendet ihn.',
+      },
+      {
+        title: 'Vertippt? Kein Problem',
+        text: 'Gleich danach hilft „Rückgängig“. Später tippst du auf den Stift auf der Karte. Im Verlauf kannst du alles bearbeiten und nachtragen.',
+      },
+      {
+        title: 'Ruhig durch die Nacht',
+        text: 'Unter Einstellungen → Darstellung kannst du „Nachts automatisch“ einschalten: von 20 bis 7 Uhr gedämpfte Farben und große Knöpfe.',
+      },
+      {
+        title: 'Deine Daten bleiben bei dir',
+        text: 'Alles bleibt nur auf diesem Handy. Speichere ab und zu eine Sicherung: Einstellungen → Daten → Sicherung speichern.',
+      },
+    ],
+  },
+
   profile: {
     name: 'Wie heißt dein Baby?',
     optional: '(freiwillig)',

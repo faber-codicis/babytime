@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { openApp, waitForApp } from './helpers';
+import { openApp, skipTutorial, waitForApp } from './helpers';
 
 /** Simulates iOS: `navigator.standalone` exists only there (false in a Safari tab, true from the home screen). */
 const simulateIos = (standalone: boolean) => `Object.defineProperty(Navigator.prototype, 'standalone', { get: () => ${standalone} });`;
@@ -22,6 +22,7 @@ test('iOS Safari tab: steps show on the first start, stay closed once closed', a
   await hint.getByRole('button', { name: 'Hinweis schließen' }).click();
   await expect(hint).toBeHidden();
   await page.getByRole('button', { name: 'Ohne Namen fortfahren' }).click();
+  await skipTutorial(page);
   await expect(page.getByRole('heading', { name: 'Dein Baby' })).toBeVisible();
   await expect(hint).toBeHidden();
 

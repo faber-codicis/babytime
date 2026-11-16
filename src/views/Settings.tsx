@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
-import { getLastExportAt } from '../data/appState';
+import { getLastExportAt, setTutorialPending } from '../data/appState';
 import { getLanguageChoice, phoneLanguages, pickLang, saveLanguageChoice, type LanguageChoice } from '../data/language';
 import type { Profile } from '../data/profile';
 import { formatAge, formatDaysAgo, formatStamp } from '../logic/time';
@@ -185,6 +185,13 @@ export function Settings({ profile }: { profile: Profile }) {
           <VersionDetails />
         </div>
         <div class="data-group">
+          <ActionRow
+            id={GUIDE_ANCHOR.tutorial}
+            icon="info"
+            label={t.tutorial.open}
+            hint={t.tutorial.openHint}
+            onClick={() => void setTutorialPending(true)}
+          />
           <LinkRow
             id={GUIDE_ANCHOR.feedback}
             icon="mail"

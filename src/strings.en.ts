@@ -155,6 +155,39 @@ export const en: Strings = {
     skip: 'Continue without a name',
   },
 
+  tutorial: {
+    title: 'How Baby Time works',
+    stepOf: (n: number, total: number) => `Step ${n} of ${total}`,
+    next: 'Next',
+    back: 'Back',
+    skip: 'Skip',
+    done: 'Let’s go',
+    open: 'How Baby Time works',
+    openHint: 'See the short introduction again',
+    steps: [
+      {
+        title: 'Breastfeeding in one tap',
+        text: 'Tap “Breastfeed” at the bottom. The timer runs, and Baby Time remembers which side is next.',
+      },
+      {
+        title: 'Diaper, bottle, sleep',
+        text: 'Diapers and bottles are saved in two taps. “Sleep” starts a nap, “Awake” ends it.',
+      },
+      {
+        title: 'Wrong tap? No problem',
+        text: 'Right after, “Undo” helps. Later, tap the pencil on the card. In History you can edit and add anything.',
+      },
+      {
+        title: 'Calm through the night',
+        text: 'Under Settings → Appearance you can turn on “Dark at night”: muted colours and big buttons from 8 p.m. to 7 a.m.',
+      },
+      {
+        title: 'Your data stays with you',
+        text: 'Everything stays on this phone only. Save a backup now and then: Settings → Data → Save backup.',
+      },
+    ],
+  },
+
   profile: {
     name: 'What’s your baby’s name?',
     optional: '(optional)',

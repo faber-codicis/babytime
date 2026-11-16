@@ -243,6 +243,10 @@
 
 .status-label {
   grid-area: label;
+  min-width: 0;
+  /* Large text: "Windel"/"Diaper" breaks inside the card instead of spilling into the next one. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
   margin-top: 0;
   font-size: 14px;
   font-weight: 500;
@@ -321,6 +325,9 @@
 
 .dock {
   display: flex;
+  /* Large text (0.16.0, e.g. Chrome text scaling 150 %): buttons that no longer fit side by side wrap into a
+     second row instead of running into each other. */
+  flex-wrap: wrap;
   gap: 8px;
   padding: 10px;
   border-radius: 36px;
@@ -330,7 +337,7 @@
 
 .dock-btn {
   flex: 1 1 0;
-  min-width: 0;
+  min-width: max-content;
   height: var(--action-height);
   border-radius: 24px;
   display: inline-flex;
@@ -749,4 +756,16 @@
   margin-left: auto;
   background: var(--surface);
   color: var(--ink-soft);
+}
+
+/* Very narrow screens (0.16.0, Chrome page zoom 150 %): the card label goes under its icon, so "Windel" stays whole. */
+@media (max-width: 330px) {
+  .status {
+    grid-template-areas:
+      'icon icon edit'
+      'label label label'
+      'big big big'
+      'sub sub sub';
+    row-gap: 6px;
+  }
 }

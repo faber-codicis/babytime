@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { openApp, waitForApp } from './helpers';
+import { openApp, skipTutorial, waitForApp } from './helpers';
 
 test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
@@ -57,6 +57,7 @@ test('export, delete everything, restore in the fresh app: all entries are back'
   // Like a fresh install: first start again, name still optional.
   await expect(page.getByRole('heading', { name: 'Herzlichen Glückwunsch!' })).toBeVisible();
   await page.getByRole('button', { name: 'Ohne Namen fortfahren' }).click();
+  await skipTutorial(page);
   await expect(page.getByText('Noch nichts eingetragen')).toBeVisible();
 
   const restore = await chooseRestoreFile(page, { name: backup.name, mimeType: 'application/json', buffer: Buffer.from(backup.text) });

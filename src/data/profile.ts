@@ -1,4 +1,4 @@
-import { setLastSeenVersion } from './appState';
+import { setLastSeenVersion, setTutorialPending } from './appState';
 import { db } from './db';
 
 export interface Profile {
@@ -48,6 +48,8 @@ export async function completeOnboarding(input: { babyName?: string; birthDate?:
   return db.transaction('rw', db.kv, async () => {
     const profile = await saveProfile({ ...pick(input), onboarded: true });
     await setLastSeenVersion(version);
+    // 0.16.0: the short introduction follows the first start.
+    await setTutorialPending(true);
     return profile;
   });
 }

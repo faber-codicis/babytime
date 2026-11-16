@@ -13,6 +13,7 @@ import './styles/history.css';
 import './styles/onboarding.css';
 import './styles/whatsnew.css';
 import './styles/settings.css';
+import './styles/tutorial.css';
 import { App } from './app';
 import { openDb } from './data/db';
 import { watchForUpdates } from './ui/appUpdate';

@@ -10,7 +10,14 @@ export async function openApp(page: Page, path = '/'): Promise<void> {
   await page.goto(path);
   await waitForApp(page);
   await page.getByRole('button', { name: 'Ohne Namen fortfahren' }).click();
+  await skipTutorial(page);
   await expect(page.getByRole('navigation', { name: 'Hauptnavigation' })).toBeVisible();
+}
+
+/** The short introduction (0.16.0) opens right after the first start; most tests skip it. */
+export async function skipTutorial(page: Page, label = 'Überspringen'): Promise<void> {
+  await page.getByRole('button', { name: label }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
 }
 
 /** Sets a kv value (e.g. lastSeenVersion) directly in IndexedDB, then reloads like an app restart. */

@@ -6,6 +6,7 @@ import { lang, t } from '../strings';
 export const GUIDE_ANCHOR: Record<GuideTarget, string> = {
   language: 'settings-language',
   feedback: 'settings-feedback',
+  tutorial: 'settings-tutorial',
 };
 
 let pending: GuideTarget | undefined;

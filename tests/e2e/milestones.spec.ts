@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { waitForApp } from './helpers';
+import { skipTutorial, waitForApp } from './helpers';
 
 test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
@@ -10,6 +10,7 @@ test.beforeEach(async ({ page }) => {
   await page.getByLabel('Wie heißt dein Baby?').fill('Lena');
   await page.getByLabel('Geburtsdatum').fill('2026-09-01');
   await page.getByRole('button', { name: 'Los geht’s' }).click();
+  await skipTutorial(page);
 });
 
 const nav = (page: import('@playwright/test').Page) => page.getByRole('navigation', { name: 'Hauptnavigation' });

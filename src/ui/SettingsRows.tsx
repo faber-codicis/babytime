@@ -3,6 +3,8 @@ import { Icon, type IconName } from './icons';
 
 /** A tappable settings row with icon, label and optional hint (at least 64 px high). */
 export function ActionRow(props: {
+  /** Target for a guide's button (0.16.0). */
+  id?: string;
   icon: IconName;
   label: string;
   hint?: string | undefined;
@@ -11,7 +13,13 @@ export function ActionRow(props: {
   onClick: () => void;
 }) {
   return (
-    <button type="button" class={`data-action${props.warn ? ' data-action--warn' : ''}`} disabled={props.disabled} onClick={props.onClick}>
+    <button
+      type="button"
+      id={props.id}
+      class={`data-action${props.warn ? ' data-action--warn' : ''}`}
+      disabled={props.disabled}
+      onClick={props.onClick}
+    >
       <span class="data-action-icon" aria-hidden="true">
         <Icon name={props.icon} size={20} />
       </span>
