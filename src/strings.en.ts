@@ -321,9 +321,9 @@ export const en: Strings = {
 
   language: {
     label: 'Sprache · Language',
-    hint: 'Automatic follows your phone’s language',
+    hint: (detected: string) => `System follows your phone’s language, now ${detected}`,
     a11y: 'Language',
-    auto: 'Automatic',
+    auto: 'System',
   },
 
   guide: {

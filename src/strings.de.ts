@@ -321,9 +321,10 @@ export const de = {
   language: {
     /** Both languages on purpose: whoever lands in the wrong one still finds the switch. */
     label: 'Sprache · Language',
-    hint: 'Automatisch folgt der Sprache des Handys',
+    /** Names the detected language, so a wrong guess is visible (0.15.2). */
+    hint: (detected: string) => `System folgt der Sprache des Handys, gerade ${detected}`,
     a11y: 'Sprache',
-    auto: 'Automatisch',
+    auto: 'System',
   },
 
   guide: {

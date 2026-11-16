@@ -28,7 +28,14 @@ try {
   } catch {
     // Storage blocked: follow the phone.
   }
-  var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+  // The browser's own locale follows the system language; navigator.languages can lag behind (0.15.2).
+  var first = '';
+  try {
+    first = new Intl.DateTimeFormat().resolvedOptions().locale;
+  } catch {
+    // No Intl: use the website list below.
+  }
+  first = first || (navigator.languages && navigator.languages[0]) || navigator.language || '';
   var lang = choice === 'de' || choice === 'en' ? choice : /^de(-|$)/i.test(first) ? 'de' : 'en';
   document.documentElement.lang = lang;
 })();

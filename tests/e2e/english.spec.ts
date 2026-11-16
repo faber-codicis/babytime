@@ -86,11 +86,11 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
   await expect(page.getByText(/^Restored: \d+\sentries$/)).toBeVisible();
 });
 
-test('the language switch: German sticks after a restart, Automatic follows the phone again', async ({ page }) => {
+test('the language switch: German sticks after a restart, System follows the phone again', async ({ page }) => {
   await openAppEnglish(page);
   let main = await settings(page);
   const group = main.getByRole('group', { name: 'Language' });
-  await expect(group.getByRole('button', { name: 'Automatic' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(group.getByRole('button', { name: 'System' })).toHaveAttribute('aria-pressed', 'true');
 
   await Promise.all([page.waitForEvent('load'), group.getByRole('button', { name: 'Deutsch' }).click()]);
   await waitForApp(page);
@@ -101,9 +101,22 @@ test('the language switch: German sticks after a restart, Automatic follows the 
   await expect(page.getByRole('heading', { name: 'Einstellungen', level: 1 })).toBeVisible();
 
   main = page.getByRole('main');
-  await Promise.all([page.waitForEvent('load'), main.getByRole('group', { name: 'Sprache' }).getByRole('button', { name: 'Automatisch' }).click()]);
+  await Promise.all([page.waitForEvent('load'), main.getByRole('group', { name: 'Sprache' }).getByRole('button', { name: 'System' }).click()]);
   await waitForApp(page);
   await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
+});
+
+test('System follows the phone even when the browser still lists German first for websites (0.15.2)', async ({ page }) => {
+  // Android Chrome after switching the phone to English: the system locale is English, the website list is still German.
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'languages', { get: () => ['de-DE', 'de'] });
+    Object.defineProperty(navigator, 'language', { get: () => 'de-DE' });
+  });
+  await openAppEnglish(page);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  const main = await settings(page);
+  await expect(main.getByRole('group', { name: 'Language' }).getByRole('button', { name: 'System' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(main.getByText('System follows your phone’s language, now English')).toBeVisible();
 });
 
 test('after the update: English popup with the guide, its button goes straight to the language row', async ({ page }) => {
@@ -111,7 +124,7 @@ test('after the update: English popup with the guide, its button goes straight t
   await setKvAndRestart(page, 'lastSeenVersion', '0.13.0');
   const popup = page.getByRole('dialog', { name: `New in version ${pkg.version}` });
   await expect(popup).toBeVisible();
-  await expect(popup.getByText(/^Backups have one name everywhere/)).toBeVisible();
+  await expect(popup.getByText(/^The language option “Automatisch” is now called “System”/)).toBeVisible();
   await expect(popup.getByText('How it works')).toBeVisible();
   await expect(popup.getByRole('list', { name: 'Steps' }).getByRole('listitem')).toHaveCount(3);
   // The tall popup starts at its title, although "Got it" further down has the focus.

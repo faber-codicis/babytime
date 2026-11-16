@@ -222,6 +222,16 @@ Grundlage: Audit vom 2026-11-15 (17 Screens × DE/EN × hell/dunkel × 360/375/4
 - **Tab-Beschriftung 12 px ab 375 px Breite**, bei 360 px weiter 11 px, damit „Einstellungen“ ganz sichtbar bleibt (E2E prüft beide Breiten).
 - Weiter offen: weitere alte Wege in „Was ist neu“, HSTS-Header.
 
+## 0.15.2 (Sprache „System“ erkennt das Handy zuverlässiger)
+
+Meldung des Besitzers, 2026-11-16: „Automatisch“ blieb auf Deutsch, obwohl das Handy auf Englisch steht.
+
+- **Ursache:** Die Erkennung nahm `navigator.languages[0]`. Das ist die Sprachliste des Browsers für Webseiten (Accept-Language), nicht die Systemsprache. In Chrome für Android ist sie eine eigene Einstellung, die beim ersten Start angelegt wird und beim Umstellen des Handys auf Englisch nicht mitzieht; Deutsch bleibt dann vorne. Nicht auf dem echten Handy nachgemessen, aber die einzige Stelle, an der der Code vom System abweicht (gespeicherter Wert wird bei „Automatisch“ gelöscht, Service Worker liefert dieselbe Regel aus).
+- **Lösung:** `phoneLanguages()` in `src/data/language.ts` stellt das Browser-Locale (`Intl.DateTimeFormat().resolvedOptions().locale`) vor die Webseiten-Liste. Es folgt der Sprache der Browser-Oberfläche, und die folgt auf Android und iOS der Systemsprache. `public/theme-init.js` nutzt dieselbe Reihenfolge. Folge: Wer das Handy auf Deutsch und nur die Webseiten-Sprache auf Englisch hat, bekommt jetzt Deutsch – passt zum Namen „System“.
+- **„Automatisch“ heißt „System“** (beide Sprachen gleich). Der Hinweis darunter nennt die erkannte Sprache („System folgt der Sprache des Handys, gerade English“), damit eine falsche Erkennung sofort sichtbar ist.
+- Die Anleitung von 0.14.0 in „Was ist neu“ nennt jetzt „System“; der Eintrag 0.15.1 bleibt wörtlich (beschreibt den damaligen Stand).
+- E2E-Test bildet den Fehler nach: Locale Englisch, `navigator.languages` Deutsch → App auf Englisch.
+
 ## Abhängigkeiten
 
 | Paket | Art | Grund |

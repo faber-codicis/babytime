@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { getLastExportAt } from '../data/appState';
-import { getLanguageChoice, saveLanguageChoice, type LanguageChoice } from '../data/language';
+import { getLanguageChoice, phoneLanguages, pickLang, saveLanguageChoice, type LanguageChoice } from '../data/language';
 import type { Profile } from '../data/profile';
 import { formatAge, formatDaysAgo, formatStamp } from '../logic/time';
 import { t } from '../strings';
@@ -35,6 +35,9 @@ const LANGUAGE_OPTIONS = [
   ['de', 'Deutsch'],
   ['en', 'English'],
 ] as const satisfies readonly (readonly [LanguageChoice, string])[];
+
+/** What "System" picks right now, by its own name (0.15.2). */
+const detectedLanguage = () => (pickLang('auto', phoneLanguages()) === 'de' ? 'Deutsch' : 'English');
 
 /** The whole UI text is fixed per start, so a new language means a restart (entries stay, a running feed too). */
 function changeLanguage(choice: LanguageChoice): void {
@@ -150,7 +153,7 @@ export function Settings({ profile }: { profile: Profile }) {
             id={GUIDE_ANCHOR.language}
             icon="globe"
             label={t.language.label}
-            hint={t.language.hint}
+            hint={t.language.hint(detectedLanguage())}
             groupLabel={t.language.a11y}
             options={LANGUAGE_OPTIONS}
             value={getLanguageChoice()}

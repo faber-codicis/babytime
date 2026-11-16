@@ -1,4 +1,4 @@
-import { getLanguageChoice, pickLang, type Lang } from './data/language';
+import { getLanguageChoice, phoneLanguages, pickLang, type Lang } from './data/language';
 import { de } from './strings.de';
 import { en } from './strings.en';
 
@@ -22,7 +22,7 @@ export type Strings = Widen<typeof de>;
  * Outside a browser (unit tests) it is German.
  */
 export const lang: Lang =
-  typeof document === 'undefined' ? 'de' : pickLang(getLanguageChoice(), navigator.languages?.length ? navigator.languages : [navigator.language]);
+  typeof document === 'undefined' ? 'de' : pickLang(getLanguageChoice(), phoneLanguages());
 
 if (typeof document !== 'undefined') document.documentElement.lang = lang;
 

@@ -29,6 +29,22 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.15.2',
+    date: '2026-11-16',
+    items: {
+      de: [
+        'Die Spracheinstellung „Automatisch“ heißt jetzt „System“',
+        'System erkennt die Sprache des Handys zuverlässiger, auch wenn der Browser noch eine andere Sprache für Webseiten eingestellt hat',
+        'Unter „Sprache · Language“ steht jetzt, welche Sprache erkannt wurde',
+      ],
+      en: [
+        'The language option “Automatisch” is now called “System”',
+        'System detects your phone’s language more reliably, even if your browser still prefers another language for websites',
+        '“Sprache · Language” now shows which language was detected',
+      ],
+    },
+  },
+  {
     version: '0.15.1',
     date: '2026-11-16',
     items: {
@@ -101,11 +117,11 @@ export const changelog: ChangelogEntry[] = [
       target: 'language',
       text: {
         de: {
-          steps: ['Öffne Einstellungen → Darstellung', 'Tippe bei „Sprache · Language“ auf Deutsch, English oder Automatisch', 'Die App startet kurz neu, deine Einträge bleiben'],
+          steps: ['Öffne Einstellungen → Darstellung', 'Tippe bei „Sprache · Language“ auf Deutsch, English oder System', 'Die App startet kurz neu, deine Einträge bleiben'],
           button: 'Zur Sprache',
         },
         en: {
-          steps: ['Open Settings → Appearance', 'Under “Sprache · Language”, tap Deutsch, English or Automatic', 'The app restarts briefly, your entries stay'],
+          steps: ['Open Settings → Appearance', 'Under “Sprache · Language”, tap Deutsch, English or System', 'The app restarts briefly, your entries stay'],
           button: 'Go to language',
         },
       },

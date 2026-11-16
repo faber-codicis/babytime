@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pickLang } from '../../src/data/language';
+import { phoneLanguages, pickLang } from '../../src/data/language';
 import { de } from '../../src/strings.de';
 import { en } from '../../src/strings.en';
 
@@ -58,5 +58,9 @@ describe('languages (0.14.0)', () => {
     expect(pickLang('auto', [])).toBe('en');
     expect(pickLang('de', ['en-US'])).toBe('de');
     expect(pickLang('en', ['de-AT'])).toBe('en');
+  });
+
+  it('puts the system locale first, before the browser’s website list (0.15.2)', () => {
+    expect(phoneLanguages()[0]).toBe(new Intl.DateTimeFormat().resolvedOptions().locale);
   });
 });
