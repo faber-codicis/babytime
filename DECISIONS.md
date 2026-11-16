@@ -1,4 +1,4 @@
-# Entscheidungen und Abweichungen
+﻿# Entscheidungen und Abweichungen
 
 Kurz begründet, neueste unten. Paketänderungen stehen im Abschnitt „Abhängigkeiten“.
 
@@ -6,7 +6,7 @@ Kurz begründet, neueste unten. Paketänderungen stehen im Abschnitt „Abhängi
 
 - **Mockups sind die Gestaltungsvorlage** (`Baby Time – Mockups-png/`). Bei Widerspruch gilt der Umfang der Spec (z. B. keine Meilensteine-/Einstellungen-Tabs), das Aussehen folgt den Mockups.
 - **Deployment-Ordner ist `dist/`, nicht `public/`** (anders als in den anderen PWA-Projekten): `public/` ist Vites Quellordner für statische Dateien, der Build leert den Ausgabeordner, `dist/` wird nicht gesichert. Mit der Besitzerin so abgestimmt (Variante A).
-- **Deployment von Hand:** Die Besitzerin lädt nach `npm run build` den Inhalt von `dist/` selbst im Cloudflare-Dashboard hoch. `wrangler.jsonc` und das Skript `deploy` bleiben wie in §13.1 gefordert als Alternative bestehen.
+- **Deployment von Hand:** Die Besitzerin lädt nach `npm run build` den Inhalt von `dist/` selbst im Cloudflare-Dashboard hoch. `wrangler.jsonc` und das Skript `deploy` bleiben wie in §13.1 gefordert als Alternative bestehen. **Abgelöst seit 0.15.1:** siehe „Deployment über GitHub Actions“.
 - **Nachtmodus-Mockup** zeigt einen eigenen Ring-Aufbau; laut Spec §15 („Nachtmodus-Ring“) später. Dunkel wird in Stufe B nur über die Farb-Tokens umgesetzt.
 
 ## Stufe A
@@ -233,6 +233,13 @@ Grundlage: Audit vom 2026-11-15 (17 Screens × DE/EN × hell/dunkel × 360/375/4
 | `fake-indexeddb` | Entwicklung | Dexie-Tests in Node ohne Browser |
 | `@types/node` | Entwicklung | Typen für `vite.config.ts` (liest `_headers` für `vite preview`) und Node-Skripte |
 | `sharp` | Entwicklung | Icons aus dem Logo erzeugen (§7) |
-| `wrangler` | Entwicklung | Skript `deploy` (§13.1), wird von Claude nie ausgeführt |
+| `wrangler` | Entwicklung | Skript `deploy` (§13.1) und Workflow `.github/workflows/deploy.yml` |
 
 npm 11 blockiert die Install-Skripte von `esbuild` und `workerd` (nicht freigegeben). `esbuild` bezieht sein Binary über optionale Abhängigkeiten, `workerd` wird nur für `wrangler dev` gebraucht; Build und Deploy laufen ohne.
+
+## Deployment über GitHub Actions (seit 0.15.1)
+
+- **Merge auf `main` ist die Freigabe.** Der Workflow `.github/workflows/deploy.yml` prüft danach alles wie im README (Typecheck, Lint, Unit- und E2E-Tests, Audit, Build, `check:external`) und liefert nur bei Erfolg per `wrangler deploy` aus. Mit „Run workflow“ (auch in der GitHub-App) lässt sich ein Stand erneut ausliefern. So hängt das Ausliefern an keinem PC.
+- **Claude darf auf ausdrücklichen Auftrag der Besitzerin auch selbst deployen** (`npm run deploy`), z. B. wenn die Action nicht läuft. Merges nur auf ihren Auftrag.
+- Der lokale `npm run snapshot` läuft in der Action nicht; Rückgriff ist GitHub (jeder Stand ist ein Commit) bzw. Rollback im Cloudflare-Dashboard.
+- Secrets im Repo: `CLOUDFLARE_API_TOKEN` (nur „Workers Scripts: Edit“) und `CLOUDFLARE_ACCOUNT_ID`. Das Token legt die Besitzerin selbst an.

@@ -1,4 +1,4 @@
-# Baby Time
+﻿# Baby Time
 
 PWA zum Mitschreiben von Stillen, Windeln und Schlaf – einhändig, offline, ohne Konto. Testversion 0.14.0 (Beta, Deutsch und Englisch).
 
@@ -89,9 +89,13 @@ Oben rechts auf **Heute** steht die Versions-Pille „vx.y.z“; antippen zeigt 
 2. `npm run typecheck && npm run lint && npm test && npm run test:e2e`
 3. `npm audit --omit=dev` – hohe oder kritische Funde beheben oder in `DECISIONS.md` begründen.
 4. `npm run build && npm run check:external`, danach `npm run snapshot`.
-5. Inhalt von `dist/` hochladen (siehe unten).
+5. PR mergen: Die Action `Deploy` prüft alles erneut und liefert aus (siehe unten). Von Hand nur, wenn die Action nicht läuft.
 
-## Deployment (Cloudflare, von Hand)
+## Deployment (Cloudflare)
+
+**Normalfall seit 0.15.1:** Merge auf `main` startet die GitHub Action `Deploy` (`.github/workflows/deploy.yml`): alle Prüfungen, danach `wrangler deploy`. Erneut ausliefern: im Repo unter *Actions → Deploy → Run workflow* (geht auch in der GitHub-App). Fehlschläge meldet GitHub per Mail; dann wird nichts ausgeliefert.
+
+### Von Hand (Rückfall)
 
 Anders als in den anderen PWA-Projekten wird hier **`dist/`** ausgeliefert, nicht `public/`. `public/` enthält nur die Rohdateien (Icons, `_headers`), die beim Build nach `dist/` kopiert werden.
 
