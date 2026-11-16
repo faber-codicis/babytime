@@ -445,8 +445,14 @@
   transition: none;
 }
 
-/* "Automatisch" must fit its third of the row on a 360 px phone (0.14.1). */
+/*
+ * "Automatisch" must never be cut off (0.14.1, 0.15.1): each option is as wide as its word and shares
+ * the rest of the row. The button's min-width from base.css would let it shrink below its word, so
+ * max-content here; if the words don't fit (narrow phone, large system font), the row wraps.
+ */
 .choice-row .segmented--small .segment {
+  flex: 1 1 auto;
+  min-width: max-content;
   font-size: 15px;
-  padding-inline: 4px;
+  padding-inline: 12px;
 }

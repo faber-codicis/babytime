@@ -29,6 +29,22 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.15.1',
+    date: '2026-11-16',
+    items: {
+      de: [
+        'In den Einstellungen wird „Automatisch“ bei der Sprache nicht mehr abgeschnitten',
+        'Auch bei großer Schrift auf dem Handy bleiben alle drei Knöpfe lesbar',
+        'Sonst hat sich nichts geändert: Deine Einträge bleiben, wie sie sind',
+      ],
+      en: [
+        'In the settings, "Automatisch" for the language is no longer cut off',
+        'All three buttons stay readable even with large text on your phone',
+        'Nothing else changed: your entries stay as they are',
+      ],
+    },
+  },
+  {
     version: '0.15.0',
     date: '2026-11-15',
     items: {

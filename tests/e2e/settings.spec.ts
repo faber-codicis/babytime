@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+﻿import { expect, test, type Page } from '@playwright/test';
 import pkg from '../../package.json' with { type: 'json' };
 import { openApp, seed, setKvAndRestart, waitForApp } from './helpers';
 
@@ -160,4 +160,22 @@ test.describe('backup reminder on Today', () => {
     await expect(page.getByText('Stillt gerade')).toBeVisible();
     await expect(card(page)).toHaveCount(0);
   });
+});
+
+test('language buttons: no word is cut off, even on a narrow phone with large text (0.15.1)', async ({ page }) => {
+  await openApp(page);
+  await page.getByRole('link', { name: 'Einstellungen' }).click();
+  for (const [width, zoom] of [[360, '1'], [412, '1.3'], [320, '1.3']] as const) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.evaluate((z) => { document.documentElement.style.zoom = z; }, zoom);
+    const group = page.getByRole('main').getByRole('group', { name: 'Sprache' });
+    await group.scrollIntoViewIfNeeded();
+    const clipped = await group.getByRole('button').evaluateAll((els) =>
+      els.filter((el) => el.scrollWidth > el.clientWidth + 1).map((el) => el.textContent),
+    );
+    expect(clipped, `${width} px, zoom ${zoom}`).toEqual([]);
+    const box = await group.boundingBox();
+    expect(box!.x + box!.width).toBeLessThanOrEqual(width + 1);
+  }
+  await page.screenshot({ path: 'test-results/language-buttons-large-text.png', animations: 'disabled' });
 });
