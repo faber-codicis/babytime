@@ -5,7 +5,7 @@
  */
 export const OWNER = {
   name: 'Christoph Mraz',
-  place: '',
+  place: 'Wien',
 } as const;
 
 /** Date of the current privacy policy text (YYYY-MM-DD). Change it with every change to the text. */
