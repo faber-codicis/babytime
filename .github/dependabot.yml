@@ -9,6 +9,12 @@ updates:
     groups:
       alle:
         patterns: ['*']
+        update-types: [minor, patch]
+    ignore:
+      # Große Sprünge (z. B. TypeScript 7) brechen oft Peer-Abhängigkeiten wie typescript-eslint.
+      # Die kommen bewusst von Hand, nicht automatisch.
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
