@@ -4,7 +4,7 @@ Kurz begründet, neueste unten. Paketänderungen stehen im Abschnitt „Abhängi
 
 ## Allgemein
 
-- **Mockups sind die Gestaltungsvorlage** (`Baby Time – Mockups-png/`). Bei Widerspruch gilt der Umfang der Spec (z. B. keine Meilensteine-/Einstellungen-Tabs), das Aussehen folgt den Mockups.
+- **Mockups sind die Gestaltungsvorlage** (`docs/design/mockups/`). Bei Widerspruch gilt der Umfang der Spec (z. B. keine Meilensteine-/Einstellungen-Tabs), das Aussehen folgt den Mockups.
 - **Deployment-Ordner ist `dist/`, nicht `public/`** (anders als in den anderen PWA-Projekten): `public/` ist Vites Quellordner für statische Dateien, der Build leert den Ausgabeordner, `dist/` wird nicht gesichert. Mit der Besitzerin so abgestimmt (Variante A).
 - **Deployment von Hand:** Die Besitzerin lädt nach `npm run build` den Inhalt von `dist/` selbst im Cloudflare-Dashboard hoch. `wrangler.jsonc` und das Skript `deploy` bleiben wie in §13.1 gefordert als Alternative bestehen. **Abgelöst seit 0.15.1:** siehe „Deployment über GitHub Actions“.
 - **Nachtmodus-Mockup** zeigt einen eigenen Ring-Aufbau; laut Spec §15 („Nachtmodus-Ring“) später. Dunkel wird in Stufe B nur über die Farb-Tokens umgesetzt.
@@ -261,3 +261,15 @@ npm 11 blockiert die Install-Skripte von `esbuild` und `workerd` (nicht freigege
 - **Claude darf auf ausdrücklichen Auftrag der Besitzerin auch selbst deployen** (`npm run deploy`), z. B. wenn die Action nicht läuft. Merges nur auf ihren Auftrag.
 - Der lokale `npm run snapshot` läuft in der Action nicht; Rückgriff ist GitHub (jeder Stand ist ein Commit) bzw. Rollback im Cloudflare-Dashboard.
 - Secrets im Repo: `CLOUDFLARE_API_TOKEN` (nur „Workers Scripts: Edit“) und `CLOUDFLARE_ACCOUNT_ID`. Das Token legt die Besitzerin selbst an.
+
+## Öffentliches Repo (2026-11-22)
+
+Auftrag des Besitzers: das GitHub-Repo öffentlich machen, Landingpage optional.
+
+- **Lizenz MIT** (Vorschlag, leicht austauschbar: nur `LICENSE` und `license` in `package.json`). Schrift Plus Jakarta Sans bleibt OFL-1.1, Logo und Icons sind eigene SVGs.
+- **README für die Öffentlichkeit**, zweisprachig, mit Screenshots aus 0.16.0 (`docs/screenshots/`, Testdaten mit erfundenem Namen „Emma“). Die bisherige Entwickler-Anleitung steht unverändert in `docs/ENTWICKLUNG.md`.
+- **Mockups nach `docs/design/mockups/`** verschoben (kein Leerzeichen und Gedankenstrich mehr im Pfad an der Wurzel).
+- **CI für Pull Requests** (`.github/workflows/ci.yml`): dieselben Prüfungen wie beim Deploy, ohne Secrets, auch für Forks. `deploy.yml` läuft weiter nur auf `main` und nutzt das Environment `production`, damit die Cloudflare-Secrets dorthin wandern und auf `main` beschränkt werden können.
+- **SECURITY.md** (private Meldung über GitHub oder `kontakt@mraz.app`), **CONTRIBUTING.md**, Issue-Vorlagen (Fehler, Idee; leere Issues aus), PR-Vorlage, **Dependabot** monatlich gebündelt.
+- **Git-History nicht umgeschrieben:** Die Commits tragen die private Autoren-Adresse. Umschreiben wäre nur vor dem Umschalten sinnvoll und bleibt Entscheidung des Besitzers.
+- **Keine eigene Landingpage:** Das README ist die Projektseite. Eine spätere Seite gehört nicht in die App (Service Worker, CSP, Daten hängen an `babytime.mraz.app`), sondern auf `mraz.app` oder GitHub Pages.

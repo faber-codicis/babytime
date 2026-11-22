@@ -2,7 +2,8 @@
 # - Merge bzw. Push auf main: alle Prüfungen aus dem README, danach `wrangler deploy`.
 # - Knopf „Run workflow“ (auch in der GitHub-App): denselben Stand erneut prüfen und ausliefern.
 # Schlägt eine Prüfung fehl, wird nichts ausgeliefert. Der Merge ist die Freigabe der Besitzerin.
-# Secrets im Repo: CLOUDFLARE_API_TOKEN (nur „Workers Scripts: Edit“) und CLOUDFLARE_ACCOUNT_ID.
+# Secrets: CLOUDFLARE_API_TOKEN (nur „Workers Scripts: Edit“) und CLOUDFLARE_ACCOUNT_ID, am besten im
+# Environment „production“, das nur `main` nutzen darf (Settings → Environments). Pull Requests prüft ci.yml.
 name: Deploy
 
 on:
@@ -21,11 +22,16 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://babytime.mraz.app
     timeout-minutes: 30
     env:
       TZ: Europe/Vienna
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v7
         with:

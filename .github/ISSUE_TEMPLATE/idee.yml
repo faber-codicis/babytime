@@ -1,0 +1,23 @@
+name: Idee · Feature request
+description: Vorschlag für eine neue Funktion oder Verbesserung. Suggest a feature or improvement.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Baby Time bleibt bewusst klein, einhändig bedienbar und offline. Nicht jede Idee passt, aber jede wird gelesen.
+        Baby Time is meant to stay small, one-handed and offline. Not every idea fits, but every one is read.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Welches Problem löst das? · What problem does it solve?
+    validations:
+      required: true
+  - type: textarea
+    id: vorschlag
+    attributes:
+      label: Vorschlag · Proposal
+  - type: textarea
+    id: alternativen
+    attributes:
+      label: Wie machst du es heute? · How do you handle it today?

@@ -1,0 +1,52 @@
+# Prüfen bei jedem Pull Request (auch aus Forks). Kein Deploy, keine Secrets.
+# Ausgeliefert wird nur über deploy.yml nach dem Merge auf main.
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TZ: Europe/Vienna
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck, Lint, Unit-Tests
+        run: |
+          npm run typecheck
+          npm run lint
+          npm test
+
+      - name: Browser für E2E
+        run: npx playwright install --with-deps chromium webkit
+
+      - name: E2E-Tests
+        run: npm run test:e2e -- --trace off
+
+      - name: Audit (hohe und kritische Funde stoppen)
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Build und externe URLs
+        run: |
+          npm run build
+          npm run check:external
