@@ -490,3 +490,27 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+/* Privacy policy and disclosure in a sheet (0.16.1): plain reading text, small headings. */
+.legal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.legal h3 {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.legal-updated {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.legal-summary {
+  font-weight: 600;
+}

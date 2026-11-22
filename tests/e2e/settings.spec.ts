@@ -54,6 +54,20 @@ test.describe('settings tab', () => {
     await expect(main.getByText(/^Kein Konto, kein Upload, keine Analyse\./)).toBeVisible();
   });
 
+  test('privacy policy opens from "Über die App" and closes again (0.16.1)', async ({ page }) => {
+    await page.getByRole('link', { name: 'Einstellungen' }).click();
+    await page.getByRole('main').getByRole('button', { name: /^Datenschutz/ }).click();
+    const sheet = page.getByRole('dialog', { name: 'Datenschutz' });
+    await expect(sheet).toBeVisible();
+    await expect(sheet.getByText(/^Kurz gesagt: Deine Einträge verlassen dein Handy nicht/)).toBeVisible();
+    await expect(sheet.getByText(/Kontakt: kontakt@mraz\.app$/)).toBeVisible();
+    await expect(sheet.getByRole('heading', { name: 'Deine Rechte' })).toBeVisible();
+    await expect(sheet.getByRole('button', { name: 'Schließen' })).toBeFocused();
+    await page.screenshot({ path: 'test-results/privacy.png', animations: 'disabled' });
+    await sheet.getByRole('button', { name: 'Schließen' }).click();
+    await expect(sheet).toBeHidden();
+  });
+
   test('screenshot and touch targets', async ({ page }) => {
     await page.getByRole('link', { name: 'Einstellungen' }).click();
     await page.screenshot({ path: 'test-results/settings.png', animations: 'disabled', fullPage: true });

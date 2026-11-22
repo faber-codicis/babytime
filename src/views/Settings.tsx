@@ -10,6 +10,7 @@ import { GUIDE_ANCHOR, showPendingGuideTarget } from '../ui/Guide';
 import { useLive, useNow } from '../ui/hooks';
 import { Icon } from '../ui/icons';
 import { InstallSection, isInstalled } from '../ui/InstallSection';
+import { PrivacySheet } from '../ui/PrivacySheet';
 import { AccentRow, ActionRow, ChoiceRow, LinkRow, SettingsSection, SwitchRow } from '../ui/SettingsRows';
 import { Snackbar, type SnackMessage } from '../ui/Snackbar';
 import { useAccent, useThemeMode } from '../ui/theme';
@@ -57,6 +58,7 @@ const TRACKER_ICON: Record<(typeof TRACKER_KINDS)[number], IconName> = {
 export function Settings({ profile }: { profile: Profile }) {
   const now = useNow(60_000);
   const [snack, setSnack] = useState<SnackMessage>();
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const message = (text: string) => setSnack({ id: ++snackId, text });
   const data = useDataActions(profile, message);
   const [themeMode, setThemeMode] = useThemeMode();
@@ -199,6 +201,7 @@ export function Settings({ profile }: { profile: Profile }) {
             hint={t.feedback.hint(FEEDBACK_EMAIL)}
             href={feedbackMailto(__APP_VERSION__, formatStamp(__BUILD_TIME__), navigator.userAgent, isInstalled())}
           />
+          <ActionRow icon="shield" label={t.privacy.open} hint={t.privacy.openHint} onClick={() => setPrivacyOpen(true)} />
         </div>
         <InstallSection />
         <p class="settings-note settings-privacy">
@@ -214,6 +217,7 @@ export function Settings({ profile }: { profile: Profile }) {
         <Snackbar message={snack} onDone={() => setSnack(undefined)} />
       </div>
       {data.sheets}
+      <PrivacySheet open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </div>
   );
 }

@@ -52,6 +52,7 @@ Always start it from the home screen afterwards. Safari may delete data of websi
 - **No account, no upload, no analytics, no ads.** Entries are stored only in your browser on your device.
 - The host (Cloudflare) only delivers the app and its updates. Like any website it sees your IP address, never your entries.
 - A strict Content Security Policy blocks the app from talking to any other server.
+- The full privacy policy is in the app under **Settings → About the app → Privacy**.
 - Because data never leaves the phone, there is **no sync between devices**. To move to a new phone, export a backup and restore it there.
 
 Baby Time is not a medical device and does not replace advice from your midwife or doctor.
