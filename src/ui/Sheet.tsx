@@ -30,6 +30,31 @@ function openerElement(): HTMLElement | null {
   return lastPressed?.isConnected ? lastPressed : null;
 }
 
+/** How long after opening a scroll the user did not cause is undone. */
+const HOLD_TOP_MS = 600;
+
+/**
+ * WebKit sometimes scrolls a freshly opened dialog to its focused button a frame or two later,
+ * despite preventScroll (seen in CI, 2026-11-22). Until the user touches, scrolls or types,
+ * any scroll in the first moments is put back to the top.
+ */
+function holdAtTop(dialog: HTMLDialogElement): void {
+  const until = performance.now() + HOLD_TOP_MS;
+  const onScroll = () => {
+    if (performance.now() > until) return stop();
+    if (dialog.scrollTop !== 0) dialog.scrollTop = 0;
+  };
+  const stop = () => {
+    dialog.removeEventListener('scroll', onScroll);
+    for (const type of USER_INPUT) dialog.removeEventListener(type, stop, true);
+  };
+  dialog.addEventListener('scroll', onScroll);
+  for (const type of USER_INPUT) dialog.addEventListener(type, stop, { capture: true, once: true });
+  setTimeout(stop, HOLD_TOP_MS);
+}
+
+const USER_INPUT = ['wheel', 'touchstart', 'pointerdown', 'keydown'] as const;
+
 /**
  * Bottom sheet on a native modal <dialog>: focus moves in and back out, Escape and a tap
  * outside close it, the page behind is inert.
@@ -50,6 +75,7 @@ export function Sheet({ open, onClose, labelledBy, children }: SheetProps) {
       dialog.querySelector<HTMLElement>('[data-autofocus]')?.focus({ preventScroll: true });
       dialog.scrollTop = 0;
       requestAnimationFrame(() => (dialog.scrollTop = 0));
+      holdAtTop(dialog);
     } else if (!open && dialog.open) {
       dialog.close();
     }
