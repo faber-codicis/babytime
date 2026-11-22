@@ -31,48 +31,6 @@ export function ActionRow(props: {
   );
 }
 
-/**
- * One choice out of a few, shown as a segmented control under the label (e.g. the language, 0.14.0).
- * `id` makes the row a target for a guide's button (focusable, but not in the tab order).
- */
-export function ChoiceRow<K extends string>(props: {
-  id?: string;
-  icon: IconName;
-  label: string;
-  hint: string;
-  groupLabel: string;
-  options: readonly (readonly [K, string])[];
-  value: K;
-  onChange: (value: K) => void;
-}) {
-  return (
-    <div class="data-action choice-row" id={props.id} tabIndex={props.id ? -1 : undefined}>
-      <div class="choice-row-head">
-        <span class="data-action-icon" aria-hidden="true">
-          <Icon name={props.icon} size={20} />
-        </span>
-        <span class="data-action-text">
-          <span class="data-action-label">{props.label}</span>
-          <span class="data-action-hint">{props.hint}</span>
-        </span>
-      </div>
-      <div class="segmented segmented--small segmented--wrap" role="group" aria-label={props.groupLabel}>
-        {props.options.map(([value, text]) => (
-          <button
-            key={value}
-            type="button"
-            class={`segment${value === props.value ? ' is-active' : ''}`}
-            aria-pressed={value === props.value}
-            onClick={() => value !== props.value && props.onChange(value)}
-          >
-            {text}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /** Same look as ActionRow, but a link (e.g. mailto for "Feedback senden", 0.13.0). */
 export function LinkRow(props: { id?: string; icon: IconName; label: string; hint?: string | undefined; href: string }) {
   return (
@@ -172,6 +130,66 @@ export function AccentRow<K extends string>(props: {
           </button>
         ))}
       </div>
+    </div>
+  );
+}
+
+/** A row that opens a settings sub page (0.17.0): icon, label, current state as hint, chevron. */
+export function NavRow(props: { icon: IconName; label: string; hint?: ComponentChildren; href: string }) {
+  return (
+    <a class="data-action data-action--link" href={props.href}>
+      <span class="data-action-icon" aria-hidden="true">
+        <Icon name={props.icon} size={20} />
+      </span>
+      <span class="data-action-text">
+        <span class="data-action-label">{props.label}</span>
+        {props.hint && <span class="data-action-hint">{props.hint}</span>}
+      </span>
+      <span class="row-chevron" aria-hidden="true">
+        <Icon name="forward" size={20} />
+      </span>
+    </a>
+  );
+}
+
+/**
+ * A choice in one line (0.17.0, e.g. the language): label left, a native picker right. The picker is the phone's own,
+ * so it stays readable with large text and needs no room for every option.
+ */
+export function SelectRow<K extends string>(props: {
+  id?: string;
+  icon: IconName;
+  label: string;
+  options: readonly (readonly [K, string])[];
+  value: K;
+  onChange: (value: K) => void;
+}) {
+  const selectId = `${props.id ?? 'select'}-input`;
+  return (
+    <div class="data-action select-row" id={props.id} tabIndex={props.id ? -1 : undefined}>
+      <span class="data-action-icon" aria-hidden="true">
+        <Icon name={props.icon} size={20} />
+      </span>
+      <label class="data-action-label select-row-label" for={selectId}>
+        {props.label}
+      </label>
+      <span class="select-pill">
+        <select
+          id={selectId}
+          value={props.value}
+          onChange={(event) => {
+            const value = (event.currentTarget as HTMLSelectElement).value as K;
+            if (value !== props.value) props.onChange(value);
+          }}
+        >
+          {props.options.map(([value, text]) => (
+            <option key={value} value={value}>
+              {text}
+            </option>
+          ))}
+        </select>
+        <Icon name="down" size={18} />
+      </span>
     </div>
   );
 }

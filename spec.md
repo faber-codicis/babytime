@@ -184,7 +184,7 @@ Regeln:
 
 ## 6. Screens
 
-Navigation: Tab-Leiste unten mit **3 Tabs: Heute, Verlauf und Einstellungen** (seit 0.4.0; vorher 2). Auf „Stillen läuft“, „Was ist neu“, Erststart und Splash ausgeblendet. Routen: `#/` (Heute), `#/verlauf`, `#/einstellungen`, `#/stillen`, `#/neu` (Was ist neu, ohne Tab-Leiste).
+Navigation: Tab-Leiste unten mit **3 Tabs: Heute, Verlauf und Einstellungen** (seit 0.4.0; vorher 2). Auf „Stillen läuft“, „Was ist neu“, Erststart und Splash ausgeblendet. Routen: `#/` (Heute), `#/verlauf`, `#/einstellungen` (seit 0.17.0 mit Unterseiten, 6.10), `#/stillen`, `#/neu` (Was ist neu, ohne Tab-Leiste).
 
 ### 6.0 Splash (App-Start)
 
@@ -322,6 +322,12 @@ Nicht in 0.4.0: Tracker-Schalter, Meilensteine, Akzentfarben, automatischer Nach
 **Seit 0.8.0 – „Was möchtest du festhalten?“** (Mockup „Einstellungen“, erster Abschnitt nach dem Profil): je ein Schalter für **Stillen** („Timer mit Links/Rechts“), **Flasche** („Menge und Uhrzeit“), **Abpumpen** („Menge pro Seite“), **Windel** („nass, voll oder beides“), **Schlaf** („Start und Ende“), alle standardmäßig an, gespeichert in `kv` `trackers`. Ausgeschaltetes verschwindet von Heute (Knopf, Karte, Zähler, Zeitleiste) und aus der Nachtansicht; Einträge bleiben im Verlauf, in der Sicherung und beim Nachtragen wählbar. Mindestens einer bleibt an (sonst Hinweis „Mindestens eins bleibt eingeschaltet“). Ist nur Flasche oder nur Abpumpen an, heißt der Knopf so und das Sheet hat keinen Umschalter. Ohne Stillen gibt es keine Nachtansicht. Unter **Darstellung** zusätzlich **Zeitleiste auf Heute** (an/aus).
 
 **Seit 0.10.0 – Akzentfarbe** (Mockup „Einstellungen“): letzte Zeile unter **Darstellung**, darunter fünf runde Farbflächen (44 px) Rosé, Grün, Lila, Blau, Orange als Radiogruppe (`role="radiogroup"`, Pfeiltasten wechseln). Die gewählte hat Ring und Häkchen, ihr Name steht in der Zusatzzeile („Grün · Für Knöpfe, Schalter und Markierungen“). Wirkt sofort und ab dem nächsten Start vor dem ersten Bild; „Alle Daten löschen“ setzt auf Rosé zurück. Farbwerte in Abschnitt 4.
+
+**Seit 0.17.0 – Übersicht mit Unterseiten** (Wunsch des Besitzers, 2026-11-22, Variante B „gruppierte Liste“, Mockups in `design-0.17.0`): Die Seite war rund zwölf Handy-Bildschirme lang. Die Übersicht `#/einstellungen` zeigt jetzt die Profil-Karte und drei Gruppen:
+- **Alltag:** **Erfassen** („5 von 6 eingeschaltet“) → `#/einstellungen/erfassen` mit den Tracker-Schaltern und Meilensteine; **Daten & Backup** („Letzte Sicherung: …“, mit Punkt, wenn eine Sicherung fällig ist, gleiche Regel wie die Erinnerung auf Heute) → `#/einstellungen/daten`: Karte mit Stand und großem Knopf **Sicherung speichern**, dann Sicherung mit Passwort, Wiederherstellen, ein Satz zur unverschlüsselten Datei mit „Mehr“, **Alle Daten löschen** abgesetzt.
+- **Anpassen:** **Darstellung** („Hell · Rosé · Zeitleiste an“) → `#/einstellungen/darstellung`: **Design** als eine Auswahl **Hell | Dunkel | Nachts** (ersetzt die zwei Schalter „Dunkles Design“ und „Nachts automatisch“), Akzentfarbe, Zeitleiste auf Heute; **Sprache · Language** direkt in der Zeile als Auswahlliste („System (Deutsch)“, „Deutsch“, „English“).
+- **Hilfe und Info:** So funktioniert Baby Time, Feedback senden, **Über die App** („Version x.y.z · Datenschutz“) → `#/einstellungen/app`: Version und Update, Datenschutz, Als App installieren, Hinweise Testversion und „kein ärztlicher Rat“.
+- Darunter „Deine Einträge bleiben auf diesem Handy.“ Unterseiten haben oben einen Zurück-Knopf und behalten die Tab-Leiste mit „Einstellungen“ markiert. Sprache, Anleitung und Feedback bleiben auf der Übersicht, damit die Knöpfe der „So geht's“-Anleitungen dort landen.
 
 ### 6.11 Flasche und Abpumpen (seit 0.6.0)
 

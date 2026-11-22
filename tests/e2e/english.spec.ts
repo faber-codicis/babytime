@@ -14,11 +14,18 @@ async function openAppEnglish(page: Page): Promise<void> {
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
 }
 
-const settings = async (page: Page) => {
-  await page.getByRole('link', { name: 'Settings' }).click();
+const settings = async (page: Page, sub?: string) => {
+  await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Settings' }).click();
   await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
+  if (sub) {
+    await page.getByRole('main').getByRole('link', { name: new RegExp(`^${sub}`) }).click();
+    await expect(page.getByRole('heading', { name: sub, level: 1 })).toBeVisible();
+  }
   return page.getByRole('main');
 };
+
+/** The language picker on the settings overview (a native select since 0.17.0). */
+const languagePicker = (page: Page, name: string) => page.getByRole('main').getByRole('combobox', { name });
 
 test('splash and first start are English, <html lang> is en', async ({ page }) => {
   await page.goto('/');
@@ -63,14 +70,15 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
 
   // Backup: export, delete everything, restore.
   let main = await settings(page);
-  await expect(main.getByRole('heading', { level: 2 })).toHaveText(['What do you want to track?', 'Appearance', 'Data', 'About the app']);
+  await expect(main.getByRole('heading', { level: 2 })).toHaveText(['Everyday', 'Personalise', 'Help and info']);
   await page.screenshot({ path: 'test-results/en-settings.png', animations: 'disabled', fullPage: true });
+  main = await settings(page, 'Data & backup');
   const download = page.waitForEvent('download');
-  await main.getByRole('button', { name: /Save backup/ }).click();
+  await main.getByRole('button', { name: 'Save backup' }).click();
   const file = await download;
   const text = readFileSync((await file.path())!, 'utf8');
   await expect(page.getByText('Backup created')).toBeVisible();
-  await expect(main.getByRole('button', { name: /Save backup Last backup: today/ })).toBeVisible();
+  await expect(main.getByRole('region', { name: 'Last backup: today' })).toBeVisible();
 
   await main.getByRole('button', { name: /Delete all data/ }).click();
   await page.getByRole('dialog', { name: 'Delete everything?' }).getByRole('button', { name: 'Delete everything' }).click();
@@ -78,7 +86,7 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
   await page.getByRole('button', { name: 'Continue without a name' }).click();
   await skipTutorial(page, 'Skip');
 
-  main = await settings(page);
+  main = await settings(page, 'Data & backup');
   const chooser = page.waitForEvent('filechooser');
   await main.getByRole('button', { name: 'Restore backup' }).click();
   await (await chooser).setFiles({ name: file.suggestedFilename(), mimeType: 'application/json', buffer: Buffer.from(text) });
@@ -91,11 +99,12 @@ test('Today, History, Settings and backup in English', async ({ page }) => {
 
 test('the language switch: German sticks after a restart, System follows the phone again', async ({ page }) => {
   await openAppEnglish(page);
-  let main = await settings(page);
-  const group = main.getByRole('group', { name: 'Language' });
-  await expect(group.getByRole('button', { name: 'System' })).toHaveAttribute('aria-pressed', 'true');
+  await settings(page);
+  const picker = languagePicker(page, 'Sprache · Language');
+  await expect(picker).toHaveValue('auto');
+  await expect(picker.locator('option:checked')).toHaveText('System (English)');
 
-  await Promise.all([page.waitForEvent('load'), group.getByRole('button', { name: 'Deutsch' }).click()]);
+  await Promise.all([page.waitForEvent('load'), picker.selectOption('de')]);
   await waitForApp(page);
   await expect(page.locator('html')).toHaveAttribute('lang', 'de');
   await expect(page.getByRole('heading', { name: 'Einstellungen', level: 1 })).toBeVisible();
@@ -103,8 +112,8 @@ test('the language switch: German sticks after a restart, System follows the pho
   await waitForApp(page);
   await expect(page.getByRole('heading', { name: 'Einstellungen', level: 1 })).toBeVisible();
 
-  main = page.getByRole('main');
-  await Promise.all([page.waitForEvent('load'), main.getByRole('group', { name: 'Sprache' }).getByRole('button', { name: 'System' }).click()]);
+  await expect(picker).toHaveValue('de');
+  await Promise.all([page.waitForEvent('load'), picker.selectOption('auto')]);
   await waitForApp(page);
   await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
 });
@@ -117,9 +126,10 @@ test('System follows the phone even when the browser still lists German first fo
   });
   await openAppEnglish(page);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  const main = await settings(page);
-  await expect(main.getByRole('group', { name: 'Language' }).getByRole('button', { name: 'System' })).toHaveAttribute('aria-pressed', 'true');
-  await expect(main.getByText('System follows your phone’s language, now English')).toBeVisible();
+  await settings(page);
+  const picker = languagePicker(page, 'Sprache · Language');
+  await expect(picker).toHaveValue('auto');
+  await expect(picker.locator('option:checked')).toHaveText('System (English)');
 });
 
 test('after the update: English popup with the newest guide, its button goes straight to the settings row', async ({ page }) => {
@@ -127,7 +137,7 @@ test('after the update: English popup with the newest guide, its button goes str
   await setKvAndRestart(page, 'lastSeenVersion', '0.13.0');
   const popup = page.getByRole('dialog', { name: `New in version ${pkg.version}` });
   await expect(popup).toBeVisible();
-  await expect(popup.getByText(/^New under Settings → About the app: “Privacy”/)).toBeVisible();
+  await expect(popup.getByText(/^Settings are now a short overview with sub pages/)).toBeVisible();
   await expect(popup.getByText('How it works')).toBeVisible();
   await expect(popup.getByRole('list', { name: 'Steps' }).getByRole('listitem')).toHaveCount(3);
   // The tall popup starts at its title, although "Got it" further down has the focus.
@@ -145,6 +155,7 @@ test('after the update: English popup with the newest guide, its button goes str
   await page.reload();
   await waitForApp(page);
   await expect(popup).toHaveCount(0);
+  await settings(page, 'About the app');
   await page.getByRole('main').getByRole('link', { name: 'What’s new' }).click();
   await expect(page.getByRole('heading', { name: 'What’s new', level: 1 })).toBeVisible();
   await page.getByRole('button', { name: 'Go to feedback' }).click();
@@ -161,8 +172,9 @@ test.describe('German phone', () => {
     await page.getByRole('button', { name: 'Ohne Namen fortfahren' }).click();
     await skipTutorial(page);
     await page.getByRole('link', { name: 'Einstellungen' }).click();
-    const group = page.getByRole('main').getByRole('group', { name: 'Sprache' });
-    await Promise.all([page.waitForEvent('load'), group.getByRole('button', { name: 'English' }).click()]);
+    const picker = languagePicker(page, 'Sprache · Language');
+    await expect(picker.locator('option:checked')).toHaveText('System (Deutsch)');
+    await Promise.all([page.waitForEvent('load'), picker.selectOption('en')]);
     await waitForApp(page);
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();

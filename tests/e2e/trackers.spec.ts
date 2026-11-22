@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { openApp } from './helpers';
+import { openApp, openSettings } from './helpers';
 
 test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('switched-off trackers disappear from Today; at least one stays on', async ({ page }) => {
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
+  await openSettings(page, 'Erfassen');
   const section = page.getByRole('region', { name: 'Was möchtest du festhalten?' });
   for (const name of ['Stillen', 'Flasche', 'Abpumpen', 'Windel', 'Schlaf']) {
     await expect(section.getByRole('switch', { name: new RegExp(`^${name}`) })).toHaveAttribute('aria-checked', 'true');
@@ -32,7 +32,7 @@ test('switched-off trackers disappear from Today; at least one stays on', async 
   await page.keyboard.press('Escape');
 
   // Switch off everything else: the last one stays on, with a message.
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
+  await openSettings(page, 'Erfassen');
   for (const name of ['Stillen', 'Abpumpen']) await section.getByRole('switch', { name: new RegExp(`^${name}`) }).click();
   await section.getByRole('switch', { name: /^Schlaf/ }).click();
   await expect(page.getByText('Mindestens eins bleibt eingeschaltet')).toBeVisible();
@@ -46,7 +46,7 @@ test('switched-off trackers disappear from Today; at least one stays on', async 
 test('the timeline can be hidden', async ({ page }) => {
   const figure = page.getByRole('figure', { name: 'Der heutige Tag von 0 bis 24 Uhr' });
   await expect(figure).toBeVisible();
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
+  await openSettings(page, 'Darstellung');
   await page.getByRole('switch', { name: /^Zeitleiste auf Heute/ }).click();
   await page.getByRole('link', { name: 'Heute' }).click();
   await expect(page.getByRole('heading', { name: 'Dein Baby' })).toBeVisible();

@@ -14,6 +14,15 @@ describe('parseHash', () => {
     expect(parseHash('#/meilensteine')).toBe('milestones');
   });
 
+  it('maps the settings sub pages (0.17.0)', () => {
+    expect(parseHash('#/einstellungen')).toBe('settings');
+    expect(parseHash('#/einstellungen/erfassen')).toBe('settingsTrackers');
+    expect(parseHash('#/einstellungen/darstellung')).toBe('settingsLook');
+    expect(parseHash('#/einstellungen/daten')).toBe('settingsData');
+    expect(parseHash('#/einstellungen/app')).toBe('settingsAbout');
+    expect(parseHash('#/einstellungen/gibtsnicht')).toBe('today');
+  });
+
   it('falls back to today for empty, root and unknown hashes', () => {
     expect(parseHash('')).toBe('today');
     expect(parseHash('#/')).toBe('today');

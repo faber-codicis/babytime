@@ -427,34 +427,135 @@
 }
 
 /* Language (0.14.0): label on top, the choices below – like the accent row. */
-.data-action.choice-row {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-  padding: 14px 16px 16px;
+/* ---------------------------------------------------------------- overview and sub pages (0.17.0) */
+
+/* Chevron of a row that opens a sub page. */
+.row-chevron {
+  flex: none;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
 }
 
-.choice-row-head {
+/* Backup due: a dot before the text, which says when (never colour alone). */
+.due-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--rose);
+  vertical-align: 1px;
+}
+
+/*
+ * Language in one line: label left, the phone's own picker in a tinted pill right. A choice restarts the app.
+ * Words never break inside (min-content = the longest word); if label and picker don't fit side by side
+ * (narrow phone, large text), the picker moves under the label.
+ */
+.data-action.select-row {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.select-row-label {
+  flex: 1 1 6em;
+  min-width: min-content;
+  overflow-wrap: normal;
+}
+
+.select-pill {
+  position: relative;
+  flex: none;
+  max-width: 100%;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  border-radius: 22px;
+  background: var(--rose-tint);
+  color: var(--rose-ink);
+}
+
+.select-pill select {
+  appearance: none;
+  min-height: var(--touch);
+  max-width: 100%;
+  padding: 0 38px 0 16px;
+  border: 0;
+  border-radius: 22px;
+  background: transparent;
+  color: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.select-pill select:focus-visible {
+  outline: 3px solid var(--rose);
+  outline-offset: 2px;
+}
+
+.select-pill svg {
+  position: absolute;
+  right: 14px;
+  pointer-events: none;
+}
+
+/* Design: light, dark or at night as one choice, each with its icon over the word. */
+.theme-choice .segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 60px;
+  font-size: 15px;
+  /* The whole page changes colour at once; a fading button would lag behind (and flash white text in dark). */
+  transition: none;
+}
+
+.backup-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.backup-status {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-/* A choice here restarts the app, so no colour fade (it would also lag behind a design switch). */
-.choice-row .segment {
-  transition: none;
+/* One sentence with "Mehr" that opens the rest (instead of a paragraph). */
+.settings-more summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: var(--touch);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 4px;
 }
 
-/*
- * "Automatisch" (now "System") must never be cut off (0.14.1, 0.15.1): each option is as wide as its word and shares
- * the rest of the row. The button's min-width from base.css would let it shrink below its word, so
- * max-content here; if the words don't fit (narrow phone, large system font), the row wraps.
- */
-.choice-row .segmented--small .segment {
-  flex: 1 1 auto;
-  min-width: max-content;
-  font-size: 15px;
-  padding-inline: 12px;
+.settings-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.settings-more-link {
+  font-weight: 700;
+  color: var(--rose-ink);
+}
+
+.settings-more[open] .settings-more-link {
+  display: none;
+}
+
+.settings-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 /*

@@ -37,6 +37,9 @@ const PATHS = {
   globe: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9s1.3-6.4 3.8-9',
   // Akzentfarbe (Einstellungen → Darstellung).
   palette: 'M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.9 1.4-1.9-.5-1.1.3-2.4 1.6-2.4H17a4 4 0 0 0 4-4c0-5.4-4-9.7-9-9.7zM7.5 11.5v.01M9.5 7.5v.01M14.5 7.5v.01',
+  // Einstellungen → Erfassen (0.17.0): a list, and the down chevron of the language picker.
+  list: 'M4 6h3M4 12h3M4 18h3M10 6h10M10 12h10M10 18h10',
+  down: 'M6 9l6 6 6-6',
 } as const;
 
 export type IconName = keyof typeof PATHS;

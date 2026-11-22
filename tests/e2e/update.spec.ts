@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import pkg from '../../package.json' with { type: 'json' };
-import { openApp, setKvAndRestart, waitForApp } from './helpers';
+import { openApp, openSettings, setKvAndRestart, waitForApp } from './helpers';
 
 test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
@@ -76,10 +76,13 @@ test('"Alle Neuerungen ansehen" opens the changelog page', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: popupName })).toHaveCount(0);
 });
 
-test('"Was ist neu" is reachable from the settings', async ({ page }) => {
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
+test('"Was ist neu" is reachable from Einstellungen → Über die App', async ({ page }) => {
+  await openSettings(page, 'Über die App');
   await page.getByRole('main').getByRole('link', { name: 'Was ist neu' }).click();
   await expect(page.getByRole('heading', { name: 'Was ist neu', level: 1 })).toBeVisible();
   await page.getByRole('button', { name: 'Zurück' }).click();
+  await expect(page.getByRole('heading', { name: 'Über die App', level: 1 })).toBeVisible();
+  // And from the sub page back to the overview.
+  await page.getByRole('button', { name: 'Zurück zu den Einstellungen' }).click();
   await expect(page.getByRole('heading', { name: 'Einstellungen', level: 1 })).toBeVisible();
 });

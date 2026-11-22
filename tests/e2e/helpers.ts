@@ -67,3 +67,16 @@ export async function seed(page: Page, events: Seed[]): Promise<void> {
   await page.reload();
   await waitForApp(page);
 }
+
+/** The settings sub pages since 0.17.0, by the row name on the overview. */
+export type SettingsSub = 'Erfassen' | 'Darstellung' | 'Daten & Backup' | 'Über die App';
+
+/** Opens the Einstellungen tab and, if given, one of its sub pages. */
+export async function openSettings(page: Page, sub?: SettingsSub): Promise<void> {
+  await page.getByRole('navigation', { name: 'Hauptnavigation' }).getByRole('link', { name: 'Einstellungen' }).click();
+  await expect(page.getByRole('heading', { name: 'Einstellungen', level: 1 })).toBeVisible();
+  if (!sub) return;
+  const escaped = sub.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  await page.getByRole('main').getByRole('link', { name: new RegExp(`^${escaped}`) }).click();
+  await expect(page.getByRole('heading', { name: sub, level: 1 })).toBeVisible();
+}
