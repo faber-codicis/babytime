@@ -127,7 +127,7 @@ test('after the update: English popup with the newest guide, its button goes str
   await setKvAndRestart(page, 'lastSeenVersion', '0.13.0');
   const popup = page.getByRole('dialog', { name: `New in version ${pkg.version}` });
   await expect(popup).toBeVisible();
-  await expect(popup.getByText(/^The language option “Automatisch” is now called “System”/)).toBeVisible();
+  await expect(popup.getByText(/^New under Settings → About the app: “Privacy”/)).toBeVisible();
   await expect(popup.getByText('How it works')).toBeVisible();
   await expect(popup.getByRole('list', { name: 'Steps' }).getByRole('listitem')).toHaveCount(3);
   // The tall popup starts at its title, although "Got it" further down has the focus.

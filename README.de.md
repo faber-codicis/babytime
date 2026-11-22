@@ -52,6 +52,7 @@ Danach immer vom Home-Bildschirm starten. Safari kann Daten von Webseiten lösch
 - **Kein Konto, kein Upload, keine Analyse, keine Werbung.** Die Einträge liegen nur im Browser auf deinem Gerät.
 - Der Server (Cloudflare) liefert nur die App und ihre Updates aus. Er sieht wie jede Webseite die IP-Adresse, nie die Einträge.
 - Eine strenge Content-Security-Policy verbietet der App jede Verbindung zu fremden Servern.
+- Die vollständige Datenschutzerklärung steht in der App unter **Einstellungen → Über die App → Datenschutz**.
 - Weil nichts das Handy verlässt, gibt es **keinen Abgleich zwischen Geräten**. Für ein neues Handy: Sicherung exportieren und dort wiederherstellen.
 
 Baby Time ist kein Medizinprodukt und ersetzt keinen Rat von Hebamme, Ärztin oder Arzt.

@@ -351,6 +351,42 @@ export const de = {
     medical: 'Baby Time ist ein Tagebuch und ersetzt keinen Rat von Hebamme, Ärztin oder Arzt.',
   },
 
+  privacy: {
+    open: 'Datenschutz',
+    openHint: 'Was mit deinen Daten passiert, wer die App betreibt',
+    title: 'Datenschutz',
+    updated: (date: string) => `Stand: ${date}`,
+    summary: 'Kurz gesagt: Deine Einträge verlassen dein Handy nicht. Es gibt kein Konto, keine Werbung und keine Analyse.',
+    controllerTitle: 'Verantwortlich',
+    controller: (name: string, email: string) => `${name}, privat, nicht gewerblich. Kontakt: ${email}`,
+    sections: [
+      {
+        title: 'Deine Einträge',
+        text: 'Stillen, Windeln, Schlaf, Meilensteine, Name und Geburtsdatum deines Babys speichert die App nur im Browser auf deinem Gerät. Sie werden nicht an uns oder andere übertragen; wir können sie nicht sehen. Du löschst sie unter Einstellungen → Alle Daten löschen oder indem du die App bzw. die Website-Daten entfernst. Sicherungsdateien liegen dort, wo du sie speicherst.',
+      },
+      {
+        title: 'Aufruf der App',
+        text: 'Die App wird über Cloudflare, Inc. (USA) ausgeliefert. Beim Laden und bei Updates verarbeitet Cloudflare wie bei jeder Website technische Daten: IP-Adresse, Zeitpunkt, aufgerufene Datei und Browserkennung. Das ist nötig, um die App sicher auszuliefern (Art. 6 Abs. 1 lit. f DSGVO). Wir werten diese Daten nicht aus; Cloudflare Web Analytics ist aus. Cloudflare ist nach dem EU-US Data Privacy Framework zertifiziert.',
+      },
+      {
+        title: 'Speicher im Browser',
+        text: 'Die App nutzt keine Cookies. Sie legt nur die Daten im Browser ab, die sie zum Funktionieren braucht: deine Einträge und Einstellungen wie Design, Akzentfarbe und Sprache.',
+      },
+      {
+        title: 'Feedback per E-Mail',
+        text: 'Wenn du „Feedback senden“ nutzt, öffnet sich dein E-Mail-Programm. Erst wenn du selbst sendest, erhalten wir deine Adresse, deine Nachricht und die angezeigten Geräteangaben (Version, Browserkennung). Wir nutzen sie nur, um zu antworten und Fehler zu beheben (Art. 6 Abs. 1 lit. f DSGVO), und löschen sie, wenn sie nicht mehr gebraucht werden. Die Mail läuft über die Weiterleitung von Cloudflare in ein privates Postfach.',
+      },
+      {
+        title: 'Deine Rechte',
+        text: 'Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch. Schreib dafür an die Adresse oben. Du kannst dich auch bei der Österreichischen Datenschutzbehörde beschweren (dsb.gv.at).',
+      },
+    ],
+    imprintTitle: 'Offenlegung (§ 25 MedienG)',
+    imprint: (name: string, place: string) =>
+      `Medieninhaber: ${name}, ${place}. Inhalt: Informationen zur App Baby Time, ein privates, nicht gewerbliches Projekt.`,
+    close: 'Schließen',
+  },
+
   language: {
     /** Both languages on purpose: whoever lands in the wrong one still finds the switch. */
     label: 'Sprache · Language',

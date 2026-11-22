@@ -273,3 +273,11 @@ Auftrag des Besitzers: das GitHub-Repo öffentlich machen, Landingpage optional.
 - **SECURITY.md** (private Meldung über GitHub oder `kontakt@mraz.app`), **CONTRIBUTING.md**, Issue-Vorlagen (Fehler, Idee; leere Issues aus), PR-Vorlage, **Dependabot** monatlich gebündelt.
 - **Neues Repo mit umgeschriebener History** (Wahl des Besitzers): Das alte Repo heißt jetzt `babytime-archive` (privat, mit den PRs 1–22). Im neuen `babytime` tragen alle Commits die GitHub-noreply-Adresse statt der Gmail-Adresse; ein PR allein hätte das nicht gekonnt, weil GitHub die alten PR-Commits (`refs/pull/*`) aufhebt.
 - **Keine eigene Landingpage:** Das README ist die Projektseite. Eine spätere Seite gehört nicht in die App (Service Worker, CSP, Daten hängen an `babytime.mraz.app`), sondern auf `mraz.app` oder GitHub Pages.
+
+## 0.16.1 (Datenschutz und Offenlegung)
+
+Auftrag des Besitzers, 2026-11-22: Datenschutzerklärung für das öffentliche Repo und die App.
+
+- **In der App statt auf einer eigenen Website:** Einstellungen → Über die App → **Datenschutz** öffnet ein Sheet (Art. 13 DSGVO: Verantwortlicher, lokale Einträge, Cloudflare-Auslieferung mit IP-Logs, Browserspeicher ohne Cookies, Feedback-Mail, Rechte, Beschwerde bei der DSB). Offline erreichbar wie alles andere; Texte in DE und EN.
+- **Betreiberdaten in `src/legal.ts`** (`OWNER`, `PRIVACY_UPDATED`). Die **Offenlegung nach § 25 Abs. 5 MedienG** (Name und Wohnort, ohne Straße) erscheint erst, wenn `OWNER.place` ausgefüllt ist. Der Besitzer trägt den Ort selbst ein. Keine Rechtsberatung.
+- **Version 0.16.1** mit Was-ist-neu-Eintrag, aber ohne Anleitung (kein neues Werkzeug, nur ein Info-Text). Der E2E-Test zum englischen Popup prüft deshalb den 0.16.1-Eintrag statt des älteren 0.15.2-Satzes, der jetzt hinter die Grenze von fünf Punkten fällt.

@@ -352,6 +352,42 @@ export const en: Strings = {
     medical: 'Baby Time is a diary and doesn’t replace advice from your midwife or doctor.',
   },
 
+  privacy: {
+    open: 'Privacy',
+    openHint: 'What happens to your data, who runs the app',
+    title: 'Privacy',
+    updated: (date: string) => `Last updated: ${date}`,
+    summary: 'In short: your entries never leave your phone. No account, no ads, no analytics.',
+    controllerTitle: 'Responsible',
+    controller: (name: string, email: string) => `${name}, private, non-commercial. Contact: ${email}`,
+    sections: [
+      {
+        title: 'Your entries',
+        text: 'Feeds, diapers, sleep, milestones and your baby’s name and birth date are stored only in the browser on your device. They are not sent to us or anyone else; we cannot see them. Delete them under Settings → Delete all data, or by removing the app or its website data. Backup files stay wherever you save them.',
+      },
+      {
+        title: 'Loading the app',
+        text: 'The app is delivered by Cloudflare, Inc. (USA). When it loads or updates, Cloudflare processes technical data like for any website: IP address, time, requested file and browser identifier. This is needed to deliver the app securely (Art. 6(1)(f) GDPR). We do not analyse this data; Cloudflare Web Analytics is off. Cloudflare is certified under the EU-US Data Privacy Framework.',
+      },
+      {
+        title: 'Browser storage',
+        text: 'The app uses no cookies. It only stores what it needs to work in your browser: your entries and settings such as theme, accent colour and language.',
+      },
+      {
+        title: 'Feedback by email',
+        text: '“Send feedback” opens your email app. Only when you send it do we receive your address, your message and the device details shown (version, browser identifier). We use them only to reply and fix bugs (Art. 6(1)(f) GDPR) and delete them once no longer needed. The mail passes through Cloudflare’s forwarding to a private mailbox.',
+      },
+      {
+        title: 'Your rights',
+        text: 'You have the right to access, rectification, erasure, restriction, data portability and objection. Write to the address above. You can also complain to the Austrian Data Protection Authority (dsb.gv.at).',
+      },
+    ],
+    imprintTitle: 'Disclosure (§ 25 Austrian Media Act)',
+    imprint: (name: string, place: string) =>
+      `Media owner: ${name}, ${place}. Content: information about the Baby Time app, a private, non-commercial project.`,
+    close: 'Close',
+  },
+
   language: {
     label: 'Sprache · Language',
     hint: (detected: string) => `System follows your phone’s language, now ${detected}`,

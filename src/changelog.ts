@@ -29,6 +29,22 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.16.1',
+    date: '2026-11-22',
+    items: {
+      de: [
+        'Neu unter Einstellungen → Über die App: „Datenschutz“ erklärt, was mit deinen Daten passiert',
+        'Kurz: Deine Einträge bleiben auf deinem Handy, ohne Konto, Werbung und Analyse',
+        'Baby Time ist jetzt Open Source: Der Code liegt öffentlich auf GitHub',
+      ],
+      en: [
+        'New under Settings → About the app: “Privacy” explains what happens to your data',
+        'In short: your entries stay on your phone, with no account, ads or analytics',
+        'Baby Time is now open source: the code is public on GitHub',
+      ],
+    },
+  },
+  {
     version: '0.16.0',
     date: '2026-11-16',
     items: {
