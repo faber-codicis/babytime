@@ -179,11 +179,11 @@ export const en: Strings = {
       },
       {
         title: 'Calm through the night',
-        text: 'Under Settings → Appearance you can turn on “Dark at night”: muted colours and big buttons from 8 p.m. to 7 a.m.',
+        text: 'Under Settings → Appearance you can pick “At night” as the design: muted colours and big buttons from 8 p.m. to 7 a.m.',
       },
       {
         title: 'Your data stays with you',
-        text: 'Everything stays on this phone only. Save a backup now and then: Settings → Data → Save backup.',
+        text: 'Everything stays on this phone only. Save a backup now and then: Settings → Data & backup.',
       },
     ],
   },
@@ -203,8 +203,10 @@ export const en: Strings = {
     open: 'Data and info',
     title: 'Data and info',
     export: 'Save backup',
-    exportHint:
-      'The normal backup is not encrypted. With a password, the file is protected if it ends up in the wrong hands. Keep your backups in a safe place.',
+    exportHint: 'The normal backup is not encrypted.',
+    exportHintMore: 'More',
+    exportHintMoreText: 'With a password, the file is protected if it ends up in the wrong hands. Keep your backups in a safe place.',
+    backupNudge: 'Save a backup now and then.',
     exportEncrypted: 'Backup with password',
     exportEncryptedHint: 'Encrypted, readable only with the password',
     exportShareTitle: 'Baby Time backup',
@@ -214,14 +216,19 @@ export const en: Strings = {
     deleteAll: 'Delete all data',
     deleteAllHint: 'Remove entries, milestones, profile and settings from this phone',
     versionCard: (version: string) => `Baby Time · Version ${version}`,
-    darkMode: 'Dark design',
-    darkModeHint: 'Muted colours all the time',
+    theme: 'Design',
+    themeNames: { light: 'Light', dark: 'Dark', night: 'At night' },
+    themeHints: {
+      light: 'Light colours all the time.',
+      dark: 'Muted colours all the time.',
+      night: 'Dark from 8 p.m. to 7 a.m., Today then shows the night view.',
+    },
+    colourAndView: 'Colour and view',
     timeline: 'Timeline on Today',
     timelineHint: 'The whole day at a glance',
-    nightMode: 'Dark at night',
-    nightModeHint: 'Dark from 8 p.m. to 7 a.m., Today then shows the night view',
+    timelineOn: 'timeline on',
     accent: 'Accent colour',
-    accentHint: 'For buttons, switches and highlights',
+    accentHint: 'for buttons, switches and highlights',
     accentNames: { rose: 'Rosé', green: 'Green', purple: 'Purple', blue: 'Blue', orange: 'Orange' },
   },
 
@@ -338,23 +345,28 @@ export const en: Strings = {
     title: 'Settings',
     editProfile: 'Edit profile',
     addName: 'Add a name',
+    back: 'Back to settings',
+    groupDaily: 'Everyday',
+    groupCustomize: 'Personalise',
+    groupHelp: 'Help and info',
+    trackers: 'What to track',
+    trackersOn: (on: number, total: number) => `${on} of ${total} switched on`,
     sectionLook: 'Appearance',
-    sectionData: 'Data',
+    sectionData: 'Data & backup',
     sectionAbout: 'About the app',
+    aboutSummary: (version: string) => `Version ${version} · Privacy`,
     lastBackup: (when: string) => `Last backup: ${when}`,
     noBackup: 'No backup yet',
     install: 'Install as app',
     installAndroidMenu: 'In the Chrome menu ⋮, tap “Install app”.',
     privacy: 'Your entries stay on this phone.',
-    privacyMore:
-      'No account, no upload, no analytics. The server (Cloudflare) only delivers the app and its updates; like any website it sees your IP address, never your entries.',
-    beta: 'Test version: there may still be bugs. Back up your data now and then (Data and info → Save backup).',
+    beta: 'Test version: there may still be bugs.',
     medical: 'Baby Time is a diary and doesn’t replace advice from your midwife or doctor.',
   },
 
   privacy: {
     open: 'Privacy',
-    openHint: 'What happens to your data, who runs the app',
+    openHint: 'No account, no upload, no analytics',
     title: 'Privacy',
     updated: (date: string) => `Last updated: ${date}`,
     summary: 'In short: your entries never leave your phone. No account, no ads, no analytics.',
@@ -393,6 +405,7 @@ export const en: Strings = {
     hint: (detected: string) => `System follows your phone’s language, now ${detected}`,
     a11y: 'Language',
     auto: 'System',
+    autoNow: (detected: string) => `System (${detected})`,
   },
 
   guide: {
@@ -402,7 +415,7 @@ export const en: Strings = {
 
   feedback: {
     label: 'Send feedback',
-    hint: (email: string) => `Found a bug or have an idea? Opens an email to ${email}. Nothing is sent until you tap Send yourself.`,
+    hint: (email: string) => `Found a bug or have an idea? Opens an email to ${email}.`,
     subject: (version: string) => `Baby Time ${version}: feedback`,
     body: (version: string, builtAt: string, userAgent: string, installed: boolean) =>
       [

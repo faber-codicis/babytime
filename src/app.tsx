@@ -1,7 +1,7 @@
 import { isTutorialPending, setTutorialPending } from './data/appState';
 import { getProfile } from './data/profile';
 import { DEFAULT_TRACKERS, getTrackers } from './data/trackers';
-import { useRoute } from './router';
+import { isSettingsPage, useRoute } from './router';
 import { useLive } from './ui/hooks';
 import { Nav } from './ui/Nav';
 import { Tutorial } from './ui/Tutorial';
@@ -38,7 +38,7 @@ export function App() {
   // No tab bar on the running feed and on "Was ist neu" (spec 6.1, 6).
   // Meilensteine switched off: its address shows Today (and the tab bar has three tabs, mockup "Navigation").
   const page = route === 'milestones' && !trackers.milestones ? 'today' : route;
-  const withNav = page === 'today' || page === 'history' || page === 'milestones' || page === 'settings';
+  const withNav = page === 'today' || page === 'history' || page === 'milestones' || isSettingsPage(page);
   const view =
     page === 'feeding' ? (
       <Breastfeeding />
@@ -46,8 +46,8 @@ export function App() {
       <History />
     ) : page === 'milestones' ? (
       <Milestones profile={profile} />
-    ) : page === 'settings' ? (
-      <Settings profile={profile} />
+    ) : isSettingsPage(page) ? (
+      <Settings profile={profile} page={page} />
     ) : page === 'whatsnew' ? (
       <WhatsNew />
     ) : (
@@ -57,7 +57,7 @@ export function App() {
   return (
     <>
       <main class={`app${withNav ? ' app--with-nav' : ''}`}>{view}</main>
-      {withNav && <Nav route={page} milestones={trackers.milestones} />}
+      {withNav && <Nav route={isSettingsPage(page) ? 'settings' : page} milestones={trackers.milestones} />}
       {/* Never over a running feed, and never together with the update popup. */}
       <Tutorial open={tutorial && page !== 'feeding' && !update.entries} onClose={() => void setTutorialPending(false)} />
       <UpdateDialog entries={update.entries} onDismiss={update.dismiss} onShowAll={update.showAll} onGuide={update.openGuide} />

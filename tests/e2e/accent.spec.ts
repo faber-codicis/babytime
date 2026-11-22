@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openApp, waitForApp } from './helpers';
+import { openApp, openSettings, waitForApp } from './helpers';
 
 test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
@@ -8,7 +8,7 @@ const roseToken = (page: Page) => page.evaluate(() => getComputedStyle(document.
 const barColour = (page: Page) => page.locator('meta[name="theme-color"]').getAttribute('content');
 
 async function openLook(page: Page) {
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
+  await openSettings(page, 'Darstellung');
   return page.getByRole('radiogroup', { name: 'Akzentfarbe' });
 }
 
@@ -43,8 +43,8 @@ test('five accent colours; the choice applies at once, survives a restart and fo
   await waitForApp(page);
 
   // Dark design: the dark variant of the accent; the bar stays dark.
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
-  await page.getByRole('switch', { name: /Dunkles Design/ }).click();
+  await openSettings(page, 'Darstellung');
+  await page.getByRole('group', { name: 'Design' }).getByRole('button', { name: 'Dunkel' }).click();
   expect(await roseToken(page)).toBe('#a48ad8');
   expect(await barColour(page)).toBe('#150D10');
   await page.screenshot({ path: 'test-results/accent-purple-dark.png', animations: 'disabled' });
@@ -55,6 +55,7 @@ test('"Alle Daten löschen" goes back to rosé', async ({ page }) => {
   const group = await openLook(page);
   await group.getByRole('radio', { name: 'Orange' }).click();
   expect(await accentOf(page)).toBe('orange');
+  await openSettings(page, 'Daten & Backup');
   await page.getByRole('button', { name: /Alle Daten löschen/ }).click();
   await page.getByRole('dialog', { name: 'Alles löschen?' }).getByRole('button', { name: 'Alles löschen' }).click();
   await expect(page.getByRole('heading', { name: 'Herzlichen Glückwunsch!' })).toBeVisible();

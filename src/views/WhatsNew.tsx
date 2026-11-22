@@ -18,7 +18,7 @@ export function WhatsNew() {
   return (
     <div class="whatsnew">
       <header class="screen-head">
-        <button type="button" class="round-btn" aria-label={t.whatsNew.back} onClick={goBack}>
+        <button type="button" class="round-btn" aria-label={t.whatsNew.back} onClick={() => goBack()}>
           <Icon name="back" size={22} />
         </button>
         <h1 class="screen-title">{t.whatsNew.title}</h1>

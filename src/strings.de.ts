@@ -178,11 +178,11 @@ export const de = {
       },
       {
         title: 'Ruhig durch die Nacht',
-        text: 'Unter Einstellungen → Darstellung kannst du „Nachts automatisch“ einschalten: von 20 bis 7 Uhr gedämpfte Farben und große Knöpfe.',
+        text: 'Unter Einstellungen → Darstellung kannst du beim Design „Nachts“ wählen: von 20 bis 7 Uhr gedämpfte Farben und große Knöpfe.',
       },
       {
         title: 'Deine Daten bleiben bei dir',
-        text: 'Alles bleibt nur auf diesem Handy. Speichere ab und zu eine Sicherung: Einstellungen → Daten → Sicherung speichern.',
+        text: 'Alles bleibt nur auf diesem Handy. Speichere ab und zu eine Sicherung: Einstellungen → Daten & Backup.',
       },
     ],
   },
@@ -202,8 +202,11 @@ export const de = {
     open: 'Daten und Info',
     title: 'Daten und Info',
     export: 'Sicherung speichern',
-    exportHint:
-      'Die normale Sicherung ist unverschlüsselt. Mit Passwort ist die Datei geschützt, falls sie in falsche Hände gerät. Bewahre deine Sicherungen an einem sicheren Ort auf.',
+    exportHint: 'Die normale Sicherung ist unverschlüsselt.',
+    exportHintMore: 'Mehr',
+    exportHintMoreText:
+      'Mit Passwort ist die Datei geschützt, falls sie in falsche Hände gerät. Bewahre deine Sicherungen an einem sicheren Ort auf.',
+    backupNudge: 'Speichere ab und zu eine Sicherung.',
     exportEncrypted: 'Sicherung mit Passwort',
     exportEncryptedHint: 'Verschlüsselt, nur mit Passwort lesbar',
     exportShareTitle: 'Baby Time Sicherung',
@@ -213,14 +216,19 @@ export const de = {
     deleteAll: 'Alle Daten löschen',
     deleteAllHint: 'Einträge, Meilensteine, Profil und Einstellungen von diesem Handy entfernen',
     versionCard: (version: string) => `Baby Time · Version ${version}`,
-    darkMode: 'Dunkles Design',
-    darkModeHint: 'Immer gedämpfte Farben',
+    theme: 'Design',
+    themeNames: { light: 'Hell', dark: 'Dunkel', night: 'Nachts' },
+    themeHints: {
+      light: 'Immer helle Farben.',
+      dark: 'Immer gedämpfte Farben.',
+      night: 'Von 20 bis 7 Uhr dunkel, Heute zeigt dann die Nachtansicht.',
+    },
+    colourAndView: 'Farbe und Ansicht',
     timeline: 'Zeitleiste auf Heute',
     timelineHint: 'Der Tag von 0 bis 24 Uhr auf einen Blick',
-    nightMode: 'Nachts automatisch',
-    nightModeHint: 'Von 20 bis 7 Uhr dunkel, Heute zeigt dann die Nachtansicht',
+    timelineOn: 'Zeitleiste an',
     accent: 'Akzentfarbe',
-    accentHint: 'Für Knöpfe, Schalter und Markierungen',
+    accentHint: 'für Knöpfe, Schalter und Markierungen',
     accentNames: { rose: 'Rosé', green: 'Grün', purple: 'Lila', blue: 'Blau', orange: 'Orange' },
   },
 
@@ -337,23 +345,28 @@ export const de = {
     title: 'Einstellungen',
     editProfile: 'Profil bearbeiten',
     addName: 'Name eintragen',
+    back: 'Zurück zu den Einstellungen',
+    groupDaily: 'Alltag',
+    groupCustomize: 'Anpassen',
+    groupHelp: 'Hilfe und Info',
+    trackers: 'Erfassen',
+    trackersOn: (on: number, total: number) => `${on} von ${total} eingeschaltet`,
     sectionLook: 'Darstellung',
-    sectionData: 'Daten',
+    sectionData: 'Daten & Backup',
     sectionAbout: 'Über die App',
+    aboutSummary: (version: string) => `Version ${version} · Datenschutz`,
     lastBackup: (when: string) => `Letzte Sicherung: ${when}`,
     noBackup: 'Noch keine Sicherung',
     install: 'Als App installieren',
     installAndroidMenu: 'Im Chrome-Menü ⋮ auf „App installieren“ tippen.',
     privacy: 'Deine Einträge bleiben auf diesem Handy.',
-    privacyMore:
-      'Kein Konto, kein Upload, keine Analyse. Der Server (Cloudflare) liefert nur die App und ihre Updates aus und sieht dabei wie jede Webseite deine IP-Adresse, nie deine Einträge.',
-    beta: 'Testversion: Es kann noch Fehler geben. Sichere deine Daten ab und zu (Daten und Info → Sicherung speichern).',
+    beta: 'Testversion: Es kann noch Fehler geben.',
     medical: 'Baby Time ist ein Tagebuch und ersetzt keinen Rat von Hebamme, Ärztin oder Arzt.',
   },
 
   privacy: {
     open: 'Datenschutz',
-    openHint: 'Was mit deinen Daten passiert, wer die App betreibt',
+    openHint: 'Kein Konto, kein Upload, keine Analyse',
     title: 'Datenschutz',
     updated: (date: string) => `Stand: ${date}`,
     summary: 'Kurz gesagt: Deine Einträge verlassen dein Handy nicht. Es gibt kein Konto, keine Werbung und keine Analyse.',
@@ -392,6 +405,8 @@ export const de = {
     label: 'Sprache · Language',
     /** Names the detected language, so a wrong guess is visible (0.15.2). */
     hint: (detected: string) => `System folgt der Sprache des Handys, gerade ${detected}`,
+    /** Option text for "System" in the language picker (0.17.0): what it picks right now. */
+    autoNow: (detected: string) => `System (${detected})`,
     a11y: 'Sprache',
     auto: 'System',
   },
@@ -403,7 +418,7 @@ export const de = {
 
   feedback: {
     label: 'Feedback senden',
-    hint: (email: string) => `Fehler oder Ideen? Öffnet eine E-Mail an ${email}. Gesendet wird erst, wenn du selbst auf Senden tippst.`,
+    hint: (email: string) => `Fehler oder Ideen? Öffnet eine E-Mail an ${email}.`,
     subject: (version: string) => `Baby Time ${version}: Feedback`,
     body: (version: string, builtAt: string, userAgent: string, installed: boolean) =>
       [

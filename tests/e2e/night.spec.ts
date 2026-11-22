@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openApp, seed, waitForApp } from './helpers';
+import { openApp, openSettings, seed, waitForApp } from './helpers';
 
 test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
@@ -8,19 +8,20 @@ const DARK_BG = 'rgb(21, 13, 16)';
 const LIGHT_BG = 'rgb(251, 243, 241)';
 const bodyBg = (page: Page) => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 
+/** "Nachts" in Einstellungen → Darstellung → Design (two switches until 0.16). */
 async function nightSwitch(page: Page) {
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
-  return page.getByRole('switch', { name: /Nachts automatisch/ });
+  await openSettings(page, 'Darstellung');
+  return page.getByRole('group', { name: 'Design' }).getByRole('button', { name: 'Nachts' });
 }
 
-test('at night: "Nachts automatisch" turns dark at once, Today shows the night view; sun and moon switch views', async ({ page }) => {
+test('at night: "Nachts" turns dark at once, Today shows the night view; sun and moon switch views', async ({ page }) => {
   await page.clock.install({ time: at(3, 12) });
   await openApp(page);
   await seed(page, [{ type: 'feed', side: 'right', start: at(0, 50), end: at(1, 7) }]);
   const toggle = await nightSwitch(page);
   await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-checked', 'true');
-  await expect(page.getByRole('switch', { name: /Dunkles Design/ })).toHaveAttribute('aria-checked', 'false');
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('group', { name: 'Design' }).getByRole('button', { name: 'Dunkel' })).toHaveAttribute('aria-pressed', 'false');
   expect(await bodyBg(page)).toBe(DARK_BG);
 
   await page.getByRole('link', { name: 'Heute' }).click();

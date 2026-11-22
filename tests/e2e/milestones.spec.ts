@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { skipTutorial, waitForApp } from './helpers';
+import { openSettings, skipTutorial, waitForApp } from './helpers';
 
 test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
@@ -56,7 +56,7 @@ test('four tabs; mark a suggestion with date and note, add an own milestone, edi
 });
 
 test('switching Meilensteine off in the settings leaves three tabs; the address then shows Today', async ({ page }) => {
-  await nav(page).getByRole('link', { name: 'Einstellungen' }).click();
+  await openSettings(page, 'Erfassen');
   const toggle = page.getByRole('switch', { name: /Meilensteine/ });
   await expect(toggle).toBeChecked();
   await toggle.click();
@@ -66,7 +66,7 @@ test('switching Meilensteine off in the settings leaves three tabs; the address 
   await page.goto('/#/meilensteine');
   await expect(page.getByRole('heading', { name: 'Lena' })).toBeVisible();
 
-  await nav(page).getByRole('link', { name: 'Einstellungen' }).click();
+  await openSettings(page, 'Erfassen');
   await page.getByRole('switch', { name: /Meilensteine/ }).click();
   await expect(nav(page).getByRole('link')).toHaveCount(4);
 });

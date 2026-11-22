@@ -281,3 +281,15 @@ Auftrag des Besitzers, 2026-11-22: Datenschutzerklärung für das öffentliche R
 - **In der App statt auf einer eigenen Website:** Einstellungen → Über die App → **Datenschutz** öffnet ein Sheet (Art. 13 DSGVO: Verantwortlicher, lokale Einträge, Cloudflare-Auslieferung mit IP-Logs, Browserspeicher ohne Cookies, Feedback-Mail, Rechte, Beschwerde bei der DSB). Offline erreichbar wie alles andere; Texte in DE und EN.
 - **Betreiberdaten in `src/legal.ts`** (`OWNER`, `PRIVACY_UPDATED`). Die **Offenlegung nach § 25 Abs. 5 MedienG** (Name und Wohnort, ohne Straße) erscheint erst, wenn `OWNER.place` ausgefüllt ist. Der Besitzer trägt den Ort selbst ein. Keine Rechtsberatung.
 - **Version 0.16.1** mit Was-ist-neu-Eintrag, aber ohne Anleitung (kein neues Werkzeug, nur ein Info-Text). Der E2E-Test zum englischen Popup prüft deshalb den 0.16.1-Eintrag statt des älteren 0.15.2-Satzes, der jetzt hinter die Grenze von fünf Punkten fällt.
+
+## 0.17.0 (Einstellungen als Übersicht mit Unterseiten)
+
+Auftrag des Besitzers, 2026-11-22: Die Einstellungen waren zu lang (etwa zwölf Handy-Bildschirme). Vorher Mockups in zwei Varianten (Kacheln, gruppierte Liste), gewählt hat er **B: gruppierte Liste**.
+
+- **Unterseiten als eigene Routen** (`#/einstellungen/erfassen`, `/darstellung`, `/daten`, `/app`) statt Zustand in der Ansicht: Der Zurück-Knopf des Handys funktioniert, und Tests können sie direkt öffnen. Der Zurück-Knopf in der Seite nutzt die Browser-History, ohne History geht er zur Übersicht.
+- **Design als eine Auswahl von drei** (Hell, Dunkel, Nachts) statt zwei Schaltern, die sich gegenseitig ausschalteten. Gespeichert wird wie bisher `babytime-theme` `light|dark|night`, also keine Migration.
+- **Sprache als native Auswahlliste** statt drei Knöpfen: Sie passt in eine Zeile und bleibt bei großer Schrift lesbar, weil das Handy die Liste selbst zeigt. „System“ nennt in Klammern, was gerade gewählt ist.
+- **Texte gekürzt:** Der Hinweis zur Sicherung ist ein Satz mit aufklappbarem „Mehr“ (`<details>`). Der Absatz zu Cloudflare und IP-Adresse steht nicht mehr in den Einstellungen, sondern nur noch in der Datenschutzerklärung (dort ausführlicher). Die Hinweise bei Feedback und Testversion sind kürzer.
+- **Backup-Punkt** bei „Daten & Backup“ nach derselben Regel wie die Erinnerungskarte auf Heute (14 Tage), aber unabhängig davon, ob die Karte weggeklickt wurde. Der Text sagt zusätzlich, wann gesichert wurde.
+- Kein „So geht's“ zu 0.17.0: Es gibt kein neues Werkzeug, nur einen neuen Aufbau.
+

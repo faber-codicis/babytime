@@ -1,13 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { openApp, skipTutorial, waitForApp } from './helpers';
+import { openApp, openSettings, skipTutorial, waitForApp } from './helpers';
 
 test.use({ timezoneId: 'Europe/Vienna', locale: 'de-AT' });
 
-/** Opens the settings tab (0.4.0: replaces the "Daten und Info" sheet in the history). */
+/** Opens Einstellungen → Daten & Backup (0.4.0: settings tab; 0.17.0: own sub page). */
 const openData = async (page: Page) => {
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
-  await expect(page.getByRole('heading', { name: 'Einstellungen', level: 1 })).toBeVisible();
+  await openSettings(page, 'Daten & Backup');
   return page.getByRole('main');
 };
 
@@ -15,7 +14,7 @@ const openData = async (page: Page) => {
 async function exportBackup(page: Page): Promise<{ name: string; text: string }> {
   const sheet = await openData(page);
   const download = page.waitForEvent('download');
-  await sheet.getByRole('button', { name: /Sicherung speichern/ }).click();
+  await sheet.getByRole('button', { name: 'Sicherung speichern' }).click();
   const file = await download;
   return { name: file.suggestedFilename(), text: readFileSync((await file.path())!, 'utf8') };
 }
@@ -44,7 +43,7 @@ test('export, delete everything, restore in the fresh app: all entries are back'
   expect(backup.name).toMatch(/^babytime-\d{4}-\d{2}-\d{2}\.json$/);
   expect(JSON.parse(backup.text)).toMatchObject({ app: 'babytime', schemaVersion: 3 });
   await expect(page.getByText('Sicherung erstellt')).toBeVisible();
-  await expect(page.getByRole('button', { name: /Sicherung speichern Letzte Sicherung: heute/ })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Letzte Sicherung: heute' })).toBeVisible();
 
   // Delete all: asks first, Abbrechen is the default.
   const sheet = await openData(page);
@@ -98,7 +97,8 @@ test('a huge file is refused before reading it', async ({ page }) => {
 });
 
 test('edit the profile from the settings', async ({ page }) => {
-  const settings = await openData(page);
+  await openSettings(page);
+  const settings = page.getByRole('main');
   await expect(settings.getByText('Name eintragen')).toBeVisible();
   await settings.getByRole('button', { name: 'Profil bearbeiten' }).click();
   const profile = page.getByRole('dialog', { name: 'Profil bearbeiten' });

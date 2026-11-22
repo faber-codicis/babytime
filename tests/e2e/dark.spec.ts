@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openApp, waitForApp } from './helpers';
+import { openApp, openSettings, waitForApp } from './helpers';
 
 // The phone is set to dark – the app must still start light (dark is an opt-in switch).
 test.use({ colorScheme: 'dark', timezoneId: 'Europe/Vienna', locale: 'de-AT' });
@@ -22,9 +22,11 @@ async function pureWhite(page: Page): Promise<string[]> {
   });
 }
 
-async function darkSwitch(page: Page) {
-  await page.getByRole('link', { name: 'Einstellungen' }).click();
-  return page.getByRole('switch', { name: /Dunkles Design/ });
+/** Since 0.17.0 one choice of three (Hell, Dunkel, Nachts) instead of two switches. */
+async function designChoice(page: Page) {
+  await openSettings(page, 'Darstellung');
+  const group = page.getByRole('group', { name: 'Design' });
+  return { light: group.getByRole('button', { name: 'Hell' }), dark: group.getByRole('button', { name: 'Dunkel' }) };
 }
 
 test('starts light even when the phone is set to dark', async ({ page }) => {
@@ -32,13 +34,15 @@ test('starts light even when the phone is set to dark', async ({ page }) => {
   expect(await bodyBg(page)).toBe(LIGHT_BG);
 });
 
-test('the switch turns the dark design on, it survives a restart (splash included) and has no pure white', async ({ page }) => {
+test('"Dunkel" turns the dark design on, it survives a restart (splash included) and has no pure white', async ({ page }) => {
   await openApp(page);
-  const toggle = await darkSwitch(page);
-  await expect(toggle).toHaveAttribute('aria-checked', 'false');
+  const choice = await designChoice(page);
+  await expect(choice.light).toHaveAttribute('aria-pressed', 'true');
+  await expect(choice.dark).toHaveAttribute('aria-pressed', 'false');
   await page.screenshot({ path: 'test-results/dark-switch-off.png', animations: 'disabled' });
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-checked', 'true');
+  await choice.dark.click();
+  await expect(choice.dark).toHaveAttribute('aria-pressed', 'true');
+  await expect(choice.light).toHaveAttribute('aria-pressed', 'false');
   expect(await bodyBg(page)).toBe(DARK_BG);
   expect(await pureWhite(page)).toEqual([]);
   await page.screenshot({ path: 'test-results/dark-settings.png', animations: 'disabled' });
@@ -75,15 +79,16 @@ test('the switch turns the dark design on, it survives a restart (splash include
   await page.screenshot({ path: 'test-results/dark-history.png', animations: 'disabled' });
 });
 
-test('switching off returns to light; "Alle Daten löschen" also resets to light', async ({ page }) => {
+test('"Hell" returns to light; "Alle Daten löschen" also resets to light', async ({ page }) => {
   await openApp(page);
-  const toggle = await darkSwitch(page);
-  await toggle.click();
+  const choice = await designChoice(page);
+  await choice.dark.click();
   expect(await bodyBg(page)).toBe(DARK_BG);
-  await toggle.click();
+  await choice.light.click();
   expect(await bodyBg(page)).toBe(LIGHT_BG);
 
-  await toggle.click();
+  await choice.dark.click();
+  await openSettings(page, 'Daten & Backup');
   await page.getByRole('button', { name: /Alle Daten löschen/ }).click();
   await page.getByRole('dialog', { name: 'Alles löschen?' }).getByRole('button', { name: 'Alles löschen' }).click();
   await expect(page.getByRole('heading', { name: 'Herzlichen Glückwunsch!' })).toBeVisible();

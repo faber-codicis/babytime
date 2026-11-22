@@ -31,29 +31,42 @@ function openerElement(): HTMLElement | null {
 }
 
 /** How long after opening a scroll the user did not cause is undone. */
-const HOLD_TOP_MS = 600;
+const HOLD_TOP_MS = 1500;
 
 /**
  * WebKit sometimes scrolls a freshly opened dialog to its focused button a frame or two later,
- * despite preventScroll (seen in CI, 2026-11-22). Until the user touches, scrolls or types,
- * any scroll in the first moments is put back to the top.
+ * despite preventScroll (seen in CI, 2026-11-22; again with the taller 0.17.0 popup, scrollTop 410 on
+ * the first check after opening). Until the user touches, scrolls, types or moves focus (also a screen
+ * reader), any scroll in the first moments is put back to the top: on each scroll event and, because
+ * scroll events only arrive with the next frame, also checked every frame.
  */
 function holdAtTop(dialog: HTMLDialogElement): void {
   const until = performance.now() + HOLD_TOP_MS;
-  const onScroll = () => {
-    if (performance.now() > until) return stop();
+  let frame = 0;
+  const reset = () => {
     if (dialog.scrollTop !== 0) dialog.scrollTop = 0;
   };
+  const onScroll = () => {
+    if (performance.now() > until) return stop();
+    reset();
+  };
+  const tick = () => {
+    if (performance.now() > until || !dialog.open) return stop();
+    reset();
+    frame = requestAnimationFrame(tick);
+  };
   const stop = () => {
+    cancelAnimationFrame(frame);
     dialog.removeEventListener('scroll', onScroll);
     for (const type of USER_INPUT) dialog.removeEventListener(type, stop, true);
   };
   dialog.addEventListener('scroll', onScroll);
   for (const type of USER_INPUT) dialog.addEventListener(type, stop, { capture: true, once: true });
+  frame = requestAnimationFrame(tick);
   setTimeout(stop, HOLD_TOP_MS);
 }
 
-const USER_INPUT = ['wheel', 'touchstart', 'pointerdown', 'keydown'] as const;
+const USER_INPUT = ['wheel', 'touchstart', 'pointerdown', 'keydown', 'focusin'] as const;
 
 /**
  * Bottom sheet on a native modal <dialog>: focus moves in and back out, Escape and a tap

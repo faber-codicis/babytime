@@ -29,6 +29,24 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.17.0',
+    date: '2026-11-22',
+    items: {
+      de: [
+        'Die Einstellungen sind jetzt eine kurze Übersicht mit Unterseiten: Erfassen, Daten & Backup, Darstellung und Über die App',
+        'Hell, Dunkel oder Nachts wählst du unter Darstellung in einer einzigen Auswahl',
+        'Die Sprache stellst du direkt in der Übersicht um',
+        'Ein Punkt bei „Daten & Backup“ zeigt, wenn eine Sicherung fällig ist',
+      ],
+      en: [
+        'Settings are now a short overview with sub pages: What to track, Data & backup, Appearance and About the app',
+        'Pick Light, Dark or At night under Appearance in a single choice',
+        'Change the language right on the overview',
+        'A dot next to “Data & backup” shows when a backup is due',
+      ],
+    },
+  },
+  {
     version: '0.16.1',
     date: '2026-11-22',
     items: {
