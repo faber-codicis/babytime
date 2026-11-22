@@ -267,9 +267,9 @@ npm 11 blockiert die Install-Skripte von `esbuild` und `workerd` (nicht freigege
 Auftrag des Besitzers: das GitHub-Repo öffentlich machen, Landingpage optional.
 
 - **Lizenz MIT** (Vorschlag, leicht austauschbar: nur `LICENSE` und `license` in `package.json`). Schrift Plus Jakarta Sans bleibt OFL-1.1, Logo und Icons sind eigene SVGs.
-- **README für die Öffentlichkeit**, zweisprachig, mit Screenshots aus 0.16.0 (`docs/screenshots/`, Testdaten mit erfundenem Namen „Emma“). Die bisherige Entwickler-Anleitung steht unverändert in `docs/ENTWICKLUNG.md`.
+- **README für die Öffentlichkeit in zwei Dateien:** `README.md` Englisch (GitHub zeigt sie als Startseite, internationales Publikum), `README.de.md` Deutsch, oben jeweils ein Sprachlink. GitHub kann nicht nach Browsersprache umschalten. Screenshots aus 0.16.0 je Sprache in `docs/screenshots/de/` und `en/` (Testdaten mit erfundenem Namen „Emma“). Die bisherige Entwickler-Anleitung steht unverändert in `docs/ENTWICKLUNG.md`.
 - **Mockups nach `docs/design/mockups/`** verschoben (kein Leerzeichen und Gedankenstrich mehr im Pfad an der Wurzel).
 - **CI für Pull Requests** (`.github/workflows/ci.yml`): dieselben Prüfungen wie beim Deploy, ohne Secrets, auch für Forks. `deploy.yml` läuft weiter nur auf `main` und nutzt das Environment `production`, damit die Cloudflare-Secrets dorthin wandern und auf `main` beschränkt werden können.
 - **SECURITY.md** (private Meldung über GitHub oder `kontakt@mraz.app`), **CONTRIBUTING.md**, Issue-Vorlagen (Fehler, Idee; leere Issues aus), PR-Vorlage, **Dependabot** monatlich gebündelt.
-- **Git-History nicht umgeschrieben:** Die Commits tragen die private Autoren-Adresse. Umschreiben wäre nur vor dem Umschalten sinnvoll und bleibt Entscheidung des Besitzers.
+- **Neues Repo mit umgeschriebener History** (Wahl des Besitzers): Das alte Repo heißt jetzt `babytime-archive` (privat, mit den PRs 1–22). Im neuen `babytime` tragen alle Commits die GitHub-noreply-Adresse statt der Gmail-Adresse; ein PR allein hätte das nicht gekonnt, weil GitHub die alten PR-Commits (`refs/pull/*`) aufhebt.
 - **Keine eigene Landingpage:** Das README ist die Projektseite. Eine spätere Seite gehört nicht in die App (Service Worker, CSP, Daten hängen an `babytime.mraz.app`), sondern auf `mraz.app` oder GitHub Pages.

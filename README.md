@@ -1,68 +1,76 @@
+<div align="center">
+
+<img src="public/icon-192.png" width="96" alt="Baby Time app icon">
+
 # Baby Time
 
-Stillen, Windeln, Flasche und Schlaf mitschreiben – einhändig, offline, ohne Konto.
-*Track breastfeeding, diapers, bottles and sleep – one-handed, offline, no account.* ([English below](#english))
+**Log breastfeeding, diapers and sleep with one hand. Offline, private, no account.**
 
-**App öffnen:** https://babytime.mraz.app · Beta, Deutsch und Englisch
+[**Open the app**](https://babytime.mraz.app) · [Deutsch](README.de.md)
 
-<p>
-  <img src="docs/screenshots/heute-hell.png" width="200" alt="Heute: zuletzt gestillt, nächste Seite, Windel, Schlaf und Tageszähler">
-  <img src="docs/screenshots/stillen.png" width="200" alt="Stillen mit Timer und Seitenwechsel">
-  <img src="docs/screenshots/verlauf-woche.png" width="200" alt="Verlauf als Wochenansicht">
-  <img src="docs/screenshots/heute-dunkel.png" width="200" alt="Heute im dunklen Design">
-</p>
+</div>
 
-## Was die App kann
+Baby Time is a calm little diary for new parents. It is made for 3 a.m.: big buttons, one hand, a dark night view, and nothing to sign up for. Every entry stays on your phone.
 
-- **Heute:** zuletzt gestillt, nächste Seite, letzte Windel, Schlaf und Tageszähler auf einen Blick. Stillen mit Timer und Seitenwechsel, Windel in zwei Taps, Schlaf in einem, Flasche und Abpumpen mit Menge, jeweils mit „Rückgängig“.
-- **Verlauf:** Liste nach Tagen und Wochenansicht; Einträge ändern, löschen und nachtragen.
-- **Meilensteine:** erstes Lächeln, erstes Bad und Eigenes festhalten.
-- **Nachtansicht** und dunkles Design, fünf Akzentfarben, jede Funktion einzeln abschaltbar.
-- **Sicherung** als Datei, wahlweise mit Passwort verschlüsselt, mit Erinnerung.
-- **Installierbar** als App auf iPhone und Android (PWA), läuft danach komplett offline.
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="docs/screenshots/en/today.png" alt="Today screen: time since last breastfeed, next side, diaper, sleep and daily counters"><br><sub><b>Today</b> – everything at a glance</sub></td>
+    <td align="center" width="33%"><img src="docs/screenshots/en/feeding.png" alt="Breastfeeding timer with left and right side"><br><sub><b>Breastfeeding</b> – timer that remembers the side</sub></td>
+    <td align="center" width="33%"><img src="docs/screenshots/en/night-view.png" alt="Dark night view with large time since last feed"><br><sub><b>Night view</b> – dark and easy on tired eyes</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/en/history-week.png" alt="Week view with bar charts for feeds and diapers"><br><sub><b>History</b> – days and weekly charts</sub></td>
+    <td align="center"><img src="docs/screenshots/en/milestones.png" alt="Milestones list with first smile and first bath"><br><sub><b>Milestones</b> – first smile, first bath, your own</sub></td>
+    <td align="center"><img src="docs/screenshots/en/today-dark.png" alt="Today screen in the dark theme"><br><sub><b>Dark theme</b> – on demand or automatically at night</sub></td>
+  </tr>
+</table>
 
-## Datenschutz
+## What it does
 
-Alle Einträge bleiben auf dem Gerät (IndexedDB im Browser). Es gibt kein Konto, keinen Upload, keine Analyse und keine Werbung. Der Server (Cloudflare) liefert nur die App und ihre Updates aus und sieht dabei wie jede Webseite die IP-Adresse, nie die Einträge. Die Content-Security-Policy verbietet der App jede Verbindung zu fremden Servern.
+| | |
+| --- | --- |
+| 🤱 **Breastfeeding** | Timer with side switching. The app suggests the next side and shows how long ago the last feed ended. |
+| 🍼 **Bottle and pumping** | Amount in ml, breast milk or formula, pumped side. |
+| 🧷 **Diapers** | Wet, dirty or both in two taps. |
+| 🌙 **Sleep** | Start and stop with one tap, daily total in hours and minutes. |
+| 📅 **History** | List by day and a week view with charts. Edit, delete or add entries afterwards. Right after saving, "Undo" is one tap away. |
+| ⭐ **Milestones** | Suggestions like "first smile" or add your own, with the baby's age on that day. |
+| 🎨 **Your way** | Light, dark or dark at night (8 p.m.–7 a.m.), five accent colours, switch off what you don't track. German and English. |
+| 💾 **Backup** | Export to a file, optionally password-protected, with a gentle reminder every two weeks. |
 
-Baby Time ersetzt keinen Rat von Hebamme, Ärztin oder Arzt.
+## Install it like an app
 
-## Selbst bauen
+Baby Time is a web app (PWA). Once added to your home screen, it opens full screen and works without internet.
 
-Voraussetzung: Node.js 24 oder neuer.
+- **iPhone (Safari):** open [babytime.mraz.app](https://babytime.mraz.app) → tap **•••** → **Share** → **Add to Home Screen**.
+- **Android (Chrome):** open the link → tap **Install** on the card at the top, or menu **⋮** → **Install app**.
+
+Always start it from the home screen afterwards. Safari may delete data of websites that were not added to the home screen.
+
+## Privacy
+
+- **No account, no upload, no analytics, no ads.** Entries are stored only in your browser on your device.
+- The host (Cloudflare) only delivers the app and its updates. Like any website it sees your IP address, never your entries.
+- A strict Content Security Policy blocks the app from talking to any other server.
+- Because data never leaves the phone, there is **no sync between devices**. To move to a new phone, export a backup and restore it there.
+
+Baby Time is not a medical device and does not replace advice from your midwife or doctor.
+
+## Build it yourself
+
+You need Node.js 24 or newer.
 
 ```
 npm ci
 npm run dev
 ```
 
-Tests, Build, Deployment und alle Details: [docs/ENTWICKLUNG.md](docs/ENTWICKLUNG.md). Entscheidungen stehen in [DECISIONS.md](DECISIONS.md), der ursprüngliche Auftrag in [spec.md](spec.md).
+Tests, build and deployment are described in [docs/ENTWICKLUNG.md](docs/ENTWICKLUNG.md) (German). Built with [Preact](https://preactjs.com/), [Dexie](https://dexie.org/) on IndexedDB and [Vite](https://vite.dev/), tested with Vitest and Playwright, served as static files from Cloudflare Workers.
 
-Technik: [Preact](https://preactjs.com/), [Dexie](https://dexie.org/) (IndexedDB), [Vite](https://vite.dev/) mit `vite-plugin-pwa`, Tests mit Vitest und Playwright, ausgeliefert als statische Dateien über Cloudflare Workers.
+## Contributing
 
-## Mitmachen
+Bug reports and ideas are welcome as [issues](../../issues/new/choose), in English or German. Please don't include health data or real baby names. See [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues privately as described in [SECURITY.md](SECURITY.md).
 
-Fehler und Ideen gern als [Issue](../../issues/new/choose). Bitte keine Gesundheitsdaten und keine echten Babynamen in Texte oder Screenshots. Wie Beiträge ablaufen: [CONTRIBUTING.md](CONTRIBUTING.md). Sicherheitslücken bitte nicht öffentlich melden, sondern wie in [SECURITY.md](SECURITY.md) beschrieben.
+## License
 
-## Lizenz
-
-[MIT](LICENSE). Die Schrift Plus Jakarta Sans steht unter der SIL Open Font License 1.1.
-
----
-
-## English
-
-Baby Time is a small web app for new parents to log breastfeeding (with timer and side switching), diapers, bottles, pumping, sleep and milestones. It is built for one hand at 3 a.m.: big buttons, a night view and a dark theme.
-
-- **Try it:** https://babytime.mraz.app (beta). Install it to your home screen and it works fully offline.
-- **Privacy:** everything stays on your device. No account, no upload, no analytics. The host (Cloudflare) only serves the app and sees your IP address like any website, never your entries.
-- **Languages:** German and English, switchable in Settings.
-- **Not medical advice.**
-
-<p>
-  <img src="docs/screenshots/today-en.png" width="200" alt="Today screen in English">
-  <img src="docs/screenshots/nachtansicht.png" width="200" alt="Night view">
-  <img src="docs/screenshots/meilensteine.png" width="200" alt="Milestones">
-</p>
-
-Build it yourself with `npm ci` and `npm run dev` (Node.js 24+). The developer docs are in German: [docs/ENTWICKLUNG.md](docs/ENTWICKLUNG.md). Issues and pull requests in English are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md). Licensed under [MIT](LICENSE).
+[MIT](LICENSE). The Plus Jakarta Sans font is licensed under the SIL Open Font License 1.1.

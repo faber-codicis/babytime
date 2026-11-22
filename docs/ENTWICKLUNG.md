@@ -1,6 +1,6 @@
 # Entwicklung
 
-Anleitung für alle, die Baby Time selbst bauen, testen oder ausliefern. Überblick und Screenshots stehen im [README](../README.md).
+Anleitung für alle, die Baby Time selbst bauen, testen oder ausliefern. Überblick und Screenshots stehen im [README](../README.de.md).
 
 ## Start
 
