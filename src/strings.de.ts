@@ -272,10 +272,42 @@ export const de = {
       tooMany: 'Die Datei enthält zu viele Einträge. Es wurde nichts geändert.',
       invalidEntry: (n: number) => `Eintrag ${n} in der Datei ist fehlerhaft. Es wurde nichts geändert.`,
       invalidMilestone: (n: number) => `Meilenstein ${n} in der Datei ist fehlerhaft. Es wurde nichts geändert.`,
+      invalidDeletion: (n: number) => `Lösch-Vermerk ${n} in der Datei ist fehlerhaft. Es wurde nichts geändert.`,
       duplicate: (n: number) => `Eintrag ${n} kommt doppelt vor. Es wurde nichts geändert.`,
       running: 'Die Datei enthält mehr als ein laufendes Stillen oder mehr als einen laufenden Schlaf. Es wurde nichts geändert.',
       runningConflict: 'In der Datei und auf diesem Handy läuft gerade etwas. Bitte zuerst hier beenden und dann zusammenführen.',
     },
+  },
+
+  partner: {
+    open: 'Mit Partner abgleichen',
+    openHint: 'Einträge zwischen zwei Handys austauschen',
+    title: 'Mit Partner abgleichen',
+    intro: 'So habt ihr auf beiden Handys dieselben Einträge und Meilensteine. Ihr schickt euch dafür eine verschlüsselte Datei, zum Beispiel per Signal oder WhatsApp.',
+    setupText: 'Wählt ein gemeinsames Passwort und gebt es auf beiden Handys gleich ein. Es bleibt auf diesem Handy gespeichert.',
+    password: 'Gemeinsames Passwort',
+    repeat: 'Passwort wiederholen',
+    savePassword: 'Passwort speichern',
+    steps: [
+      'Tippe auf „Stand senden“ und schicke die Datei an das andere Handy.',
+      'Dort die Datei speichern, dann „Stand übernehmen“ tippen und die Datei wählen.',
+      'Danach dasselbe in die andere Richtung, dann haben beide alles.',
+    ],
+    send: 'Stand senden',
+    preparing: 'Wird vorbereitet …',
+    receive: 'Stand übernehmen',
+    receiving: 'Wird übernommen …',
+    changePassword: 'Passwort ändern',
+    cancel: 'Abbrechen',
+    shareTitle: 'Baby Time Abgleich',
+    sent: 'Stand gesendet',
+    otherPassword:
+      'Diese Datei passt nicht zum gespeicherten Passwort. Gib das Passwort vom anderen Handy ein. Es wird danach hier gespeichert.',
+    unlock: 'Übernehmen',
+    done: (changed: number, removed: number) =>
+      changed + removed === 0
+        ? 'Schon auf dem gleichen Stand'
+        : `Abgeglichen: ${changed}\u00A0neu oder geändert${removed ? `, ${removed}\u00A0entfernt` : ''}`,
   },
 
   deleteAll: {
@@ -375,7 +407,7 @@ export const de = {
     sections: [
       {
         title: 'Deine Einträge',
-        text: 'Stillen, Windeln, Schlaf, Meilensteine, Name und Geburtsdatum deines Babys speichert die App nur im Browser auf deinem Gerät. Sie werden nicht an uns oder andere übertragen; wir können sie nicht sehen. Du löschst sie unter Einstellungen → Alle Daten löschen oder indem du die App bzw. die Website-Daten entfernst. Sicherungsdateien liegen dort, wo du sie speicherst.',
+        text: 'Stillen, Windeln, Schlaf, Meilensteine, Name und Geburtsdatum deines Babys speichert die App nur im Browser auf deinem Gerät. Sie werden nicht an uns oder andere übertragen; wir können sie nicht sehen. Du löschst sie unter Einstellungen → Alle Daten löschen oder indem du die App bzw. die Website-Daten entfernst. Sicherungsdateien liegen dort, wo du sie speicherst. Beim Abgleich mit Partner schickst du selbst eine verschlüsselte Datei, zum Beispiel über einen Messenger; nur wer das gemeinsame Passwort kennt, kann sie lesen.',
       },
       {
         title: 'Aufruf der App',

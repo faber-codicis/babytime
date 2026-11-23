@@ -1,6 +1,7 @@
 import { liveQuery } from 'dexie';
 import { hasErrors, isAmount, isTimed, NOTE_MAX, validateDraft, type DraftErrors, type EventDraft } from '../logic/validate';
 import { t } from '../strings';
+import { removeEvent, restoreEvent } from './deletions';
 import { db, type BabyEvent, type DiaperKind, type EventType, type MilkKind, type PumpSide, type Side, type TimedEventType } from './db';
 
 export type { BabyEvent, DiaperKind, EventType, MilkKind, PointEventType, PumpSide, Side, TimedEventType } from './db';
@@ -22,9 +23,9 @@ function createEvent(type: EventType, start: number, extra: Pick<BabyEvent, 'sid
   return { id: newId(), type, start, ...extra, createdAt: start, updatedAt: start };
 }
 
-/** Undo for a newly created event: remove it again. */
+/** Undo for a newly created event: remove it again (with a deletion note, in case it was already sent). */
 const undoCreate = (id: string) => async () => {
-  await db.events.delete(id);
+  await removeEvent(id);
 };
 
 /** Undo for an updated event: put the previous version back. */
@@ -155,9 +156,9 @@ export async function finishFeed(now = Date.now()): Promise<BabyEvent | undefine
 
 /** Discards the running feed. Earlier, already finished sides stay saved. */
 export async function cancelFeed(): Promise<void> {
-  await db.transaction('rw', db.events, async () => {
+  await db.transaction('rw', db.events, db.deleted, async () => {
     const running = await getRunning('feed');
-    if (running) await db.events.delete(running.id);
+    if (running) await removeEvent(running.id);
   });
 }
 
@@ -260,12 +261,12 @@ export async function saveEvent(draft: EventDraft, now = Date.now()): Promise<Ch
   });
 }
 
-/** Deletes an event; undo puts it back unchanged. */
+/** Deletes an event and notes the deletion (0.19.0); undo puts it back unchanged. */
 export async function deleteEvent(id: string): Promise<Change | undefined> {
   const previous = await db.events.get(id);
   if (!previous) return undefined;
-  await db.events.delete(id);
-  return { event: previous, undo: async () => void (await db.events.put(previous)) };
+  await removeEvent(id);
+  return { event: previous, undo: () => restoreEvent(previous) };
 }
 
 /** All events, newest first, starting at or after `from`. */

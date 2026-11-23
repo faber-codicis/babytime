@@ -52,3 +52,18 @@ export async function setTutorialPending(pending: boolean): Promise<void> {
   if (pending) await db.kv.put({ key: TUTORIAL_PENDING, value: true });
   else await db.kv.delete(TUTORIAL_PENDING);
 }
+
+const PARTNER_PASSWORD = 'partnerPassword';
+
+/**
+ * Shared password for "Mit Partner abgleichen" (0.19.0). Kept on this phone like the entries themselves, which are
+ * not encrypted here either: it protects the file on its way through a messenger, not the phone.
+ */
+export async function getPartnerPassword(): Promise<string | undefined> {
+  const value = (await db.kv.get(PARTNER_PASSWORD))?.value;
+  return typeof value === 'string' && value ? value : undefined;
+}
+
+export async function setPartnerPassword(password: string): Promise<void> {
+  await db.kv.put({ key: PARTNER_PASSWORD, value: password });
+}

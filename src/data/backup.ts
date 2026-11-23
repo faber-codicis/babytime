@@ -1,6 +1,6 @@
 import { hasAmount, isAmount, isTimed, NOTE_MAX } from '../logic/validate';
 import { t } from '../strings';
-import { db, SCHEMA_VERSION, type Milestone, type BabyEvent, type DiaperKind, type EventType, type MilkKind, type PumpSide, type Side } from './db';
+import { db, SCHEMA_VERSION, type Deletion, type Milestone, type BabyEvent, type DiaperKind, type EventType, type MilkKind, type PumpSide, type Side } from './db';
 import { isIsoDate, isPreset, MILESTONE_NOTE_MAX, MILESTONE_TITLE_MAX } from './milestones';
 import { sanitizeProfile, type Profile } from './profile';
 import { resetTheme } from './theme';
@@ -9,6 +9,7 @@ import { resetTheme } from './theme';
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;
 export const MAX_EVENTS = 100_000;
 export const MAX_MILESTONES = 1_000;
+export const MAX_DELETIONS = MAX_EVENTS + MAX_MILESTONES;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const TYPES: readonly EventType[] = ['feed', 'diaper', 'sleep', 'bottle', 'pump'];
@@ -16,6 +17,7 @@ const SIDES: readonly Side[] = ['left', 'right'];
 const DIAPERS: readonly DiaperKind[] = ['wet', 'dirty', 'both'];
 const MILKS: readonly MilkKind[] = ['breast', 'formula'];
 const PUMP_SIDES: readonly PumpSide[] = ['left', 'right', 'both'];
+const DELETION_KINDS: readonly Deletion['kind'][] = ['event', 'milestone'];
 /** Plausible time range for entries: from 2000 until far ahead (catches seconds-vs-ms mistakes). */
 const MIN_TIME = Date.UTC(2000, 0, 1);
 const MAX_TIME = Date.UTC(2200, 0, 1);
@@ -28,6 +30,8 @@ export interface BackupFile {
   events: BabyEvent[];
   /** Since schema version 3 (0.10.0). */
   milestones: Milestone[];
+  /** Since schema version 4 (0.19.0): what was deleted on this phone, so a merge removes it elsewhere too. */
+  deleted: Deletion[];
 }
 
 /** A checked backup, ready to import. */
@@ -37,6 +41,14 @@ export interface ParsedBackup {
   events: BabyEvent[];
   /** Undefined for files without milestones (older than 0.10.0): then the milestones on the phone stay. */
   milestones: Milestone[] | undefined;
+  /** Undefined for files older than 0.19.0. */
+  deleted: Deletion[] | undefined;
+}
+
+/** What a merge changed: entries and milestones added or updated, and removed because they were deleted elsewhere. */
+export interface MergeResult {
+  changed: number;
+  removed: number;
 }
 
 /** Import refused; `message` is shown to the user as is. Nothing has been changed. */
@@ -45,11 +57,12 @@ export class BackupError extends Error {}
 // ---------------------------------------------------------------- export
 
 export async function buildExport(now = Date.now()): Promise<BackupFile> {
-  return db.transaction('r', db.events, db.kv, db.milestones, async () => {
-    const [events, profileEntry, milestones] = await Promise.all([
+  return db.transaction('r', db.events, db.kv, db.milestones, db.deleted, async () => {
+    const [events, profileEntry, milestones, deleted] = await Promise.all([
       db.events.orderBy('start').toArray(),
       db.kv.get('profile'),
       db.milestones.orderBy('date').toArray(),
+      db.deleted.toArray(),
     ]);
     return {
       app: 'babytime',
@@ -58,6 +71,7 @@ export async function buildExport(now = Date.now()): Promise<BackupFile> {
       profile: sanitizeProfile(profileEntry?.value),
       events,
       milestones,
+      deleted,
     };
   });
 }
@@ -164,6 +178,18 @@ export function rebuildMilestone(raw: unknown): Milestone | undefined {
   return milestone;
 }
 
+/** Same rules for one deletion note (0.19.0). Undefined = invalid. */
+export function rebuildDeletion(raw: unknown): Deletion | undefined {
+  if (!isRecord(raw)) return undefined;
+  const id = own(raw, 'id');
+  const kind = own(raw, 'kind');
+  const at = own(raw, 'at');
+  if (typeof id !== 'string' || !UUID.test(id)) return undefined;
+  if (typeof kind !== 'string' || !DELETION_KINDS.includes(kind as Deletion['kind'])) return undefined;
+  if (!isTime(at)) return undefined;
+  return { id: id.toLowerCase(), kind: kind as Deletion['kind'], at };
+}
+
 /** Parses and fully checks a backup file. Throws BackupError with a user-facing message. */
 export function parseBackup(text: string, byteSize = new Blob([text]).size): ParsedBackup {
   const e = t.restore.errors;
@@ -214,10 +240,26 @@ export function parseBackup(text: string, byteSize = new Blob([text]).size): Par
     }
   }
 
+  const rawDeleted = own(data, 'deleted');
+  let deleted: Deletion[] | undefined;
+  if (rawDeleted !== undefined) {
+    if (!Array.isArray(rawDeleted)) throw new BackupError(e.notBackup);
+    if (rawDeleted.length > MAX_DELETIONS) throw new BackupError(e.tooMany);
+    deleted = [];
+    const deletedIds = new Set<string>();
+    for (const [index, raw] of rawDeleted.entries()) {
+      const deletion = rebuildDeletion(raw);
+      if (!deletion || deletedIds.has(deletion.id)) throw new BackupError(e.invalidDeletion(index + 1));
+      deletedIds.add(deletion.id);
+      deleted.push(deletion);
+    }
+  }
+
   const exportedAt = own(data, 'exportedAt');
   const profile = own(data, 'profile');
   return {
     milestones,
+    deleted,
     exportedAt: typeof exportedAt === 'number' && Number.isFinite(exportedAt) ? exportedAt : undefined,
     profile: isRecord(profile) ? { ...sanitizeProfile(profile), onboarded: true } : undefined,
     events,
@@ -229,30 +271,55 @@ export function parseBackup(text: string, byteSize = new Blob([text]).size): Par
 export type ImportMode = 'replace' | 'merge';
 
 /**
- * Writes a checked backup in one transaction (all or nothing).
- * replace: events (and profile and milestones, if the file has them) are replaced.
- * merge: entries are added by id; for the same id the more recently edited version wins; the profile stays.
- * Milestones merge the same way; a suggested milestone exists once, the more recently edited one wins.
+ * Writes a checked backup in one transaction (all or nothing). Returns the number of entries written.
+ * replace: events (and profile, milestones and deletion notes, if the file has them) are replaced.
+ * merge: see mergeBackup; the profile stays.
  */
 export async function importBackup(backup: ParsedBackup, mode: ImportMode): Promise<number> {
-  return db.transaction('rw', db.events, db.kv, db.milestones, async () => {
-    if (mode === 'replace') {
-      await db.events.clear();
-      await db.events.bulkPut(backup.events);
-      if (backup.profile) await db.kv.put({ key: 'profile', value: backup.profile });
-      if (backup.milestones) {
-        await db.milestones.clear();
-        await db.milestones.bulkPut(backup.milestones);
-      }
-      return backup.events.length;
+  if (mode === 'merge') return (await mergeBackup(backup)).changed;
+  return db.transaction('rw', db.events, db.kv, db.milestones, db.deleted, async () => {
+    await db.events.clear();
+    await db.events.bulkPut(backup.events);
+    if (backup.profile) await db.kv.put({ key: 'profile', value: backup.profile });
+    if (backup.milestones) {
+      await db.milestones.clear();
+      await db.milestones.bulkPut(backup.milestones);
     }
+    if (backup.deleted) {
+      await db.deleted.clear();
+      await db.deleted.bulkPut(backup.deleted);
+    }
+    return backup.events.length;
+  });
+}
 
-    for (const milestone of backup.milestones ?? []) await mergeMilestone(milestone);
+/**
+ * Merges a checked backup into this phone (all or nothing), used by "Zusammenführen" and the partner merge (0.19.0).
+ * Entries and milestones are matched by id; the more recently edited version wins. A deletion note wins over a
+ * version edited at or before the deletion: such an entry is removed here and not brought back. The profile stays.
+ * A suggested milestone exists once, the more recently edited one wins.
+ */
+export async function mergeBackup(backup: ParsedBackup): Promise<MergeResult> {
+  return db.transaction('rw', db.events, db.milestones, db.deleted, async () => {
+    // Deletion notes: the newer one of both phones counts.
+    const fileDeleted = backup.deleted ?? [];
+    const hereNotes = await db.deleted.bulkGet(fileDeleted.map((d) => d.id));
+    const newerNotes = fileDeleted.filter((d, i) => !hereNotes[i] || hereNotes[i].at < d.at);
+    await db.deleted.bulkPut(newerNotes);
 
-    const existing = await db.events.bulkGet(backup.events.map((e) => e.id));
+    let changed = 0;
+    for (const milestone of backup.milestones ?? []) if (await mergeMilestone(milestone)) changed++;
+
+    const ids = backup.events.map((e) => e.id);
+    const [existing, notes] = await Promise.all([db.events.bulkGet(ids), db.deleted.bulkGet(ids)]);
+    const revived: string[] = [];
     const incoming = backup.events.filter((event, i) => {
       const current = existing[i];
-      return !current || event.updatedAt > current.updatedAt;
+      const note = notes[i];
+      if (note && note.at >= event.updatedAt) return false;
+      const newer = !current || event.updatedAt > current.updatedAt;
+      if (newer && note) revived.push(event.id);
+      return newer;
     });
 
     // Still at most one running feed and one running sleep afterwards.
@@ -266,19 +333,40 @@ export async function importBackup(backup: ParsedBackup, mode: ImportMode): Prom
         .first();
       if (hereRunning) throw new BackupError(t.restore.errors.runningConflict);
     }
-
     await db.events.bulkPut(incoming);
-    return incoming.length;
+    // An entry edited again after its deletion elsewhere comes back: its note is dropped.
+    await db.deleted.bulkDelete(revived);
+    changed += incoming.length;
+
+    // Remove what the other phone deleted, unless it was edited here after that.
+    let removed = 0;
+    for (const note of fileDeleted) {
+      const table = note.kind === 'event' ? db.events : db.milestones;
+      const current = await table.get(note.id);
+      if (!current || current.updatedAt > note.at) continue;
+      await table.delete(note.id);
+      removed++;
+    }
+    return { changed, removed };
   });
 }
 
-async function mergeMilestone(incoming: Milestone): Promise<void> {
+/** True if the milestone was added or updated. Respects deletion notes like events do. */
+async function mergeMilestone(incoming: Milestone): Promise<boolean> {
+  const note = await db.deleted.get(incoming.id);
+  if (note && note.at >= incoming.updatedAt) return false;
   const same = await db.milestones.get(incoming.id);
   const twin = incoming.preset ? await db.milestones.filter((m) => m.preset === incoming.preset && m.id !== incoming.id).first() : undefined;
   const current = [same, twin].filter((m): m is Milestone => Boolean(m));
-  if (current.some((m) => m.updatedAt >= incoming.updatedAt)) return;
-  if (twin) await db.milestones.delete(twin.id);
+  if (current.some((m) => m.updatedAt >= incoming.updatedAt)) return false;
+  if (twin) {
+    await db.milestones.delete(twin.id);
+    // The other phone may have the twin too: note it, so the next merge there removes it as well.
+    await db.deleted.put({ id: twin.id, kind: 'milestone', at: incoming.updatedAt });
+  }
   await db.milestones.put(incoming);
+  if (note) await db.deleted.delete(incoming.id);
+  return true;
 }
 
 // ---------------------------------------------------------------- delete everything
@@ -288,10 +376,11 @@ async function mergeMilestone(incoming: Milestone): Promise<void> {
  * design to light, like a fresh install. Service worker and caches stay, so the app keeps working offline (spec 6.8).
  */
 export async function deleteAllData(): Promise<void> {
-  await db.transaction('rw', db.events, db.kv, db.milestones, async () => {
+  await db.transaction('rw', db.events, db.kv, db.milestones, db.deleted, async () => {
     await db.events.clear();
     await db.kv.clear();
     await db.milestones.clear();
+    await db.deleted.clear();
   });
   resetTheme();
 }
