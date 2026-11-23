@@ -45,7 +45,7 @@ test('password once, send an encrypted file, take it back in; another password i
   expect(file.suggestedFilename()).toMatch(/^babytime-abgleich-\d{4}-\d{2}-\d{2}\.json$/);
   const text = readFileSync((await file.path())!, 'utf8');
   expect(JSON.parse(text)).toMatchObject({ app: 'babytime', encrypted: 1 });
-  expect(text).not.toContain('wet');
+  expect(text).not.toContain('"diaper"'); // quoted: base64 ciphertext never contains quotes
   await expect(page.getByText('Stand gesendet')).toBeVisible();
 
   // The same state again: nothing to do.
