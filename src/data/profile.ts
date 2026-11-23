@@ -1,9 +1,12 @@
 import { setLastSeenVersion, setTutorialPending } from './appState';
 import { db } from './db';
+import { isPhotoDataUrl } from './photo';
 
 export interface Profile {
   babyName?: string;
   birthDate?: string; // ISO date YYYY-MM-DD
+  /** Optional photo as small JPEG data URL (0.18.0), only on this phone and in backups. */
+  photo?: string;
   onboarded: boolean;
 }
 
@@ -26,6 +29,7 @@ export function sanitizeProfile(input: unknown): Profile {
   if (name) profile.babyName = name;
   const birthDate = source['birthDate'];
   if (typeof birthDate === 'string' && isValidIsoDate(birthDate)) profile.birthDate = birthDate;
+  if (isPhotoDataUrl(source['photo'])) profile.photo = source['photo'];
   return profile;
 }
 

@@ -9,4 +9,4 @@ export const OWNER = {
 } as const;
 
 /** Date of the current privacy policy text (YYYY-MM-DD). Change it with every change to the text. */
-export const PRIVACY_UPDATED = '2026-11-22';
+export const PRIVACY_UPDATED = '2026-11-23';

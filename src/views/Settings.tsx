@@ -99,7 +99,7 @@ export function Settings({ profile, page }: { profile: Profile; page: SettingsPa
     ) : page === 'settingsLook' ? (
       <LookPage trackers={trackers} onToggle={toggleTracker} />
     ) : page === 'settingsData' ? (
-      <DataPage data={data} now={now} />
+      <DataPage data={data} now={now} hasPhoto={profile.photo !== undefined} />
     ) : page === 'settingsAbout' ? (
       <AboutPage onPrivacy={() => setPrivacyOpen(true)} />
     ) : (
@@ -154,7 +154,13 @@ function Overview(props: { profile: Profile; trackers: Trackers | undefined; now
           <p class="profile-card-name">{profile.babyName ?? t.defaultBabyName}</p>
           <p class="profile-card-sub">{profileLine ?? (profile.babyName ? '' : t.settings.addName)}</p>
         </div>
-        <button type="button" class="round-btn round-btn--tint" aria-label={t.settings.editProfile} onClick={props.onEditProfile}>
+        <button
+          type="button"
+          id={GUIDE_ANCHOR.profile}
+          class="round-btn round-btn--tint"
+          aria-label={t.settings.editProfile}
+          onClick={props.onEditProfile}
+        >
           <Icon name="pencil" size={20} />
         </button>
       </section>
@@ -292,7 +298,7 @@ function LookPage(props: { trackers: Trackers | undefined; onToggle: (key: Track
   );
 }
 
-function DataPage({ data, now }: { data: ReturnType<typeof useDataActions>; now: number }) {
+function DataPage({ data, now, hasPhoto }: { data: ReturnType<typeof useDataActions>; now: number; hasPhoto: boolean }) {
   const lastExportAt = useLive(getLastExportAt, []);
   return (
     <>
@@ -307,6 +313,7 @@ function DataPage({ data, now }: { data: ReturnType<typeof useDataActions>; now:
               {lastExportAt === undefined ? t.settings.noBackup : t.settings.lastBackup(formatDaysAgo(lastExportAt, now))}
             </span>
             <span class="data-action-hint">{t.data.backupNudge}</span>
+            {hasPhoto && <span class="data-action-hint">{t.data.backupHasPhoto}</span>}
           </span>
         </div>
         <button type="button" class="big-btn big-btn--rose big-btn--wide" disabled={!data.exportNow} onClick={() => data.exportNow?.()}>

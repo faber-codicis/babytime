@@ -27,6 +27,7 @@
 11. **Flasche und Abpumpen** (seit 0.6.0, Wunsch des Besitzers), siehe Abschnitt 6.11.
 12. **Akzentfarben** (seit 0.10.0, Wunsch des Besitzers), siehe Abschnitt 4 „Akzentfarben“ und 6.10.
 13. **Meilensteine** (seit 0.11.0, Wunsch des Besitzers), siehe Abschnitt 6.12.
+14. **Babyfoto im Profil** (seit 0.18.0, Wunsch des Besitzers, 2026-11-23), freiwillig, nur lokal, siehe Abschnitt 6.10.
 
 ### Nicht im Umfang (nicht bauen, keine Platzhalter-UI)
 
@@ -168,6 +169,7 @@ interface BabyEvent {
 interface Profile {
   babyName?: string;
   birthDate?: string;    // ISO-Datum YYYY-MM-DD
+  photo?: string;        // seit 0.18.0: data:image/jpeg;base64,…, 256 × 256 px, höchstens 200 000 Zeichen
   onboarded: boolean;
 }
 ```
@@ -347,6 +349,8 @@ Vierter Tab `#/meilensteine` (Mockup „Navigation“, Stern), Wunsch des Besitz
 - **Sheet:** Titel = Name des Vorschlags bzw. „Meilenstein eintragen“/„bearbeiten“; bei eigenen Meilensteinen Feld „Was ist passiert?“ (Pflicht, ≤ 80 Zeichen); „Wann?“ (`type="date"`, vorbelegt mit heute, nicht in der Zukunft); „Notiz (freiwillig)“ (≤ 500 Zeichen); **Speichern**.
 - **Daten:** eigene Dexie-Tabelle `milestones: 'id, date'` (Dexie-Version 2) mit `{ id, preset? | title?, date: 'YYYY-MM-DD', note?, createdAt, updatedAt }`. Sicherung ab `schemaVersion: 3` mit Feld `milestones` (geprüft wie Einträge, höchstens 1000). Ersetzen tauscht Meilensteine nur, wenn die Datei welche enthält; Zusammenführen nach `id`, neuere Bearbeitung gewinnt, ein Vorschlag bleibt einfach. „Alle Daten löschen“ leert auch die Meilensteine.
 - **Schalter** in Einstellungen → „Was möchtest du festhalten?“: **Meilensteine** („Eigener Tab für die ersten Male“), Standard an, in `kv` `trackers.milestones`. Aus: drei Tabs, `#/meilensteine` zeigt Heute; die Meilensteine bleiben gespeichert und in der Sicherung.
+
+**Seit 0.18.0 – Babyfoto** (Wunsch des Besitzers, 2026-11-23, Mockups in `design-0.18.0`): Im Sheet **Profil bearbeiten** steht über dem Namen ein runder Bildbereich (112 px) mit Kamera-Abzeichen, darunter **Foto wählen** bzw. **Foto ändern** und **Entfernen** sowie ein Datenschutz-Satz mit Schild-Symbol. Ohne Foto zeigt der Kreis den Anfangsbuchstaben bzw. ein Kamera-Symbol. „Foto wählen“ öffnet nur die Bildauswahl des Handys (`<input type="file" accept="image/*">`), die App bekommt keinen Kamerazugriff (`Permissions-Policy: camera=()` bleibt). Das Bild wird sofort auf dem Gerät mittig quadratisch zugeschnitten, auf 256 × 256 px verkleinert und als JPEG (Qualität 0,85) neu kodiert; dabei fallen alle Metadaten (EXIF mit GPS, Kamera, Zeit) weg, die Drehung aus EXIF wird vorher angewendet. Das Original wird nie gespeichert. Gespeichert wird erst mit **Speichern**, im Profil (`kv` `profile`, Feld `photo`). Das Foto ersetzt den Anfangsbuchstaben im Avatar auf Heute und in der Profil-Karte. Es steht in der Sicherung (bei Passwort verschlüsselt), unter Daten & Backup steht dann „Die Sicherung enthält auch das Babyfoto.“; **Alle Daten löschen** entfernt es. Nicht im Erststart. Der Avatar-Baukasten (§15) bleibt davon unabhängig.
 
 ## 7. PWA-Anforderungen
 
