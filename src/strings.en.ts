@@ -281,10 +281,41 @@ export const en: Strings = {
       tooMany: 'The file contains too many entries. Nothing was changed.',
       invalidEntry: (n: number) => `Entry ${n} in the file is broken. Nothing was changed.`,
       invalidMilestone: (n: number) => `Milestone ${n} in the file is broken. Nothing was changed.`,
+      invalidDeletion: (n: number) => `Deletion note ${n} in the file is broken. Nothing was changed.`,
       duplicate: (n: number) => `Entry ${n} appears twice. Nothing was changed.`,
       running: 'The file contains more than one running breastfeed or more than one running sleep. Nothing was changed.',
       runningConflict: 'Something is running both in the file and on this phone. Please end it here first, then merge.',
     },
+  },
+
+  partner: {
+    open: 'Sync with partner',
+    openHint: 'Swap entries between two phones',
+    title: 'Sync with partner',
+    intro: 'This way both phones have the same entries and milestones. You send each other an encrypted file, for example via Signal or WhatsApp.',
+    setupText: 'Choose a shared password and enter the same one on both phones. It stays saved on this phone.',
+    password: 'Shared password',
+    repeat: 'Repeat password',
+    savePassword: 'Save password',
+    steps: [
+      'Tap “Send update” and send the file to the other phone.',
+      'There, save the file, tap “Get update” and choose the file.',
+      'Then do the same the other way round, and both have everything.',
+    ],
+    send: 'Send update',
+    preparing: 'Getting ready …',
+    receive: 'Get update',
+    receiving: 'Updating …',
+    changePassword: 'Change password',
+    cancel: 'Cancel',
+    shareTitle: 'Baby Time sync',
+    sent: 'Update sent',
+    otherPassword: 'This file does not match the saved password. Enter the password from the other phone. It will then be saved here.',
+    unlock: 'Get update',
+    done: (changed: number, removed: number) =>
+      changed + removed === 0
+        ? 'Already up to date'
+        : `Synced: ${changed}\u00A0new or changed${removed ? `, ${removed}\u00A0removed` : ''}`,
   },
 
   deleteAll: {
@@ -384,7 +415,7 @@ export const en: Strings = {
     sections: [
       {
         title: 'Your entries',
-        text: 'Feeds, diapers, sleep, milestones and your baby’s name, birth date and optional photo are stored only in the browser on your device. They are not sent to us or anyone else; we cannot see them. Delete them under Settings → Delete all data, or by removing the app or its website data. Backup files stay wherever you save them.',
+        text: 'Feeds, diapers, sleep, milestones and your baby’s name, birth date and optional photo are stored only in the browser on your device. They are not sent to us or anyone else; we cannot see them. Delete them under Settings → Delete all data, or by removing the app or its website data. Backup files stay wherever you save them. When you sync with your partner, you send an encrypted file yourself, for example via a messenger; only someone who knows the shared password can read it.',
       },
       {
         title: 'Baby photo',

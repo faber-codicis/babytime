@@ -304,3 +304,18 @@ Wunsch des Besitzers, 2026-11-23: optionales Babyfoto, offline und datenschutzko
 - **„Ersetzen“ beim Wiederherstellen** ersetzt das ganze Profil, also auch das Foto (eine Sicherung ohne Foto entfernt es). Zusammenführen lässt das Profil wie bisher unverändert.
 - **Avatar-Baukasten (§15)** bleibt offen und unabhängig: Ohne Foto gibt es weiter Anfangsbuchstaben bzw. Logo-Gesicht.
 - **Tests ohne echte Fotos:** Unit- und E2E-Tests erzeugen ihre Bilder selbst (Canvas bzw. winzige PNG-Bytes).
+
+## 0.19.0 (Mit Partner abgleichen)
+
+- **Wunsch des Besitzers (2026-11-23):** bequemer Abgleich zwischen zwei Elternhandys, „nur Option A“: per Datei, **ohne Server, Konto oder Cloud-Anbindung**. Ein Sync über einen eigenen Worker (E2E-verschlüsselt) wurde bewertet und bewusst nicht gebaut.
+- **Ablauf:** Einstellungen → „Mit Partner abgleichen“ (in der Übersicht, damit die Anleitung im Update-Popup direkt hinführt). Einmal ein gemeinsames Passwort, dann „Stand senden“ (Teilen-Menü, z. B. Signal/WhatsApp; ohne Teilen-Menü ein Download) und auf dem anderen Handy „Stand übernehmen“. Für den vollen Abgleich einmal in jede Richtung.
+- **Immer verschlüsselt** (dieselbe Hülle wie „Sicherung mit Passwort“, PBKDF2 600 000 Runden, AES-GCM), weil die Datei durch einen Messenger geht. Die Datei wird beim Öffnen des Sheets vorbereitet, damit das Teilen auf iOS im Tipp klappt.
+- **Passwort bleibt gespeichert** (`kv` `partnerPassword`): Die Einträge selbst liegen auf dem Handy ebenfalls unverschlüsselt, das Passwort schützt nur die Datei unterwegs. Passt eine Datei nicht, fragt die App nach dem Passwort des anderen Handys und speichert es danach. „Alle Daten löschen“ entfernt es mit.
+- **Übernehmen = Zusammenführen ohne Rückfrage**, das Profil bleibt. Eine normale (unverschlüsselte) Sicherung wird dort ebenfalls angenommen.
+- **Lösch-Vermerke** (Dexie-Version 3, Tabelle `deleted`: nur `id`, `kind`, `at`): Löschen, „Rückgängig“ nach dem Anlegen und „Stillen verwerfen“ hinterlassen einen Vermerk, „Rückgängig“ nach dem Löschen entfernt ihn. Ohne Vermerke hätte jedes Zusammenführen gelöschte Einträge zurückgebracht.
+- **Regeln beim Zusammenführen:** Ein Vermerk gewinnt gegen eine Version, die vor oder zur Löschzeit zuletzt bearbeitet wurde; wurde der Eintrag danach noch bearbeitet, bleibt er und der Vermerk verschwindet. Bei zwei Vermerken zählt der neuere. Wird ein vorgeschlagener Meilenstein doppelt zusammengeführt, bekommt der verdrängte einen Vermerk. Gilt auch für „Sicherung wiederherstellen → Zusammenführen“.
+- **Sicherungsformat 4** (`deleted` in der Datei, geprüft wie Einträge, höchstens 101 000). Ältere Apps lehnen solche Dateien mit der Meldung „neuere Version“ ab. Vermerke werden nicht aufgeräumt; sie sind klein (rund 80 Byte).
+- **Ein gesendeter Stand zählt als Sicherung** (`lastExportAt`), denn die Datei ist eine vollständige Sicherung.
+- **Datenschutzerklärung ergänzt** (Abschnitt „Deine Einträge“, Stand 2026-11-23): Die Abgleich-Datei verschickt der Nutzer selbst, verschlüsselt.
+- **Versionsnummer 0.19.0:** kommt nach 0.18.0 (Babyfoto, PR #10, zuerst gemergt). Das Foto steckt im Profil und bleibt beim Abgleich wie das ganze Profil unberührt.
+- **Nicht geprüft:** Teilen-Menü und Dateiauswahl auf echten Handys (E2E nur Chromium; in WebKit wird der Teil mit dem Teilen-Menü übersprungen).

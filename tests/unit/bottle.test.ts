@@ -95,7 +95,7 @@ describe('backup with bottle and pump', () => {
     await addBottle(90, 'formula', at(10));
     await addPump(40, 'right', at(11));
     const exported = await buildExport(NOW);
-    expect(exported.schemaVersion).toBe(3);
+    expect(exported.schemaVersion).toBe(4);
     const parsed = parseBackup(JSON.stringify(exported));
     expect(parsed.events.map((e) => [e.type, e.amountMl])).toEqual([
       ['bottle', 90],

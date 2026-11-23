@@ -39,6 +39,16 @@ export interface Milestone {
   updatedAt: number;
 }
 
+/**
+ * Note that an entry or milestone was deleted (0.19.0), so a merge from the other phone does not bring it back.
+ * Only the id and the time are kept, never the content.
+ */
+export interface Deletion {
+  id: string;
+  kind: 'event' | 'milestone';
+  at: number; // epoch ms
+}
+
 export interface KvEntry {
   key: string;
   value: unknown;
@@ -46,16 +56,17 @@ export interface KvEntry {
 
 /**
  * Version of the backup file format (spec 13.5). 2 since 0.6.0: entries may be bottle or pump.
- * 3 since 0.10.0: the file may contain `milestones`.
+ * 3 since 0.10.0: the file may contain `milestones`. 4 since 0.19.0: the file may contain `deleted`.
  * Older apps refuse such files with the "newer version" message instead of "entry n is broken".
- * Dexie: version 1 until 0.9.0, version 2 adds the `milestones` table (0.10.0).
+ * Dexie: version 1 until 0.9.0, version 2 adds the `milestones` table (0.10.0), version 3 the `deleted` table (0.19.0).
  */
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 export class BabyTimeDb extends Dexie {
   events!: EntityTable<BabyEvent, 'id'>;
   kv!: EntityTable<KvEntry, 'key'>;
   milestones!: EntityTable<Milestone, 'id'>;
+  deleted!: EntityTable<Deletion, 'id'>;
 
   constructor(name = 'babytime') {
     super(name);
@@ -65,6 +76,8 @@ export class BabyTimeDb extends Dexie {
     });
     // 0.10.0: milestones in their own table; events and kv stay as they are, so no upgrade function.
     this.version(2).stores({ milestones: 'id, date' });
+    // 0.19.0: deletion notes for the partner merge; nothing to migrate.
+    this.version(3).stores({ deleted: 'id' });
     // Migrations: add new versions below and never edit the ones above, e.g.
     // this.version(3).stores({ ... }).upgrade((tx) => tx.table('events').toCollection().modify(...));
     // Data may only be reset when the schema itself cannot be migrated (spec 2a).

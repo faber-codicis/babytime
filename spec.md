@@ -28,10 +28,11 @@
 12. **Akzentfarben** (seit 0.10.0, Wunsch des Besitzers), siehe Abschnitt 4 „Akzentfarben“ und 6.10.
 13. **Meilensteine** (seit 0.11.0, Wunsch des Besitzers), siehe Abschnitt 6.12.
 14. **Babyfoto im Profil** (seit 0.18.0, Wunsch des Besitzers, 2026-11-23), freiwillig, nur lokal, siehe Abschnitt 6.10.
+15. **Mit Partner abgleichen** (seit 0.19.0, Wunsch des Besitzers): Abgleich zweier Handys über eine verschlüsselte Datei, die die Eltern selbst verschicken; gelöschte Einträge werden vermerkt. Kein Server, kein Konto. Details in DECISIONS.md.
 
 ### Nicht im Umfang (nicht bauen, keine Platzhalter-UI)
 
-Benachrichtigungen und Push, Konten, Sync, Partner-Zugang, Avatar-Baukasten, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
+Benachrichtigungen und Push, Konten, Sync über einen Server (Abgleich per Datei siehe Punkt 14), Partner-Zugang, Avatar-Baukasten, Name der Mutter, mehrere Kinder, Kontakte-Zugriff, Standort.
 
 ## 2a. Lieferstufen (Reihenfolge verbindlich)
 

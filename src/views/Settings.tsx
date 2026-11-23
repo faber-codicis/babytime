@@ -103,7 +103,7 @@ export function Settings({ profile, page }: { profile: Profile; page: SettingsPa
     ) : page === 'settingsAbout' ? (
       <AboutPage onPrivacy={() => setPrivacyOpen(true)} />
     ) : (
-      <Overview profile={profile} trackers={trackers} now={now} onEditProfile={data.openProfile} />
+      <Overview profile={profile} trackers={trackers} now={now} onEditProfile={data.openProfile} onPartner={data.openPartner} />
     );
 
   return (
@@ -130,7 +130,7 @@ function SubHead({ title }: { title: string }) {
   );
 }
 
-function Overview(props: { profile: Profile; trackers: Trackers | undefined; now: number; onEditProfile: () => void }) {
+function Overview(props: { profile: Profile; trackers: Trackers | undefined; now: number; onEditProfile: () => void; onPartner: () => void }) {
   const { profile, trackers, now } = props;
   const [themeMode] = useThemeMode();
   const [accent] = useAccent();
@@ -179,6 +179,7 @@ function Overview(props: { profile: Profile; trackers: Trackers | undefined; now
             }
             href={hashOf('settingsData')}
           />
+          <ActionRow id={GUIDE_ANCHOR.partner} icon="refresh" label={t.partner.open} hint={t.partner.openHint} onClick={props.onPartner} />
         </div>
       </SettingsSection>
 

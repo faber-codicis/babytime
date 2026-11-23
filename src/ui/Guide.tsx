@@ -8,6 +8,7 @@ export const GUIDE_ANCHOR: Record<GuideTarget, string> = {
   feedback: 'settings-feedback',
   tutorial: 'settings-tutorial',
   profile: 'settings-profile',
+  partner: 'settings-partner',
 };
 
 let pending: GuideTarget | undefined;

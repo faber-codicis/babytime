@@ -137,7 +137,7 @@ test('after the update: English popup with the newest guide, its button goes str
   await setKvAndRestart(page, 'lastSeenVersion', '0.13.0');
   const popup = page.getByRole('dialog', { name: `New in version ${pkg.version}` });
   await expect(popup).toBeVisible();
-  await expect(popup.getByText(/^Settings are now a short overview with sub pages/)).toBeVisible();
+  await expect(popup.getByText(/^New: a photo of your baby/)).toBeVisible();
   await expect(popup.getByText('How it works')).toBeVisible();
   await expect(popup.getByRole('list', { name: 'Steps' }).getByRole('listitem')).toHaveCount(3);
   // The tall popup starts at its title, although "Got it" further down has the focus.
@@ -145,12 +145,13 @@ test('after the update: English popup with the newest guide, its button goes str
   expect(await popup.evaluate((el) => el.scrollTop)).toBe(0);
   await page.screenshot({ path: 'test-results/en-update-popup.png', animations: 'disabled' });
 
-  // Only the newest guide (0.18.0: the baby photo) sits in the popup; older ones stay in "What's new".
-  await expect(popup.getByRole('button', { name: 'Go to introduction' })).toHaveCount(0);
-  await popup.getByRole('button', { name: 'Go to profile' }).click();
+  // Only the newest guide (0.19.0: sync with partner) sits in the popup; older ones stay in "What's new".
+  await expect(popup.getByText(/^New: Sync with partner/)).toBeVisible();
+  await expect(popup.getByRole('button', { name: 'Go to profile' })).toHaveCount(0);
+  await popup.getByRole('button', { name: 'Go to sync' }).click();
   await expect(popup).toBeHidden();
   await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
-  await expect(page.locator('#settings-profile')).toBeFocused();
+  await expect(page.locator('#settings-partner')).toBeFocused();
 
   // Seen: no popup after a restart; the guides stay in "What's new".
   await page.reload();

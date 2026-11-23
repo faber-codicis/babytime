@@ -8,6 +8,7 @@ import { t } from '../strings';
 import { EncryptedExportSheet } from './EncryptedExportSheet';
 import { deliverExportFile, prepareExportFile } from './exportFile';
 import { useLive } from './hooks';
+import { PartnerSheet } from './PartnerSheet';
 import { ProfileSheet } from './ProfileSheet';
 import { RestoreSheet, type RestoreState } from './RestoreSheet';
 import { Sheet } from './Sheet';
@@ -31,7 +32,7 @@ export function useExport(onMessage: (text: string) => void): (() => void) | und
 }
 
 /**
- * Export, restore, profile and "delete everything" (spec 6.8) for the settings tab.
+ * Export, restore, partner merge, profile and "delete everything" (spec 6.8) for the settings tab.
  * Render `sheets` once in the screen that uses the actions.
  */
 export function useDataActions(profile: Profile | undefined, onMessage: (text: string) => void) {
@@ -40,6 +41,7 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
   const [profileOpen, setProfileOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [encryptedOpen, setEncryptedOpen] = useState(false);
+  const [partnerOpen, setPartnerOpen] = useState(false);
   const [, setThemeMode] = useThemeMode();
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -94,6 +96,8 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
         }}
       />
 
+      <PartnerSheet open={partnerOpen} onClose={() => setPartnerOpen(false)} onMessage={onMessage} />
+
       <RestoreSheet
         state={restore}
         onClose={() => setRestore(undefined)}
@@ -139,6 +143,7 @@ export function useDataActions(profile: Profile | undefined, onMessage: (text: s
     exportNow,
     openEncryptedExport: () => setEncryptedOpen(true),
     openRestore: () => fileInput.current?.click(),
+    openPartner: () => setPartnerOpen(true),
     openProfile: () => setProfileOpen(true),
     openDeleteAll: () => setDeleteOpen(true),
     sheets,

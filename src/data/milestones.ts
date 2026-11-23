@@ -1,4 +1,5 @@
 import { db, type Milestone } from './db';
+import { removeMilestone, restoreMilestone } from './deletions';
 import type { Change } from './events';
 
 export type { Milestone } from './db';
@@ -88,7 +89,7 @@ export async function saveMilestone(draft: MilestoneDraft, now = Date.now()): Pr
     await db.milestones.put(milestone);
     const undo = previous
       ? async () => void (await db.milestones.put(previous))
-      : async () => void (await db.milestones.delete(milestone.id));
+      : () => removeMilestone(milestone.id);
     return { milestone, undo };
   });
 }
@@ -96,6 +97,6 @@ export async function saveMilestone(draft: MilestoneDraft, now = Date.now()): Pr
 export async function deleteMilestone(id: string): Promise<Change['undo'] | undefined> {
   const previous = await db.milestones.get(id);
   if (!previous) return undefined;
-  await db.milestones.delete(id);
-  return async () => void (await db.milestones.put(previous));
+  await removeMilestone(id);
+  return () => restoreMilestone(previous);
 }

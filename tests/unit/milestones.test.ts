@@ -69,10 +69,10 @@ describe('backup with milestones', () => {
   const file = (milestones: unknown, extra: Record<string, unknown> = {}) =>
     JSON.stringify({ app: 'babytime', schemaVersion: 3, exportedAt: NOW, events: [], milestones, ...extra });
 
-  it('exports schema 3 with milestones; replace restores them; files without milestones keep the ones here', async () => {
+  it('exports schema 4 with milestones; replace restores them; files without milestones keep the ones here', async () => {
     await saveMilestone({ preset: 'smile', date: '2026-10-20', note: '' }, NOW);
     const exported = await buildExport(NOW);
-    expect(exported.schemaVersion).toBe(3);
+    expect(exported.schemaVersion).toBe(4);
     expect(exported.milestones).toHaveLength(1);
 
     await deleteAllData();

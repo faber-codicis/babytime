@@ -4,7 +4,7 @@ import type { Lang } from './data/language';
 export type Localized<T> = Record<Lang, T>;
 
 /** Where a guide's button leads: a row in the settings, scrolled into view and focused. */
-export type GuideTarget = 'language' | 'feedback' | 'tutorial' | 'profile';
+export type GuideTarget = 'language' | 'feedback' | 'tutorial' | 'profile' | 'partner';
 
 /**
  * Short how-to for a new feature (owner's rule since 0.14.0): numbered steps and a button straight to it.
@@ -28,6 +28,45 @@ export interface ChangelogEntry {
 }
 
 export const changelog: ChangelogEntry[] = [
+  {
+    version: '0.19.0',
+    date: '2026-11-23',
+    items: {
+      de: [
+        'Neu: Mit Partner abgleichen. So habt ihr auf zwei Handys dieselben Einträge und Meilensteine',
+        'Ihr schickt euch eine verschlüsselte Datei, zum Beispiel per Signal oder WhatsApp, ganz ohne Konto oder Server',
+        'Gelöschte Einträge bleiben beim Abgleich und beim Zusammenführen gelöscht',
+        'Ein gesendeter Stand zählt auch als Sicherung',
+      ],
+      en: [
+        'New: Sync with partner, so two phones have the same entries and milestones',
+        'You send each other an encrypted file, for example via Signal or WhatsApp, without any account or server',
+        'Deleted entries stay deleted when you sync or merge',
+        'A sent update also counts as a backup',
+      ],
+    },
+    guide: {
+      target: 'partner',
+      text: {
+        de: {
+          steps: [
+            'Öffne Einstellungen → Mit Partner abgleichen',
+            'Wählt ein gemeinsames Passwort, auf beiden Handys gleich',
+            'Tippe auf „Stand senden“ und auf dem anderen Handy auf „Stand übernehmen“, dann umgekehrt',
+          ],
+          button: 'Zum Abgleich',
+        },
+        en: {
+          steps: [
+            'Open Settings → Sync with partner',
+            'Choose a shared password, the same on both phones',
+            'Tap “Send update”, then “Get update” on the other phone, then the other way round',
+          ],
+          button: 'Go to sync',
+        },
+      },
+    },
+  },
   {
     version: '0.18.0',
     date: '2026-11-23',

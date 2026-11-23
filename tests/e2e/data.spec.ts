@@ -41,7 +41,7 @@ test('export, delete everything, restore in the fresh app: all entries are back'
 
   const backup = await exportBackup(page);
   expect(backup.name).toMatch(/^babytime-\d{4}-\d{2}-\d{2}\.json$/);
-  expect(JSON.parse(backup.text)).toMatchObject({ app: 'babytime', schemaVersion: 3 });
+  expect(JSON.parse(backup.text)).toMatchObject({ app: 'babytime', schemaVersion: 4 });
   await expect(page.getByText('Sicherung erstellt')).toBeVisible();
   await expect(page.getByRole('region', { name: 'Letzte Sicherung: heute' })).toBeVisible();
 
