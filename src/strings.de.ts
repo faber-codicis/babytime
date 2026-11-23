@@ -196,6 +196,14 @@ export const de = {
     editTitle: 'Profil bearbeiten',
     save: 'Speichern',
     saved: 'Profil gespeichert',
+    photoA11y: 'Foto',
+    photoPick: 'Foto wählen',
+    photoChange: 'Foto ändern',
+    photoRemove: 'Entfernen',
+    photoBusy: 'Foto wird vorbereitet …',
+    photoNoteEmpty: 'Freiwillig. Das Foto bleibt nur auf diesem Handy, wird verkleinert und ohne Ort oder Kameradaten gespeichert.',
+    photoNoteSet: 'Bleibt nur auf diesem Handy und kommt in deine Sicherung. Ort und Kameradaten wurden entfernt.',
+    photoError: 'Dieses Bild lässt sich nicht öffnen. Versuch ein anderes (JPEG oder PNG).',
   },
 
   data: {
@@ -207,6 +215,7 @@ export const de = {
     exportHintMoreText:
       'Mit Passwort ist die Datei geschützt, falls sie in falsche Hände gerät. Bewahre deine Sicherungen an einem sicheren Ort auf.',
     backupNudge: 'Speichere ab und zu eine Sicherung.',
+    backupHasPhoto: 'Die Sicherung enthält auch das Babyfoto.',
     exportEncrypted: 'Sicherung mit Passwort',
     exportEncryptedHint: 'Verschlüsselt, nur mit Passwort lesbar',
     exportShareTitle: 'Baby Time Sicherung',
@@ -407,7 +416,11 @@ export const de = {
     sections: [
       {
         title: 'Deine Einträge',
-        text: 'Stillen, Windeln, Schlaf, Meilensteine, Name und Geburtsdatum deines Babys speichert die App nur im Browser auf deinem Gerät. Sie werden nicht an uns oder andere übertragen; wir können sie nicht sehen. Du löschst sie unter Einstellungen → Alle Daten löschen oder indem du die App bzw. die Website-Daten entfernst. Sicherungsdateien liegen dort, wo du sie speicherst. Beim Abgleich mit Partner schickst du selbst eine verschlüsselte Datei, zum Beispiel über einen Messenger; nur wer das gemeinsame Passwort kennt, kann sie lesen.',
+        text: 'Stillen, Windeln, Schlaf, Meilensteine, Name, Geburtsdatum und ein freiwilliges Foto deines Babys speichert die App nur im Browser auf deinem Gerät. Sie werden nicht an uns oder andere übertragen; wir können sie nicht sehen. Du löschst sie unter Einstellungen → Alle Daten löschen oder indem du die App bzw. die Website-Daten entfernst. Sicherungsdateien liegen dort, wo du sie speicherst. Beim Abgleich mit Partner schickst du selbst eine verschlüsselte Datei, zum Beispiel über einen Messenger; nur wer das gemeinsame Passwort kennt, kann sie lesen.',
+      },
+      {
+        title: 'Babyfoto',
+        text: 'Das Foto ist freiwillig. Die App verkleinert es auf deinem Handy auf 256 × 256 Pixel und speichert es neu; dabei fallen Ort (GPS), Kamera und Aufnahmezeit weg. Es wird nicht hochgeladen. Es steht in deinen Sicherungsdateien (bei „Sicherung mit Passwort“ verschlüsselt). Du entfernst es unter Einstellungen → Profil bearbeiten → Entfernen. Die App hat keinen Kamerazugriff; das Handy zeigt dir nur die übliche Bildauswahl.',
       },
       {
         title: 'Aufruf der App',

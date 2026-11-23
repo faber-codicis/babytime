@@ -197,6 +197,14 @@ export const en: Strings = {
     editTitle: 'Edit profile',
     save: 'Save',
     saved: 'Profile saved',
+    photoA11y: 'Photo',
+    photoPick: 'Choose photo',
+    photoChange: 'Change photo',
+    photoRemove: 'Remove',
+    photoBusy: 'Preparing photo …',
+    photoNoteEmpty: 'Optional. The photo stays on this phone only, is made smaller and saved without location or camera data.',
+    photoNoteSet: 'Stays on this phone only and goes into your backup. Location and camera data were removed.',
+    photoError: 'This picture can’t be opened. Try another one (JPEG or PNG).',
   },
 
   data: {
@@ -207,6 +215,7 @@ export const en: Strings = {
     exportHintMore: 'More',
     exportHintMoreText: 'With a password, the file is protected if it ends up in the wrong hands. Keep your backups in a safe place.',
     backupNudge: 'Save a backup now and then.',
+    backupHasPhoto: 'The backup also contains the baby photo.',
     exportEncrypted: 'Backup with password',
     exportEncryptedHint: 'Encrypted, readable only with the password',
     exportShareTitle: 'Baby Time backup',
@@ -406,7 +415,11 @@ export const en: Strings = {
     sections: [
       {
         title: 'Your entries',
-        text: 'Feeds, diapers, sleep, milestones and your baby’s name and birth date are stored only in the browser on your device. They are not sent to us or anyone else; we cannot see them. Delete them under Settings → Delete all data, or by removing the app or its website data. Backup files stay wherever you save them. When you sync with your partner, you send an encrypted file yourself, for example via a messenger; only someone who knows the shared password can read it.',
+        text: 'Feeds, diapers, sleep, milestones and your baby’s name, birth date and optional photo are stored only in the browser on your device. They are not sent to us or anyone else; we cannot see them. Delete them under Settings → Delete all data, or by removing the app or its website data. Backup files stay wherever you save them. When you sync with your partner, you send an encrypted file yourself, for example via a messenger; only someone who knows the shared password can read it.',
+      },
+      {
+        title: 'Baby photo',
+        text: 'The photo is optional. The app makes it smaller on your phone (256 × 256 pixels) and saves it again, which drops location (GPS), camera and capture time. It is not uploaded. It is part of your backup files (encrypted with “Backup with password”). Remove it under Settings → Edit profile → Remove. The app has no camera access; your phone only shows its usual picture picker.',
       },
       {
         title: 'Loading the app',

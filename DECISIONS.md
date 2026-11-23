@@ -293,6 +293,17 @@ Auftrag des Besitzers, 2026-11-22: Die Einstellungen waren zu lang (etwa zwölf 
 - **Backup-Punkt** bei „Daten & Backup“ nach derselben Regel wie die Erinnerungskarte auf Heute (14 Tage), aber unabhängig davon, ob die Karte weggeklickt wurde. Der Text sagt zusätzlich, wann gesichert wurde.
 - Kein „So geht's“ zu 0.17.0: Es gibt kein neues Werkzeug, nur einen neuen Aufbau.
 
+## 0.18.0 (Babyfoto im Profil)
+
+Wunsch des Besitzers, 2026-11-23: optionales Babyfoto, offline und datenschutzkonform. Mockups in `design-0.18.0`, freigegeben mit „Sieht gut aus“.
+
+- **Im Profil statt eigener Tabelle:** Das Foto ist ein Feld `photo` im `kv`-Eintrag `profile`. Damit gehen Sicherung, Sicherung mit Passwort, Wiederherstellen und „Alle Daten löschen“ ohne neuen Code mit, und es braucht keine Dexie-Migration. Die Sicherungsdatei bleibt `schemaVersion` 3: Ältere Apps lassen das unbekannte Feld beim Import einfach weg (`sanitizeProfile`).
+- **Klein und ohne Metadaten:** mittig quadratisch, 256 × 256 px, JPEG 0,85, als data-URL (etwa 20–40 KB). Neu zeichnen im Canvas entfernt EXIF/GPS zuverlässig, ohne eine Bibliothek. Beim Import wird nur `data:image/jpeg;base64,…` bis 200 000 Zeichen angenommen, alles andere verworfen (keine SVGs, keine fremden URLs). Die CSP erlaubt `img-src data:` schon.
+- **Kein Zuschneide-Dialog:** Mittiger Ausschnitt reicht für ein rundes Bild und spart Bedienung mit einer Hand. Falls gewünscht, später nachrüstbar.
+- **Speichern erst mit „Speichern“**, wie Name und Datum; Schließen verwirft auch ein neu gewähltes Foto.
+- **„Ersetzen“ beim Wiederherstellen** ersetzt das ganze Profil, also auch das Foto (eine Sicherung ohne Foto entfernt es). Zusammenführen lässt das Profil wie bisher unverändert.
+- **Avatar-Baukasten (§15)** bleibt offen und unabhängig: Ohne Foto gibt es weiter Anfangsbuchstaben bzw. Logo-Gesicht.
+- **Tests ohne echte Fotos:** Unit- und E2E-Tests erzeugen ihre Bilder selbst (Canvas bzw. winzige PNG-Bytes).
 
 ## 0.19.0 (Mit Partner abgleichen)
 
@@ -306,5 +317,5 @@ Auftrag des Besitzers, 2026-11-22: Die Einstellungen waren zu lang (etwa zwölf 
 - **Sicherungsformat 4** (`deleted` in der Datei, geprüft wie Einträge, höchstens 101 000). Ältere Apps lehnen solche Dateien mit der Meldung „neuere Version“ ab. Vermerke werden nicht aufgeräumt; sie sind klein (rund 80 Byte).
 - **Ein gesendeter Stand zählt als Sicherung** (`lastExportAt`), denn die Datei ist eine vollständige Sicherung.
 - **Datenschutzerklärung ergänzt** (Abschnitt „Deine Einträge“, Stand 2026-11-23): Die Abgleich-Datei verschickt der Nutzer selbst, verschlüsselt.
-- **Versionsnummer 0.19.0**, weil 0.18.0 (Babyfoto, PR #10) noch offen ist. Wer zuerst gemergt wird, bleibt; der andere PR braucht danach einen kurzen Abgleich in `changelog.ts`, `package.json` und `GuideTarget`.
+- **Versionsnummer 0.19.0:** kommt nach 0.18.0 (Babyfoto, PR #10, zuerst gemergt). Das Foto steckt im Profil und bleibt beim Abgleich wie das ganze Profil unberührt.
 - **Nicht geprüft:** Teilen-Menü und Dateiauswahl auf echten Handys (E2E nur Chromium; in WebKit wird der Teil mit dem Teilen-Menü übersprungen).

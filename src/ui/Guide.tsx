@@ -7,6 +7,7 @@ export const GUIDE_ANCHOR: Record<GuideTarget, string> = {
   language: 'settings-language',
   feedback: 'settings-feedback',
   tutorial: 'settings-tutorial',
+  profile: 'settings-profile',
   partner: 'settings-partner',
 };
 

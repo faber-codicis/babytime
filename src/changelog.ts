@@ -4,7 +4,7 @@ import type { Lang } from './data/language';
 export type Localized<T> = Record<Lang, T>;
 
 /** Where a guide's button leads: a row in the settings, scrolled into view and focused. */
-export type GuideTarget = 'language' | 'feedback' | 'tutorial' | 'partner';
+export type GuideTarget = 'language' | 'feedback' | 'tutorial' | 'profile' | 'partner';
 
 /**
  * Short how-to for a new feature (owner's rule since 0.14.0): numbered steps and a button straight to it.
@@ -63,6 +63,37 @@ export const changelog: ChangelogEntry[] = [
             'Tap “Send update”, then “Get update” on the other phone, then the other way round',
           ],
           button: 'Go to sync',
+        },
+      },
+    },
+  },
+  {
+    version: '0.18.0',
+    date: '2026-11-23',
+    items: {
+      de: [
+        'Neu: ein Foto deines Babys im Profil, ganz freiwillig',
+        'Es erscheint oben auf Heute und in den Einstellungen',
+        'Das Foto bleibt nur auf deinem Handy, wird verkleinert und ohne Ort oder Kameradaten gespeichert',
+        'Es kommt mit in deine Sicherung; entfernen kannst du es jederzeit',
+      ],
+      en: [
+        'New: a photo of your baby in the profile, completely optional',
+        'It shows at the top of Today and in Settings',
+        'The photo stays on your phone only, is made smaller and saved without location or camera data',
+        'It goes into your backup; you can remove it any time',
+      ],
+    },
+    guide: {
+      target: 'profile',
+      text: {
+        de: {
+          steps: ['Öffne Einstellungen', 'Tippe beim Profil auf den Stift', 'Tippe auf „Foto wählen“ und dann auf „Speichern“'],
+          button: 'Zum Profil',
+        },
+        en: {
+          steps: ['Open Settings', 'Tap the pencil next to the profile', 'Tap “Choose photo”, then “Save”'],
+          button: 'Go to profile',
         },
       },
     },
