@@ -145,11 +145,12 @@ test('after the update: English popup with the newest guide, its button goes str
   expect(await popup.evaluate((el) => el.scrollTop)).toBe(0);
   await page.screenshot({ path: 'test-results/en-update-popup.png', animations: 'disabled' });
 
-  // Only the newest guide (0.16.0: the introduction) sits in the popup; older ones stay in "What's new".
-  await popup.getByRole('button', { name: 'Go to introduction' }).click();
+  // Only the newest guide (0.18.0: the baby photo) sits in the popup; older ones stay in "What's new".
+  await expect(popup.getByRole('button', { name: 'Go to introduction' })).toHaveCount(0);
+  await popup.getByRole('button', { name: 'Go to profile' }).click();
   await expect(popup).toBeHidden();
   await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
-  await expect(page.locator('#settings-tutorial')).toBeFocused();
+  await expect(page.locator('#settings-profile')).toBeFocused();
 
   // Seen: no popup after a restart; the guides stay in "What's new".
   await page.reload();

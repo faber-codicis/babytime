@@ -40,6 +40,8 @@ const PATHS = {
   // Einstellungen → Erfassen (0.17.0): a list, and the down chevron of the language picker.
   list: 'M4 6h3M4 12h3M4 18h3M10 6h10M10 12h10M10 18h10',
   down: 'M6 9l6 6 6-6',
+  // Babyfoto (0.18.0): camera.
+  camera: 'M4 8h3l2-3h6l2 3h3v11H4zM12 10a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7',
 } as const;
 
 export type IconName = keyof typeof PATHS;
