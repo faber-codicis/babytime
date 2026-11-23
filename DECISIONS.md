@@ -319,3 +319,8 @@ Wunsch des Besitzers, 2026-11-23: optionales Babyfoto, offline und datenschutzko
 - **Datenschutzerklärung ergänzt** (Abschnitt „Deine Einträge“, Stand 2026-11-23): Die Abgleich-Datei verschickt der Nutzer selbst, verschlüsselt.
 - **Versionsnummer 0.19.0:** kommt nach 0.18.0 (Babyfoto, PR #10, zuerst gemergt). Das Foto steckt im Profil und bleibt beim Abgleich wie das ganze Profil unberührt.
 - **Nicht geprüft:** Teilen-Menü und Dateiauswahl auf echten Handys (E2E nur Chromium; in WebKit wird der Teil mit dem Teilen-Menü übersprungen).
+
+## PWA-Test am Dev-Handy (2026-11-23)
+
+- **Manifest `id: '/'`:** Ohne `id` leitet Chrome die App-Identität aus der aufgelösten `start_url` ab (`/` → Ursprung + `/`). Genau dieser Wert ist jetzt fest gesetzt, damit installierte Apps dieselbe Identität behalten und nicht als zweite App erscheinen. Ändert sich später `start_url`, bleibt die Identität gleich.
+- **`<html lang="de">` bleibt:** Der Test sah `lang=en`, weil `public/theme-init.js` die Sprache vor dem ersten Zeichnen auf die gewählte bzw. die Telefonsprache setzt (seit 0.14.0). Das Testgerät war englisch eingestellt; das ist gewollt. `lang: 'de'` im Manifest bleibt als Standardsprache.

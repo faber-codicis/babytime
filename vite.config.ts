@@ -53,6 +53,9 @@ export default defineConfig({
         // Fullscreen hides the Android system bars (the light navigation strip); other platforms fall back to standalone.
         display: 'fullscreen',
         display_override: ['fullscreen', 'standalone'],
+        // Fixed app identity. '/' is exactly what Chrome derived from start_url before (origin + '/'),
+        // so already installed apps keep their identity and are not installed a second time.
+        id: '/',
         start_url: '/',
         scope: '/',
         theme_color: '#B04A63',
