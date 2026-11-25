@@ -355,7 +355,7 @@ Vierter Tab `#/meilensteine` (Mockup „Navigation“, Stern), Wunsch des Besitz
 
 ## 7. PWA-Anforderungen
 
-- `manifest.webmanifest`: `name` „Baby Time“, `short_name` „Baby Time“, `lang` „de“, `display` „fullscreen“ (mit `display_override` fullscreen, standalone; seit 0.4.0 auf Wunsch der Besitzerin, damit Android die helle Navigationsleiste ausblendet – die Uhrzeit steht in der App), `start_url` „/“, `theme_color` `#B04A63`, `background_color` `#3D2129` (tiefes Rosé für das Android-Startbild, das dem hellen/dunklen Design nicht folgen kann; vorher `#FBF3F1`, hell; geändert auf Wunsch der Besitzerin), Icons 192 und 512 (`any`) plus 512 `maskable`.
+- `manifest.webmanifest`: `name` „Baby Time“, `short_name` „Baby Time“, `lang` „de“, `display` „fullscreen“ (mit `display_override` fullscreen, standalone; seit 0.4.0 auf Wunsch der Besitzerin, damit Android die helle Navigationsleiste ausblendet – die Uhrzeit steht in der App), `id` „/“, `start_url` „/“, `theme_color` `#B04A63`, `background_color` `#3D2129` (tiefes Rosé für das Android-Startbild, das dem hellen/dunklen Design nicht folgen kann; vorher `#FBF3F1`, hell; geändert auf Wunsch der Besitzerin), Icons 192 und 512 (`any`) plus 512 `maskable`.
 - `apple-touch-icon` 180 × 180, `<meta name="apple-mobile-web-app-capable" content="yes">`, `viewport-fit=cover`, Status-Bar `default`.
 - Service Worker: Precache aller gebauten Assets inklusive Schriften, Navigations-Fallback auf `index.html`. `registerType: 'autoUpdate'`.
 - Icons aus dem SVG in Abschnitt 9 per Skript erzeugen (z. B. `sharp`), Skript unter `scripts/make-icons.mjs`. Das maskable-Icon: Hintergrund `#B04A63` vollflächig, Motiv auf 80 Prozent verkleinert (Safe Zone).
